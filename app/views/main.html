@@ -1,0 +1,69 @@
+<div ng-controller='SidenavController'>
+<md-sidenav class='md-sidenav-left md-whiteframe-z2' md-component-id='sidenav-left'>
+    <md-toolbar>
+        <div class='md-toolbar-tools'>
+            <md-button class='md-icon-button' aria-label='Server List' ng-click='switchPane("server-list")'>
+                <md-icon class='material-icons' ng-style="{color: 'white'}">view_list</md-icon>
+                <!-- <md-tooltip>站點列表</md-tooltip> -->
+            </md-button>
+            <md-button class='md-icon-button' aria-label='Search' ng-click='switchPane("search")'>
+                <md-icon class='material-icons' ng-style="{color: 'white'}">search</md-icon>
+                <!-- <md-tooltip>搜尋</md-tooltip> -->
+            </md-button>
+        </div>
+    </md-toolbar>
+        <div ng-show='selectedPane == "server-list"' ng-controller="ServerListController">
+            <md-subheader class="md-accent">站點列表</md-subheader>
+            <md-list>
+                <md-list-item ng-repeat='(name, server) in servers' ng-show='server.show'>
+                    <img alt="{{ server.title }}" ng-src="{{ server.logo }}" class="md-avatar" />
+                    <p flex>{{ server.title}}</p>
+                    <md-button class='md-icon-button' aria-label='Remove' ng-click='removeServer(name)'>
+                        <md-icon class='material-icons'>clear</md-icon>
+                    </md-button>
+                </md-list-item>
+                <md-list-item>
+                    <md-input-container flex>
+                        <label>新站點傳送門網址</label>
+                        <input ng-model='newServerPortalUrl'>
+                    </md-input-container>
+                    <md-button class='md-icon-button' aria-label='Add' ng-click='addServer(newServerPortalUrl)'>
+                        <md-icon class='material-icons'>add</md-icon>
+                    </md-button>
+                </md-list-item>
+            </md-list>
+        </div>
+        <div ng-show='selectedPane == "search"' ng-controller="SearchPaneController">
+            <md-subheader class="md-accent">搜尋</md-subheader>
+            <md-content layout-padding>
+                <md-chips ng-model="keywords" placeholder='增加關鍵字' secondary-placeholder="輸入關鍵字">
+                </md-chips>
+<!--                 <div layout='row'>
+                <md-input-container flex>
+                    <label>增加關鍵字</label>
+                    <input ng-model='newSearchKeyword'>
+                </md-input-container>
+                <md-button class='md-icon-button' aria-label='Add' ng-click='addSearch(newSearchKeyword)'>
+                    <md-icon class='material-icons'>add</md-icon>
+                </md-button>
+                </div>
+ -->            </md-content>
+        </div>
+
+    </md-tabs>
+</md-sidenav>
+</div>
+
+<md-toolbar ng-controller="HeadBarController">
+    <div layout-gt-sm='row'>
+        <md-button class='md-icon-button' aria-label='Open Side Menu' ng-click='openSidenav()'>
+            <md-icon class='material-icons' ng-style="{color: 'white'}">keyboard_arrow_right</md-icon>
+        </md-button>
+        <span flex></span>
+        <md-icon class='material-icons' ng-style="{color: 'white'}">search</md-icon>
+        <md-chips ng-model="keywords" placeholder='增加關鍵字' secondary-placeholder="搜尋">
+        </md-chips>
+    </div>
+</md-toolbar>
+
+<p>This is where map goes</p>
