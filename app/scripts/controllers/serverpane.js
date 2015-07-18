@@ -2,30 +2,15 @@
 
 /**
  * @ngdoc function
- * @name spirit99App.controller:MainCtrl
+ * @name spirit99App.controller:ServerpaneCtrl
  * @description
- * # MainCtrl
+ * # ServerpaneCtrl
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('MainCtrl', ['$scope', function ($scope) {
-}])
-.controller('HeadBarController', ['$scope', '$mdSidenav', 'ygFilter', function($scope, $mdSidenav, ygFilter){
-    $scope.keywords = ygFilter.keywords['title'];
-    $scope.openSidenav = function(){
-        $mdSidenav('sidenav-left').open();
-    };    
-}])
-.controller('SidenavController', ['$scope', function($scope){
-    $scope.selectedPane = 'server-list';
-    $scope.switchPane = function(paneName){
-        $scope.selectedPane = paneName;
-    };
-}])
-.controller('ServerListController', ['$scope', '$mdDialog', 'ygServer', function($scope, $mdDialog, ygServer){
+.controller('ServerPaneController', ['$scope', '$mdDialog', 'ygServer', function($scope, $mdDialog, ygServer){
     // ============== Initilize scope model ==================
-    ygServer.updateServers();
-    $scope.errorMessages = ygServer.errorMessages;
+    $scope.ygServer = ygServer;
     $scope.servers = ygServer.servers;
 
     // //XXX: Should be read from local storage
@@ -46,10 +31,10 @@ angular.module('spirit99App')
     };
 
     // ============== Scope $watches =================
-    $scope.$watchCollection('errorMessages', function(newValue, oldValue){
+    $scope.$watchCollection('ygServer.errorMessages', function(newValue, oldValue){
         // console.log('Got you!! ' + newValue);
-        while($scope.errorMessages.length > 0){
-            var errorMessage = $scope.errorMessages.pop();
+        while($scope.ygServer.errorMessages.length > 0){
+            var errorMessage = $scope.ygServer.errorMessages.pop();
             showError(errorMessage);
         }
     });
@@ -57,7 +42,7 @@ angular.module('spirit99App')
     // ============== Scope interaction functions =================
     $scope.addServer = function(portalUrl){
         // console.log("load server from " + portalUrl);
-        ygServer.loadServer(portalUrl);
+        $scope.ygServer.loadServer(portalUrl);
         //$scope.errorMessages.push('Testttttttesstttt');
     };
 
@@ -65,19 +50,23 @@ angular.module('spirit99App')
         var confirm = $mdDialog.confirm()
             .parent(angular.element(document.body))
             .title('移除站點')
-            .content('確定要移除站點：' + $scope.servers[serverName].title + '?')
+            .content('確定要移除站點：' + $scope.ygServer.servers[serverName].title + '?')
             .ariaLabel('Remove Server')
             .ok('確定')
             .cancel('我按錯了');
 
         $mdDialog.show(confirm).then(
             function() {
-                console.log('去死吧! ' + $scope.servers[serverName].title + '去死!');
-                ygServer.removeServer(serverName);
+                console.log('去死吧! ' + $scope.ygServer.servers[serverName].title + '去死!');
+                $scope.ygServer.removeServer(serverName);
             },
             function() {
                 console.log('阿不就按錯了!? O_o');
             });
+    };
+
+    $scope.switchServer = function(serverName){
+        $scope.ygServer.switchServer(serverName);
     };
 
     // $scope.addServer = function(portalUrl){
@@ -107,8 +96,4 @@ angular.module('spirit99App')
     // =================== Initializing actions ======================
     // $scope.updateServers($scope.portals);
 
-}])
-.controller('SearchPaneController', ['$scope', 'ygFilter', function($scope, ygFilter){
-    $scope.keywords = ygFilter.keywords['title'];
-}])
-;
+}]);

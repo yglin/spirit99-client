@@ -1,4 +1,4 @@
-<div ng-controller='SidenavController'>
+<div ng-controller='SideNavController'>
 <md-sidenav class='md-sidenav-left md-whiteframe-z2' md-component-id='sidenav-left'>
     <md-toolbar>
         <div class='md-toolbar-tools'>
@@ -12,12 +12,12 @@
             </md-button>
         </div>
     </md-toolbar>
-        <div ng-show='selectedPane == "server-list"' ng-controller="ServerListController">
+        <div ng-show='selectedPane == "server-list"' ng-controller="ServerPaneController">
             <md-subheader class="md-accent">站點列表</md-subheader>
             <md-list>
                 <md-list-item ng-repeat='(name, server) in servers' ng-show='server.show'>
-                    <img alt="{{ server.title }}" ng-src="{{ server.logo }}" class="md-avatar" />
-                    <p flex>{{ server.title}}</p>
+                    <img alt="{{ server.title }}" ng-src="{{ server.logo }}" class="md-avatar" ng-click="switchServer(name)"/>
+                    <p flex ng-click="switchServer(name)">{{ server.title}}</p>
                     <md-button class='md-icon-button' aria-label='Remove' ng-click='removeServer(name)'>
                         <md-icon class='material-icons'>clear</md-icon>
                     </md-button>
@@ -59,6 +59,11 @@
         <md-button class='md-icon-button' aria-label='Open Side Menu' ng-click='openSidenav()'>
             <md-icon class='material-icons' ng-style="{color: 'white'}">keyboard_arrow_right</md-icon>
         </md-button>
+        <span flex></span>
+        <div layout='row'>
+        <img alt="{{serverTitle}}" ng-src="{{serverLogo}}" class="md-avatar" ng-style="{'max-width':'64px', 'max-height':'64px'}"/>
+        <p flex>{{serverTitle}}</p>
+        </div>
         <span flex></span>
         <md-icon class='material-icons' ng-style="{color: 'white'}">search</md-icon>
         <md-chips ng-model="keywords" placeholder='增加關鍵字' secondary-placeholder="搜尋">
