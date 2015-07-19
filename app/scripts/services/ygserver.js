@@ -40,6 +40,7 @@ angular.module('spirit99App')
     self.currentServerName = 'No server yet';
 
     self.validatePortal = function(portalData){
+        // TODO: Validation rules
         return true;
     };
 

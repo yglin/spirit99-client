@@ -38,18 +38,8 @@
             <md-content layout-padding>
                 <md-chips ng-model="keywords" placeholder='增加關鍵字' secondary-placeholder="輸入關鍵字">
                 </md-chips>
-<!--                 <div layout='row'>
-                <md-input-container flex>
-                    <label>增加關鍵字</label>
-                    <input ng-model='newSearchKeyword'>
-                </md-input-container>
-                <md-button class='md-icon-button' aria-label='Add' ng-click='addSearch(newSearchKeyword)'>
-                    <md-icon class='material-icons'>add</md-icon>
-                </md-button>
-                </div>
- -->            </md-content>
+            </md-content>
         </div>
-
     </md-tabs>
 </md-sidenav>
 </div>
@@ -71,4 +61,5 @@
     </div>
 </md-toolbar>
 
-<p>This is where map goes</p>
+<md-content ng-controller="MapController">
+</md-content>
