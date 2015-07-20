@@ -8,16 +8,17 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('MapController', ['$scope', 'uiGmapGoogleMapApi', function($scope, uiGmapGoogleMapApi) {
-
+.controller('MapController', ['$scope', 'uiGmapGoogleMapApi', '$mdBottomSheet', function($scope, uiGmapGoogleMapApi, $mdBottomSheet) {
     $scope.onClickMap = function(googleMaps, eventName, args){
         $scope.clickedMarker.coords = {
             latitude: args[0].latLng.lat(),
             longitude: args[0].latLng.lng()
         };
-        // $scope.clickedMarker.options.opacity = 1.0;
         $scope.clickedMarker.options.visible = true;
-        console.log('map clicked!!');
+        $mdBottomSheet.show({
+            templateUrl: 'views/StoryEditor.html',
+            controller: 'StoryEditorController'
+        });
         $scope.$apply();
     };
 
