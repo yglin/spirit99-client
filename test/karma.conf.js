@@ -22,6 +22,7 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       // bower:js
+      'bower_components/jquery/dist/jquery.js',
       'bower_components/angular/angular.js',
       'bower_components/angular-animate/angular-animate.js',
       'bower_components/angular-aria/angular-aria.js',
@@ -33,6 +34,22 @@ module.exports = function(config) {
       'bower_components/angular-material/angular-material.js',
       'bower_components/lodash/lodash.js',
       'bower_components/angular-google-maps/dist/angular-google-maps.js',
+      'bower_components/FroalaWysiwygEditor/js/froala_editor.min.js',
+      'bower_components/FroalaWysiwygEditor/js/plugins/block_styles.min.js',
+      'bower_components/FroalaWysiwygEditor/js/plugins/char_counter.min.js',
+      'bower_components/FroalaWysiwygEditor/js/plugins/colors.min.js',
+      'bower_components/FroalaWysiwygEditor/js/plugins/entities.min.js',
+      'bower_components/FroalaWysiwygEditor/js/plugins/file_upload.min.js',
+      'bower_components/FroalaWysiwygEditor/js/plugins/font_family.min.js',
+      'bower_components/FroalaWysiwygEditor/js/plugins/font_size.min.js',
+      'bower_components/FroalaWysiwygEditor/js/plugins/fullscreen.min.js',
+      'bower_components/FroalaWysiwygEditor/js/plugins/inline_styles.min.js',
+      'bower_components/FroalaWysiwygEditor/js/plugins/lists.min.js',
+      'bower_components/FroalaWysiwygEditor/js/plugins/media_manager.min.js',
+      'bower_components/FroalaWysiwygEditor/js/plugins/tables.min.js',
+      'bower_components/FroalaWysiwygEditor/js/plugins/urls.min.js',
+      'bower_components/FroalaWysiwygEditor/js/plugins/video.min.js',
+      'bower_components/angular-froala/src/angular-froala.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       "app/scripts/**/*.js",

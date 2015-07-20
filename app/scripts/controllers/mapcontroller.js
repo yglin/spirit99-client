@@ -8,16 +8,22 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('MapController', ['$scope', 'uiGmapGoogleMapApi', '$mdBottomSheet', function($scope, uiGmapGoogleMapApi, $mdBottomSheet) {
+.controller('MapController', ['$scope', 'uiGmapGoogleMapApi', '$mdDialog', function($scope, uiGmapGoogleMapApi, $mdDialog) {
     $scope.onClickMap = function(googleMaps, eventName, args){
         $scope.clickedMarker.coords = {
             latitude: args[0].latLng.lat(),
             longitude: args[0].latLng.lng()
         };
         $scope.clickedMarker.options.visible = true;
-        $mdBottomSheet.show({
+        $mdDialog.show({
             templateUrl: 'views/StoryEditor.html',
-            controller: 'StoryEditorController'
+            controller: 'StoryEditorController',
+            parent: angular.element(document.body)
+        })
+        .then(function(response){
+            console.log(response);
+        }, function(response){
+            console.log('You cancelled the dialog.');
         });
         $scope.$apply();
     };

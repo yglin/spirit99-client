@@ -18,7 +18,8 @@ angular
     'ngSanitize',
     'ngTouch',
     'ngMaterial',
-    'uiGmapgoogle-maps'
+    'uiGmapgoogle-maps',
+    'froala'
 ])
 .config(function ($routeProvider) {
     $routeProvider
