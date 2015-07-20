@@ -17,7 +17,8 @@ angular
     'ngRoute',
     'ngSanitize',
     'ngTouch',
-    'ngMaterial'
+    'ngMaterial',
+    'uiGmapgoogle-maps'
 ])
 .config(function ($routeProvider) {
     $routeProvider
@@ -40,5 +41,13 @@ angular
     $mdThemingProvider.theme('default')
         .primaryPalette('green')
         .accentPalette('orange');
+})
+// Angular Google Map
+.config(function(uiGmapGoogleMapApiProvider) {
+    uiGmapGoogleMapApiProvider.configure({
+        key: 'AIzaSyB5rcT4tYhcrHp5NwEophBjfKV0uilCNEE',
+        v: '3.17',
+        libraries: 'weather,geometry,visualization'
+    });
 })
 ;

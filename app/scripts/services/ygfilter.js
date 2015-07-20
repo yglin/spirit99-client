@@ -13,7 +13,7 @@ angular.module('spirit99App')
     var self = this;
 
     this.keywords = {
-        'title': ['yygg', 'ggyy']
+        'title': []
     };
 
 });

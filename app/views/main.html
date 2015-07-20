@@ -61,5 +61,16 @@
     </div>
 </md-toolbar>
 
-<md-content ng-controller="MapController">
+<md-content ng-controller="MapController" style='height:500px'>
+<style type="text/css">
+.angular-google-map-container { height: 500px; }
+</style>
+    <div layout='column' layout-align="center center" style='height:100%;' ng-show='!mapIsReady'>
+        <p style="font-size:200%">地圖讀取中...</p>
+        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+    </div>
+    <ui-gmap-google-map center='map.center' zoom='map.zoom' events='map.events' ng-show="mapIsReady" >
+        <ui-gmap-marker coords="clickedMarker.coords" options="clickedMarker.options" events="clickedMarker.events" idkey="clickedMarker.id" ng-cloak>
+        </ui-gmap-marker>
+    </ui-gmap-google-map>
 </md-content>
