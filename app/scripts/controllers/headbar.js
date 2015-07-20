@@ -10,7 +10,7 @@
 angular.module('spirit99App')
 .controller('HeadBarController', ['$scope', '$mdSidenav', 'ygServer', 'ygFilter',
 function($scope, $mdSidenav, ygServer, ygFilter){
-    $scope.keywords = ygFilter.keywords['title'];
+    $scope.keywords = ygFilter.keywords.title;
     $scope.ygServer = ygServer;
     $scope.serverTitle = '';
     $scope.serverLogo = '';

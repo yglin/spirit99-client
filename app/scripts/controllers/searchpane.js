@@ -9,5 +9,5 @@
  */
 angular.module('spirit99App')
 .controller('SearchPaneController', ['$scope', 'ygFilter', function($scope, ygFilter){
-    $scope.keywords = ygFilter.keywords['title'];
+    $scope.keywords = ygFilter.keywords.title;
 }]);
