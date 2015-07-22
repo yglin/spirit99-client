@@ -11,17 +11,21 @@ angular.module('spirit99App')
 .controller('HeadBarController', ['$scope', '$mdSidenav', 'ygServer', 'ygFilter',
 function($scope, $mdSidenav, ygServer, ygFilter){
     $scope.keywords = ygFilter.keywords.title;
-    $scope.ygServer = ygServer;
-    $scope.serverTitle = '';
+    $scope.serverTitle = '請選擇站點';
     $scope.serverLogo = '';
 
-    $scope.$watch('ygServer.currentServerName', function(newValue, oldValue){
-        // console.log('Got you~!! ' + oldValue + ' --> ' + newValue);
-        $scope.serverTitle = '';
-        $scope.serverLogo = '';
+    $scope.$watch(function(){
+        return ygServer.currentServerName;
+    },
+    function(newValue, oldValue){
+    // console.log('Got you~!! ' + oldValue + ' --> ' + newValue);
         if(newValue in ygServer.servers){
             $scope.serverTitle = ygServer.servers[newValue].title;
             $scope.serverLogo = ygServer.servers[newValue].logo;
+        }
+        else{
+            $scope.serverTitle = '請選擇站點';
+            $scope.serverLogo = '';            
         }
     });
 

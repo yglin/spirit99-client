@@ -21,6 +21,11 @@ angular
     'uiGmapgoogle-maps',
     'froala'
 ])
+.value('portalRules', {
+    requiredFields: [
+        'name', 'title', 'restApiUrl'
+    ]
+})
 .config(function ($routeProvider) {
     $routeProvider
         .when('/', {

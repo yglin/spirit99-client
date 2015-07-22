@@ -8,7 +8,7 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('MapController', ['$scope', 'uiGmapGoogleMapApi', '$mdDialog', function($scope, uiGmapGoogleMapApi, $mdDialog) {
+.controller('MapController', ['$scope', 'uiGmapGoogleMapApi', '$mdDialog', 'ygServer', function($scope, uiGmapGoogleMapApi, $mdDialog, ygServer) {
     $scope.onClickMap = function(googleMaps, eventName, args){
         $scope.clickedMarker.coords = {
             latitude: args[0].latLng.lat(),
@@ -20,10 +20,11 @@ angular.module('spirit99App')
             controller: 'StoryEditorController',
             parent: angular.element(document.body)
         })
-        .then(function(response){
-            console.log(response);
-        }, function(response){
-            console.log('You cancelled the dialog.');
+        .then(function(data){
+            data['coords'] = $scope.clickedMarker.coords;
+            ygServer.postServer(data);
+        }, function(){
+            console.log('你又按錯啦');
         });
         $scope.$apply();
     };

@@ -1,7 +1,7 @@
-<md-dialog aria-label="Tell your story">
+<md-dialog aria-label="Tell your story" flex='60'>
 <md-toolbar>
     <div class="md-toolbar-tools">
-        <h2>分享這裏的故事</h2>
+        <h2>分享在地的故事</h2>
         <span flex></span>
         <md-button class="md-icon-button" ng-click="cancel()">
             <md-icon class='material-icons'>clear</md-icon>
@@ -13,20 +13,33 @@
         <label>標題</label>
         <input ng-model="title">
     </md-input-container>
-    <textarea froala='froalaOptions' ng-model="context"></textarea>
     <md-input-container flex>
         <label>作者</label>
         <input ng-model="author">
     </md-input-container>    
+    <md-content layout="column" class='md-whiteframe-z3'>
+        <!-- <div layout='row'> -->
+        <md-toolbar class='md-accent md-hue-1'>
+            <div class="md-toolbar-tools md-toolbar-tools-bottom">
+                <md-button aria-label="Show Tools" class="md-fab md-raised md-mini" ng-click='triggerToolbar()'>
+                    <md-icon class='material-icons'>menu</md-icon>
+                    <md-tooltip>工具列</md-tooltip>
+                </md-button>
+                <md-button aria-label="Insert Image" class="md-fab md-raised md-mini" ng-click='insertImage()'>
+                    <md-icon class='material-icons'>image</md-icon>
+                    <md-tooltip>上傳圖片</md-tooltip>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <!-- </div> -->
+        <textarea froala='froalaOptions' ng-model="context"></textarea>
+    </md-content>
 </md-dialog-content>
 <div class="md-actions" layout="row">
-<md-button ng-click="triggerToolbar()" class="md-raised md-primary">
-    工具列
-</md-button>
-<span flex></span>
 <md-button ng-click="cancel()" class="md-raised md-primary">
     我按錯了
 </md-button>
+<span flex></span>
 <md-button ng-click="post()" class="md-raised md-primary">
     好了，大家來看吧！
 </md-button>
