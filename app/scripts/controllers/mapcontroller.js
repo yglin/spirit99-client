@@ -29,6 +29,7 @@ angular.module('spirit99App')
         $scope.$apply();
     };
 
+    $scope.posts = [];
     $scope.mapIsReady = false;
     $scope.map = {
         center:{
@@ -73,6 +74,16 @@ angular.module('spirit99App')
     uiGmapGoogleMapApi.then(function(maps) {
         $scope.centerGeoLocation($scope.map);
         $scope.mapIsReady = true;    
+    });
+
+    // $watch-es
+    $scope.$watch(function () {
+        return ygServer.postResource;
+    }, function (newValue, oldValue) {
+        if(ygServer.postResource != null){
+            $scope.posts = ygServer.postResource.query();
+            console.log($scope.posts);
+        }
     });
 
 }]);

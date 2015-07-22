@@ -71,6 +71,8 @@
     <ui-gmap-google-map center='map.center' zoom='map.zoom' events='map.events' ng-show="mapIsReady" >
         <ui-gmap-marker coords="clickedMarker.coords" options="clickedMarker.options" events="clickedMarker.events" idkey="clickedMarker.id" ng-cloak>
         </ui-gmap-marker>
+        <ui-gmap-markers models='posts' coords='"self"' doCluster='true'>
+        </ui-gmap-markers>
     </ui-gmap-google-map>
 </md-content>
 

@@ -8,13 +8,14 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygServer', ['$http', 'portalRules', 'ygError', 'ygUserPref',
-function ($http, portalRules, ygError, ygUserPref) {
+.service('ygServer', ['$rootScope', '$http', '$resource', 'portalRules', 'ygError', 'ygUserPref',
+function ($rootScope, $http, $resource, portalRules, ygError, ygUserPref) {
     // AngularJS will instantiate a singleton by calling "new" on self function
     var self = this;
 
     self.servers = {};
     self.currentServerName = '';
+    self.postResource = null;
 
     self.validatePortal = function(portalData){
         for (var i = 0; i < portalRules.requiredFields.length; i++) {
@@ -81,13 +82,23 @@ function ($http, portalRules, ygError, ygUserPref) {
         }
     };
 
-    // Update servers by a list of portal URLs
-    self.updateServers = function(){
-        for (var i = 0; i < ygUserPref.portals.length; i++) {
-            self.loadServer(ygUserPref.portals[i]);
+    self.updateServers = function(portals){
+        for (var i = 0; i < portals.length; i++) {
+            self.loadServer(portals[i]);
         }
     };
 
-    // Initialization
-    self.updateServers();
+    // $watch-es
+    $rootScope.$watch(function () {
+        return self.currentServerName;
+    }, function (newValue, oldValue) {
+        if(newValue in self.servers){
+            var server = self.servers[newValue];
+            // New $resource object of self.posts
+            self.postResource = $resource(server.postUrl, {}, {});
+        }
+    });
+
+    // // Initialization
+    // self.updateServers();
 }]);

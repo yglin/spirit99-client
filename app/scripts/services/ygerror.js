@@ -26,7 +26,7 @@ angular.module('spirit99App')
     $rootScope.$watchCollection(function(){
         return self.errorMessages;
     }, 
-    function(newValue, oldValue){
+    function (newValue, oldValue){
         // console.log('Got you!! ' + newValue);
         while(self.errorMessages.length > 0){
             var errorMessage = self.errorMessages.pop();

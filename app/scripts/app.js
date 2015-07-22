@@ -23,7 +23,7 @@ angular
 ])
 .value('portalRules', {
     requiredFields: [
-        'name', 'title', 'restApiUrl'
+        'name', 'title', 'postUrl'
     ]
 })
 .config(function ($routeProvider) {
@@ -56,4 +56,9 @@ angular
         libraries: 'weather,geometry,visualization'
     });
 })
+// Kick-start the app
+.run(['ygUserPref', 'ygServer', function (ygUserPref, ygServer) {
+    ygUserPref.loadPref();
+    ygServer.updateServers(ygUserPref.portals);
+}])
 ;
