@@ -8,39 +8,20 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygServer', ['$http', function ($http) {
+.service('ygServer', ['$http', 'portalRules', 'ygError', 'ygUserPref',
+function ($http, portalRules, ygError, ygUserPref) {
     // AngularJS will instantiate a singleton by calling "new" on self function
-
-    // console.log($scope.servers);
-    // self.servers = {
-    //     localstory: {
-    //         name: 'local-stories',
-    //         title: '在地的故事',
-    //         logo: 'http://img4.wikia.nocookie.net/__cb20140710145414/finalfantasy/images/e/e6/Town-ffta-icon.png',
-    //         show: true
-    //     },
-    //     'bird-back-home': {
-    //         name: 'bird-back-home',
-    //         title: '小小鳥兒要回家',
-    //         logo: 'http://www.abeka.com/BookImages/ClipArt/226807/46x46y50fx50fh/226807-Red-Parrot-with-yellow-and-blue-wings-color-pdf.png',
-    //         show: true
-    //     }
-    // };
-    // 
     var self = this;
 
-    //XXX: Should be read from local storage
-    self.portals = [
-        'http://localhost:3000/portal/localstory',
-    ];
-
-    self.errorMessages = [];
-    
     self.servers = {};
-    self.currentServerName = 'No server yet';
+    self.currentServerName = '';
 
     self.validatePortal = function(portalData){
-        // TODO: Validation rules
+        for (var i = 0; i < portalRules.requiredFields.length; i++) {
+            if(!(portalRules.requiredFields[i] in portalData)){
+                return false;
+            }
+        }
         return true;
     };
 
@@ -71,13 +52,17 @@ angular.module('spirit99App')
                     response.show = true;
                     self.servers[response.name] = response;
                 }
+
+                if(self.currentServerName === '' || response.name === ygUserPref.lastSelectedServer){
+                    self.currentServerName = response.name;
+                }
                 // console.log(response);
                 // // Switch to new server
                 // self.switchServer(response.name);
             }
             else{
                 var errorMessage = "載入失敗，請檢查傳送門網址是否正確：" + portalUrl;
-                self.errorMessages.push(errorMessage);                
+                ygError.errorMessages.push(errorMessage);                
                 console.log(errorMessage + " response:\n" + status + "\n" + response);
             }
         })
@@ -91,12 +76,15 @@ angular.module('spirit99App')
 
     self.removeServer = function(serverName){
         self.servers[serverName].show = false;
+        if(self.currentServerName == serverName){
+            self.currentServerName = '';
+        }
     };
 
     // Update servers by a list of portal URLs
     self.updateServers = function(){
-        for (var i = 0; i < self.portals.length; i++) {
-            self.loadServer(self.portals[i]);
+        for (var i = 0; i < ygUserPref.portals.length; i++) {
+            self.loadServer(ygUserPref.portals[i]);
         }
     };
 
