@@ -104,6 +104,7 @@ function ($http, $resource, $q, portalRules, ygError, ygUserPref) {
                     }
                 }
             }
+            console.log(self.servers);
             if(ygUserPref.lastSelectedServer in self.servers){
                 self.switchServer(ygUserPref.lastSelectedServer);
             }

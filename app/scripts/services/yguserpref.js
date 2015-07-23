@@ -20,7 +20,14 @@ angular.module('spirit99App')
         self.servers['localstory'] = {
             name: ' localstory',
             title: '在地的故事',
-            portalUrl: 'http://localhost:3000/portal/localstory'
+            portalUrl: 'http://localhost:3000/portal/localstory',
+            show: true
+        };
+        self.servers['birdhome'] = {
+            name: 'birdhome',
+            title: '小小鳥兒要回家',
+            portalUrl: 'http://localhost:3000/portal/birdhome',
+            show: true
         };
         self.lastSelectedServer = 'localstory';
     };
