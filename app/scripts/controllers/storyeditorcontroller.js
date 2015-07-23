@@ -32,7 +32,7 @@ angular.module('spirit99App')
         // console.log('Show Insert Image!!');
         $scope.froalaOptions.froala('show', null);
         $scope.froalaOptions.froala('showInsertImage');
-    }
+    };
 
     $scope.cancel = function() {
         $mdDialog.cancel();
@@ -40,5 +40,5 @@ angular.module('spirit99App')
 
     $scope.post = function(){
         $mdDialog.hide($scope.context);
-    }
+    };
 }]);

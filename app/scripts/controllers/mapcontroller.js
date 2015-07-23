@@ -21,7 +21,8 @@ angular.module('spirit99App')
             parent: angular.element(document.body)
         })
         .then(function(data){
-            data['coords'] = $scope.clickedMarker.coords;
+            data.latitude = $scope.clickedMarker.coords.latitude;
+            data.longitude = $scope.clickedMarker.coords.longitude;
             ygServer.postServer(data);
         }, function(){
             console.log('你又按錯啦');
@@ -80,9 +81,13 @@ angular.module('spirit99App')
     $scope.$watch(function () {
         return ygServer.postResource;
     }, function (newValue, oldValue) {
-        if(ygServer.postResource != null){
-            $scope.posts = ygServer.postResource.query();
-            console.log($scope.posts);
+        if(ygServer.postResource !== null){
+            $scope.posts = ygServer.postResource.query(function(){
+                for (var i = 0; i < $scope.posts.length; i++) {
+                    $scope.posts[i].show = true;
+                }
+                console.log($scope.posts);
+            });
         }
     });
 

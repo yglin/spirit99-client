@@ -59,6 +59,6 @@ angular
 // Kick-start the app
 .run(['ygUserPref', 'ygServer', function (ygUserPref, ygServer) {
     ygUserPref.loadPref();
-    ygServer.updateServers(ygUserPref.portals);
+    ygServer.updateServers();
 }])
 ;

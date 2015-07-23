@@ -12,15 +12,16 @@ angular.module('spirit99App')
 // AngularJS will instantiate a singleton by calling "new" on this function
     var self = this;
 
-    self.portals = [];
-
+    self.servers = {};
     self.lastSelectedServer = '';
 
     // load user prefs from local storage
     self.loadPref = function(){
-        self.portals = [
-            'http://localhost:3000/portal/localstory'
-        ];
+        self.servers['localstory'] = {
+            name: ' localstory',
+            title: '在地的故事',
+            portalUrl: 'http://localhost:3000/portal/localstory'
+        };
         self.lastSelectedServer = 'localstory';
     };
 
