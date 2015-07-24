@@ -39,6 +39,11 @@ angular.module('spirit99App')
     };
 
     $scope.post = function(){
-        $mdDialog.hide($scope.context);
+        var postData = {
+            title: $scope.title,
+            author: $scope.author,
+            context: $scope.context
+        };
+        $mdDialog.hide(postData);
     };
 }]);

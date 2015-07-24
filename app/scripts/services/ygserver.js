@@ -8,8 +8,8 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygServer', ['$http', '$resource', '$q', 'portalRules', 'ygError', 'ygUserPref',
-function ($http, $resource, $q, portalRules, ygError, ygUserPref) {
+.service('ygServer', ['$http', '$resource', '$q', 'portalRules', 'ygError', 'ygUserPref', 'ygProgress',
+function ($http, $resource, $q, portalRules, ygError, ygUserPref, ygProgress) {
     // AngularJS will instantiate a singleton by calling "new" on self function
     var self = this;
 
@@ -28,7 +28,7 @@ function ($http, $resource, $q, portalRules, ygError, ygUserPref) {
 
     self.fillDefaultOptions = function (portalData) {
         portalData.show = true;
-    }
+    };
 
     self.switchServer = function(serverName){
         if(serverName in self.servers){
@@ -89,9 +89,9 @@ function ($http, $resource, $q, portalRules, ygError, ygUserPref) {
             updatePromises[name] = $http.get(self.servers[name].portalUrl);
         }
 
-        $q.all(updatePromises).then(function (dataArray) {
+        var promise = $q.all(updatePromises).then(function (dataArray) {
             for (var name in dataArray) {
-                var portalUrl = dataArray[name].config.url
+                var portalUrl = dataArray[name].config.url;
                 var portalData = dataArray[name].data;
                 if(self.validatePortal(portalData)){
                     if(name in self.servers){
@@ -104,12 +104,19 @@ function ($http, $resource, $q, portalRules, ygError, ygUserPref) {
                     }
                 }
             }
-            console.log(self.servers);
+            // console.log(self.servers);
             if(ygUserPref.lastSelectedServer in self.servers){
                 self.switchServer(ygUserPref.lastSelectedServer);
             }
         });
 
+        ygProgress.show('更新各站點...', promise);
+    };
+
+    self.postServer = function (data) {
+        self.postResource.save(data).then(function(){
+            self.postResource.query();
+        });
     };
 
 }]);
