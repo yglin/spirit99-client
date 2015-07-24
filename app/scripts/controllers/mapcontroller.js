@@ -107,7 +107,9 @@ function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygServer) {
     $scope.$watch(function () {
         return ygServer.postResource;
     }, function (newValue, oldValue) {
-        $scope.reloadPosts();
+        if(ygServer.postResource !== null){
+            $scope.reloadPosts();
+        }
     });
 
 }]);

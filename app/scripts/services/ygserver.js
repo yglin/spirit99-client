@@ -13,6 +13,10 @@ function ($http, $resource, $q, portalRules, ygError, ygUserPref, ygProgress) {
     // AngularJS will instantiate a singleton by calling "new" on self function
     var self = this;
 
+    self.portalDataDefaults = {
+        show: true,
+        logo: 'https://www.evansville.edu/residencelife/images/greenLogo.png'
+    };
     self.servers = ygUserPref.servers;
     self.currentServerName = '';
     self.postResource = null;
@@ -26,8 +30,10 @@ function ($http, $resource, $q, portalRules, ygError, ygUserPref, ygProgress) {
         return true;
     };
 
-    self.fillDefaultOptions = function (portalData) {
-        portalData.show = true;
+    self.fillDefaultOptions = function (serverOptions) {
+        for(var key in self.portalDataDefaults){
+            serverOptions[key] = typeof serverOptions[key] !== 'undefined' ? serverOptions[key] : self.portalDataDefaults[key];
+        }
     };
 
     self.switchServer = function(serverName){
@@ -82,6 +88,15 @@ function ($http, $resource, $q, portalRules, ygError, ygUserPref, ygProgress) {
         }
     };
 
+    self.updateServer = function (serverName, portalData) {
+        if(self.validatePortal(portalData) && serverName in self.servers){
+            for(var key in portalData){
+                self.servers[serverName][key] = portalData[key];
+            }
+            self.fillDefaultOptions(self.servers[serverName]);            
+        }        
+    };
+
     self.updateServers = function(){
         var updatePromises = {};
         // console.log(self.servers);
@@ -93,16 +108,18 @@ function ($http, $resource, $q, portalRules, ygError, ygUserPref, ygProgress) {
             for (var name in dataArray) {
                 var portalUrl = dataArray[name].config.url;
                 var portalData = dataArray[name].data;
-                if(self.validatePortal(portalData)){
-                    if(name in self.servers){
-                        // Server already exists, update it
-                        for(var key in portalData){
-                            self.servers[name][key] = portalData[key];
-                        }
-                        // update portal Url
-                        self.servers[name].portalUrl = portalUrl;
-                    }
+
+                if(('portalUrl' in portalData) && portalData.portalUrl != portalUrl){
+                // Got new portalUrl, update with new portal
+                    $http.get(portalData.portalUrl)
+                    .then(function (newPortalData) {
+                        self.updateServer(name, newPortalData);
+                    });
                 }
+                else{
+                    self.updateServer(name, portalData);
+                }
+
             }
             // console.log(self.servers);
             if(ygUserPref.lastSelectedServer in self.servers){
