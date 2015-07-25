@@ -100,6 +100,9 @@ function ($http, $resource, $q, portalRules, ygError, ygUserPref, ygProgress) {
     self.updateServers = function(){
         var updatePromises = {};
         // console.log(self.servers);
+
+        // TODO: Fix this strategy, each server update should be solved independently,
+        // TODO: and return the final promise to updatePromises[]
         for (var name in self.servers) {
             updatePromises[name] = $http.get(self.servers[name].portalUrl);
         }
@@ -113,10 +116,12 @@ function ($http, $resource, $q, portalRules, ygError, ygUserPref, ygProgress) {
                 // Got new portalUrl, update with new portal
                     $http.get(portalData.portalUrl)
                     .then(function (newPortalData) {
+                        newPortalData.portalUrl = portalData.portalUrl;
                         self.updateServer(name, newPortalData);
                     });
                 }
                 else{
+                    portalData.portalUrl = portalUrl;
                     self.updateServer(name, portalData);
                 }
 
