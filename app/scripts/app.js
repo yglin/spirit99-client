@@ -18,6 +18,7 @@ angular
     'ngSanitize',
     'ngTouch',
     'ngMaterial',
+    'ngPromiseExtras',
     'uiGmapgoogle-maps',
     'froala'
 ])

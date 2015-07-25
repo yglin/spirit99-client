@@ -24,6 +24,7 @@ function ($http, $resource, $q, portalRules, ygError, ygUserPref, ygProgress) {
     self.validatePortal = function(portalData){
         for (var i = 0; i < portalRules.requiredFields.length; i++) {
             if(!(portalRules.requiredFields[i] in portalData)){
+                console.log('Missing required field: ' + portalRules.requiredFields[i] + ',\n in data: ' + portalData);
                 return false;
             }
         }
@@ -99,34 +100,34 @@ function ($http, $resource, $q, portalRules, ygError, ygUserPref, ygProgress) {
 
     self.updateServers = function(){
         var updatePromises = {};
-        // console.log(self.servers);
-
         // TODO: Fix this strategy, each server update should be solved independently,
         // TODO: and return the final promise to updatePromises[]
         for (var name in self.servers) {
-            updatePromises[name] = $http.get(self.servers[name].portalUrl);
-        }
-
-        var promise = $q.all(updatePromises).then(function (dataArray) {
-            for (var name in dataArray) {
-                var portalUrl = dataArray[name].config.url;
-                var portalData = dataArray[name].data;
-
-                if(('portalUrl' in portalData) && portalData.portalUrl != portalUrl){
+            updatePromises[name] = $http.get(self.servers[name].portalUrl)
+            .success(function (data, status, header, config) {
+                var portalUrl = config.url;
+                if(('portalUrl' in data) && data.portalUrl != portalUrl){
                 // Got new portalUrl, update with new portal
-                    $http.get(portalData.portalUrl)
-                    .then(function (newPortalData) {
-                        newPortalData.portalUrl = portalData.portalUrl;
-                        self.updateServer(name, newPortalData);
+                    return $http.get(data.portalUrl)
+                    .success(function (newData) {
+                        newData.portalUrl = data.portalUrl;
+                        self.updateServer(newData.name, newData);
+                    })
+                    .error(function (data, status) {
+                        console.log('Failed to update server: status = ' + status + ', data = ' + data);
                     });
                 }
                 else{
-                    portalData.portalUrl = portalUrl;
-                    self.updateServer(name, portalData);
+                    data.portalUrl = portalUrl;
+                    self.updateServer(data.name, data);
                 }
+            })
+            .error(function (data, status){
+                console.log('Failed to update server: status = ' + status + ', data = ' + data);
+            });
+        }
 
-            }
-            // console.log(self.servers);
+        var promise = $q.allSettled(updatePromises).then(function (dataArray) {
             if(ygUserPref.lastSelectedServer in self.servers){
                 self.switchServer(ygUserPref.lastSelectedServer);
             }
