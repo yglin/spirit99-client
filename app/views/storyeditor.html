@@ -29,6 +29,20 @@
                     <md-icon class='material-icons'>image</md-icon>
                     <md-tooltip>上傳圖片</md-tooltip>
                 </md-button>
+                <span flex></span>
+                <md-fab-speed-dial md-direction="left" class="md-fling">
+                    <md-fab-trigger ng-show='iconSet.length > 0'>
+                        <md-button aria-label="menu" class="md-fab md-raised md-mini">
+                            <img ng-src='{{selectedIconUrl}}' width='100%' height='100%'/>
+                            <md-tooltip>選擇地圖標示</md-tooltip>
+                        </md-button>
+                    </md-fab-trigger>
+                    <md-fab-actions>
+                        <md-button ng-repeat='iconUrl in iconSet' aria-label="Marker Icon" class="md-fab md-raised md-mini" ng-click="selectMarkerIcon(iconUrl)">
+                            <img ng-src='{{iconUrl}}' width='100%' height='100%'/>
+                        </md-button>
+                    </md-fab-actions>
+                </md-fab-speed-dial>
             </div>
         </md-toolbar>
         <!-- </div> -->

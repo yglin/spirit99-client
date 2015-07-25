@@ -15,7 +15,7 @@ function ($http, $resource, $q, portalRules, ygError, ygUserPref, ygProgress) {
 
     self.portalDataDefaults = {
         show: true,
-        logo: 'https://www.evansville.edu/residencelife/images/greenLogo.png'
+        logo: 'https://www.evansville.edu/residencelife/images/greenLogo.png',
     };
     self.servers = ygUserPref.servers;
     self.currentServerName = '';

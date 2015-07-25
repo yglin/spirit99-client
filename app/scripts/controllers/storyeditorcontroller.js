@@ -17,11 +17,15 @@ angular.module('spirit99App')
     };
 
     var server = ygServer.servers[ygServer.currentServerName];
-
+    $scope.iconSet = server.markerIconSet;
+    $scope.selectedIconUrl = 'images/googlemap-marker-green-32.png';
     $scope.title = '';
     $scope.context = '';
     $scope.author = '';
 
+    $scope.selectMarkerIcon = function (iconUrl) {
+        $scope.selectedIconUrl = iconUrl;
+    }
 
     $scope.triggerToolbar = function(){
         $scope.froalaOptions.froala('show', null);
@@ -42,7 +46,8 @@ angular.module('spirit99App')
         var postData = {
             title: $scope.title,
             author: $scope.author,
-            context: $scope.context
+            context: $scope.context,
+            icon: $scope.selectedIconUrl
         };
         $mdDialog.hide(postData);
     };
