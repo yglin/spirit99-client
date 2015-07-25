@@ -70,6 +70,9 @@ function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygServer) {
             $scope.posts = ygServer.postResource.query(function(){
                 for (var i = 0; i < $scope.posts.length; i++) {
                     $scope.posts[i].show = true;
+                    if(!('icon' in $scope.posts[i]) || !($scope.posts[i].icon)){
+                        $scope.posts[i].icon = 'images/icon-chat-48.png';
+                    }
                 }
             });
         }
