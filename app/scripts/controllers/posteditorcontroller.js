@@ -8,7 +8,7 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('StoryEditorController', ['$scope', '$mdDialog', 'ygServer', function ($scope, $mdDialog, ygServer){    
+.controller('PostEditorController', ['$scope', '$mdDialog', 'ygServer', function ($scope, $mdDialog, ygServer){    
     $scope.froalaOptions = {
         inlineMode: true,
         minHeight: 150,

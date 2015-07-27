@@ -40,8 +40,8 @@ function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygServer) {
 
     $scope.popStoryEditor = function () {
         $mdDialog.show({
-            templateUrl: 'views/StoryEditor.html',
-            controller: 'StoryEditorController',
+            templateUrl: 'views/posteditor.html',
+            controller: 'PostEditorController',
             parent: angular.element(document.body)
         })
         .then(function(data){

@@ -1,81 +1,8 @@
-<div ng-controller='SideNavController'>
-<md-sidenav class='md-sidenav-left md-whiteframe-z2' md-component-id='sidenav-left'>
-    <md-toolbar>
-        <div class='md-toolbar-tools'>
-            <md-button class='md-icon-button' aria-label='Server List' ng-click='switchPane("server-list")'>
-                <md-icon class='material-icons' ng-style="{color: 'white'}">view_list</md-icon>
-                <!-- <md-tooltip>站點列表</md-tooltip> -->
-            </md-button>
-            <md-button class='md-icon-button' aria-label='Search' ng-click='switchPane("search")'>
-                <md-icon class='material-icons' ng-style="{color: 'white'}">search</md-icon>
-                <!-- <md-tooltip>搜尋</md-tooltip> -->
-            </md-button>
-        </div>
-    </md-toolbar>
-        <div ng-show='selectedPane == "server-list"' ng-controller="ServerPaneController">
-            <md-subheader class="md-accent">站點列表</md-subheader>
-            <md-list>
-                <md-list-item ng-repeat='(name, server) in servers' ng-show='server.show' ng-click="switchServer(name)">
-                    <img alt="{{ server.title }}" ng-src="{{ server.logo }}" class="md-avatar" />
-                    <p flex>{{ server.title}}</p>
-                    <md-button class='md-icon-button' aria-label='Remove' ng-click='removeServer(name); $event.stopPropagation()'>
-                        <md-icon class='material-icons'>clear</md-icon>
-                    </md-button>
-                </md-list-item>
-                <md-list-item>
-                    <md-input-container flex>
-                        <label>新站點傳送門網址</label>
-                        <input ng-model='newServerPortalUrl'>
-                    </md-input-container>
-                    <md-button class='md-icon-button' aria-label='Add' ng-click='addServer(newServerPortalUrl)'>
-                        <md-icon class='material-icons'>add</md-icon>
-                    </md-button>
-                </md-list-item>
-            </md-list>
-        </div>
-        <div ng-show='selectedPane == "search"' ng-controller="SearchPaneController">
-            <md-subheader class="md-accent">搜尋</md-subheader>
-            <md-content layout-padding>
-                <md-chips ng-model="keywords" placeholder='增加關鍵字' secondary-placeholder="輸入關鍵字">
-                </md-chips>
-            </md-content>
-        </div>
-    </md-tabs>
-</md-sidenav>
+<div class='container' ng-include='"views/sidenav.html"' ng-controller='SideNavController'>
 </div>
 
-<md-toolbar ng-controller="HeadBarController">
-    <div layout-gt-sm='row'>
-        <md-button class='md-icon-button' aria-label='Open Side Menu' ng-click='openSidenav()'>
-            <md-icon class='material-icons' ng-style="{color: 'white'}">keyboard_arrow_right</md-icon>
-        </md-button>
-        <md-list-item>
-        <img alt="{{serverTitle}}" ng-src="{{serverLogo}}" class="md-avatar" ng-style="{'max-width':'64px', 'max-height':'64px'}" ng-hide='serverLogo == ""' />
-        <p flex>{{serverTitle}}</p>
-        </md-list-item>
-        <span flex></span>
-        <md-icon class='material-icons' ng-style="{color: 'white'}">search</md-icon>
-        <md-chips ng-model="keywords" placeholder='增加關鍵字' secondary-placeholder="搜尋">
-        </md-chips>
-    </div>
-</md-toolbar>
+<div class='container' ng-include='"views/headbar.html"' ng-controller="HeadBarController">
+</div>
 
-<md-content ng-controller="MapController" style='height:500px'>
-<style type="text/css">
-.angular-google-map-container { height: 500px; }
-</style>
-    <div layout='column' layout-align="center center" style='height:100%;' ng-show='!mapIsReady'>
-        <p style="font-size:200%">地圖讀取中...</p>
-        <md-progress-circular md-mode="indeterminate" class='md-accent'></md-progress-circular>
-    </div>
-    <ui-gmap-google-map center='map.center' zoom='map.zoom' events='map.events' ng-show="mapIsReady" >
-        <ui-gmap-marker coords="clickedMarker.coords" options="clickedMarker.options" events="clickedMarker.events" idkey="clickedMarker.id" ng-cloak>
-        </ui-gmap-marker>
-        <ui-gmap-markers models='posts' coords='"self"' icon='"icon"' doCluster='true'>
-            <ui-gmap-windows>
-                <div ng-non-bindable>{{title}}</div>
-            </ui-gmap-windows>
-        </ui-gmap-markers>
-    </ui-gmap-google-map>
-</md-content>
-
+<div class='container' ng-include='"views/map.html"' ng-controller="MapController" style='height:500px'> 
+</div>
