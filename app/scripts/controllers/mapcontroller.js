@@ -42,7 +42,7 @@ function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygServer) {
         $mdDialog.show({
             templateUrl: 'views/posteditor.html',
             controller: 'PostEditorController',
-            parent: angular.element(document.body)
+            clickOutsideToClose: true
         })
         .then(function(data){
             data['latitude'] = $scope.clickedMarker.coords.latitude;
