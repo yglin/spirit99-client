@@ -65,11 +65,23 @@ function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygServer) {
         });
     };
 
+    $scope.onClickPostMarker = function (marker, eventName, model) {
+        $mdDialog.show({
+            templateUrl: 'views/post.html',
+            controller: 'PostController',
+            clickOutsideToClose: true
+        })
+        .then(function(response){}, function(response){});
+    };
+
     $scope.reloadPosts = function(){
         if(ygServer.postResource !== null){
             $scope.posts = ygServer.postResource.query(function(){
                 for (var i = 0; i < $scope.posts.length; i++) {
                     $scope.posts[i].show = true;
+                    $scope.posts[i].events = {
+                        click: $scope.onClickPostMarker
+                    };
                     if(!('icon' in $scope.posts[i]) || !($scope.posts[i].icon)){
                         $scope.posts[i].icon = 'images/icon-chat-48.png';
                     }
