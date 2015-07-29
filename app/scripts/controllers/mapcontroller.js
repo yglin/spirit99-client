@@ -12,6 +12,7 @@ angular.module('spirit99App')
 function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygServer) {
 
     $scope.posts = [];
+    $scope.newPost = null;
     $scope.mapIsReady = false;
     $scope.map = {
         center:{
@@ -39,24 +40,37 @@ function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygServer) {
     };
 
     $scope.popStoryEditor = function () {
+        if($scope.newPost === null){
+            $scope.newPost = new ygServer.postResource();
+            // $scope.newPost.title = '';
+            // $scope.newPost.context = '';
+            // $scope.newPost.author = '';
+            $scope.newPost.icon = 'images/googlemap-marker-green-32.png';
+        }
+        $scope.newPost['latitude'] = $scope.clickedMarker.coords.latitude;
+        $scope.newPost['longitude'] = $scope.clickedMarker.coords.longitude;
         $mdDialog.show({
             templateUrl: 'views/posteditor.html',
             controller: 'PostEditorController',
-            clickOutsideToClose: true
+            clickOutsideToClose: true,
+            scope: $scope,
+            preserveScope: true,
         })
         .then(function(data){
-            data['latitude'] = $scope.clickedMarker.coords.latitude;
-            data['longitude'] = $scope.clickedMarker.coords.longitude;
             if(ygServer.postResource !== null){
-                var promise = ygServer.postResource.save(data).$promise;
-                ygProgress.show('新增資料...',
-                    promise.then(function (result) {
+                var promise = $scope.newPost.$save()
+                .then(function (result) {
                         console.log('Success, post added!!');
+                        $scope.newPost = null;
                         $scope.reloadPosts();
                         $scope.clickedMarker.options.visible = false;
                     }, function (error) {
                         console.log('BoooooooM~!!!, adding post failed');
-                }));
+                });
+                // console.log(promise);
+
+                ygProgress.show('新增資料...', promise);
+
             }else{
                 console.log('Not connected to post resources');
             }

@@ -44,7 +44,7 @@ function ($http, $resource, $q, portalRules, ygError, ygUserPref, ygProgress) {
             self.currentServer = self.servers[serverName];
 
             // Create new post resource for current server
-            self.postResource = $resource(self.currentServer.postUrl, {}, {});
+            self.postResource = $resource(self.currentServer.postUrl + '/:id');
         }
         else{
             console.log('沒有找到' + serverName + '啊！你是不是忘記load啦？');
