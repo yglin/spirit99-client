@@ -1,4 +1,15 @@
 <md-dialog aria-label="View Post" flex='60'>
-<md-dialog-content>
-</md-dialog-content>
+    <md-toolbar>
+        <div class="md-toolbar-tools md-toolbar-tools-bottom">
+            <h2>{{post.title}}</h2>
+            <span flex></span>
+            <div>{{post.author}} {{create_time}} 發佈</div>
+        </div>
+    </md-toolbar>
+    <md-dialog-content>
+        <md-content>
+            <div ng-bind-html='post.context'>
+            </div>
+        </md-content>
+    </md-dialog-content>
 </md-dialog>

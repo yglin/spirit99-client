@@ -80,12 +80,20 @@ function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygServer) {
     };
 
     $scope.onClickPostMarker = function (marker, eventName, model) {
-        $mdDialog.show({
-            templateUrl: 'views/post.html',
-            controller: 'PostController',
-            clickOutsideToClose: true
-        })
-        .then(function(response){}, function(response){});
+        ygServer.postResource.get({id:model.id}, function(result){
+            $mdDialog.show({
+                templateUrl: 'views/post.html',
+                controller: 'PostController',
+                clickOutsideToClose: true,
+                locals: {
+                    post: result
+                }
+            })
+            .then(function(response){}, function(response){});
+        },
+        function(error){
+
+        });
     };
 
     $scope.reloadPosts = function(){
