@@ -142,4 +142,8 @@ function ($http, $resource, $q, portalRules, ygError, ygUserPref, ygProgress) {
         });
     };
 
+    self.createCommentResource = function (post_id) {
+        return $resource(self.currentServer.postUrl + '/:id/comments');
+    };
+
 }]);

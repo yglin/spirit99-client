@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('MapController', ['$scope', 'uiGmapGoogleMapApi', '$mdDialog', 'ygError', 'ygProgress', 'ygServer',
-function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygServer) {
+.controller('MapController', ['$scope', 'uiGmapGoogleMapApi', '$mdDialog', 'ygError', 'ygProgress', 'ygUtils', 'ygServer',
+function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygUtils, ygServer) {
 
     $scope.posts = [];
     $scope.newPost = null;
@@ -80,20 +80,15 @@ function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygServer) {
     };
 
     $scope.onClickPostMarker = function (marker, eventName, model) {
-        ygServer.postResource.get({id:model.id}, function(result){
-            $mdDialog.show({
-                templateUrl: 'views/post.html',
-                controller: 'PostController',
-                clickOutsideToClose: true,
-                locals: {
-                    post: result
-                }
-            })
-            .then(function(response){}, function(response){});
-        },
-        function(error){
-
-        });
+        $mdDialog.show({
+            templateUrl: 'views/post.html',
+            controller: 'PostController',
+            clickOutsideToClose: true,
+            locals: {
+                postID: model.id
+            }
+        })
+        .then(function(response){}, function(response){});
     };
 
     $scope.reloadPosts = function(){

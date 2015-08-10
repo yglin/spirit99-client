@@ -1,15 +1,54 @@
 <md-dialog aria-label="View Post" flex='60'>
     <md-toolbar>
-        <div class="md-toolbar-tools md-toolbar-tools-bottom">
-            <h2>{{post.title}}</h2>
+        <div class="md-toolbar-tools md-toolbar-tools-bottom" ng-show='postLoaded'>
+            <h2>{{ post.title }}</h2>
             <span flex></span>
-            <div>{{post.author}} {{create_time}} 發佈</div>
+            <div>{{ post.author }} {{ formatDatetime(post.create_time) }} 發佈</div>
         </div>
     </md-toolbar>
     <md-dialog-content>
-        <md-content>
-            <div ng-bind-html='post.context'>
+        <div layout='column' layout-align="center center" style='height:100%;' ng-show='!postLoaded'>
+            <p style="font-size:200%">讀取中...</p>
+            <md-progress-circular md-mode="indeterminate" class='md-accent'></md-progress-circular>
+        </div>
+        <md-content layout='column' layout-margin layout-padding ng-show='postLoaded'>
+            <!-- Post context -->
+            <md-content layout-padding style='min-height:100px;' ng-bind-html='post.context'>
+            </md-content>
+            <span></span>
+
+            <!-- New comment inputs -->
+            <div layout='row' ng-show='commentsResource !== null'>
+                <div flex='10' layout-padding>
+                    <img src="images/icon-comment-48.png" />
+                </div>
+                <div flex layout='column'>
+                    <div class='md-whiteframe-z3' layout-padding>
+                        <textarea froala='froalaOptions' ng-model="newComment.context"></textarea>
+                    </div>
+                    <div layout='row' layout-align='space-around center'>
+                        <md-input-container flex>
+                            <label>作者</label>
+                            <input ng-model="newComment.author">
+                        </md-input-container>
+                        <div>
+                            <md-button ng-click='addComment(newComment)'>發表</md-button>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <!-- List user comments -->
+            <md-list>
+                <md-list-item class='md-3-line' ng-repeat='comment in comments'>
+                    <div class='md-list-item-text'>
+                        <h3>{{ comment.author }}</h3>
+                        <h5>{{ formatDatetime(comment.create_time) }}</h5>
+                        <md-content layout-padding style='min-height:50px;' ng-bind-html='comment.context'>
+                        </md-content>
+                    </div>
+                </md-list-item>
+            </md-list>
         </md-content>
     </md-dialog-content>
 </md-dialog>
