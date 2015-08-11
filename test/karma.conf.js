@@ -51,6 +51,7 @@ module.exports = function(config) {
       'bower_components/FroalaWysiwygEditor/js/plugins/video.min.js',
       'bower_components/angular-froala/src/angular-froala.js',
       'bower_components/angular-promise-extras/angular-promise-extras.js',
+      'bower_components/angular-truncate-2/src/truncate.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       "app/scripts/**/*.js",

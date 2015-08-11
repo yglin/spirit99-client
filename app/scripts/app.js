@@ -20,7 +20,8 @@ angular
     'ngMaterial',
     'ngPromiseExtras',
     'uiGmapgoogle-maps',
-    'froala'
+    'froala',
+    'truncate'
 ])
 .value('portalRules', {
     requiredFields: [
