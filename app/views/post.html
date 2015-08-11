@@ -1,9 +1,16 @@
 <md-dialog aria-label="View Post" flex='60'>
     <md-toolbar>
         <div class="md-toolbar-tools md-toolbar-tools-bottom" ng-show='postLoaded'>
-            <h2>{{ post.title }}</h2>
-            <span flex></span>
-            <div>{{ post.author }} {{ formatDatetime(post.create_time) }} 發佈</div>
+            <div flex='50'>
+                <h2 data-fittext data-fittext-max='36' data-fittext-min='18'>{{ post.title }}</h2>
+            </div>
+            <span flex='20'></span>
+            <div flex='30' layout='column'>
+                <div>
+                    <div data-fittext data-fittext-max='24' data-fittext-min='14'>{{ post.author }}</div>
+                </div>
+                <div>{{ formatDatetime(post.create_time) }} 發佈</div>
+            </div>
         </div>
     </md-toolbar>
     <md-dialog-content>

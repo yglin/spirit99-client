@@ -21,7 +21,8 @@ angular
     'ngPromiseExtras',
     'uiGmapgoogle-maps',
     'froala',
-    'truncate'
+    'truncate',
+    'ngFitText'
 ])
 .value('portalRules', {
     requiredFields: [
