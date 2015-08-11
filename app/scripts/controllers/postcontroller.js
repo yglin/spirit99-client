@@ -18,8 +18,13 @@ function ($scope, $resource, $mdDialog, ygUtils, ygServer, postID) {
     };
     $scope.formatDatetime = ygUtils.formatDatetime;
 
-    var commentsResource = null;
+    $scope.commentsResource = null;
     $scope.comments = [];
+
+    $scope.newComment = {
+        context: '',
+        author: ''
+    };
 
     $scope.postLoaded = false;
     ygServer.postResource.get({id:postID},
@@ -30,13 +35,15 @@ function ($scope, $resource, $mdDialog, ygUtils, ygServer, postID) {
         // Load comments
         var links = ygUtils.getHateoasLinks(getResponseHeaders());
         if('comments' in links){
-            commentsResource = $resource(links['comments'] + '/:id');
-            $scope.comments = commentsResource.query(
+            $scope.commentsResource = $resource(links['comments'] + '/:id');
+            $scope.comments = $scope.commentsResource.query(
             function (results) {
             },
             function (error) {
                 // body...
             });
+
+            $scope.newComment = new $scope.commentsResource();
         }
     },
     function(error){
@@ -44,13 +51,19 @@ function ($scope, $resource, $mdDialog, ygUtils, ygServer, postID) {
     });
 
 
-    $scope.newComment = {
-        context: '',
-        author: ''
-    };
 
     $scope.addComment = function (comment) {
-        
+        if($scope.commentsResource === null){
+            return;
+        }
+        $scope.newComment.$save().then(
+        function (result) {
+            $scope.comments.push($scope.newComment);
+            $scope.newComment = new $scope.commentsResource();
+        },
+        function (error) {
+            console.log(error);
+        });
     };
 
     $scope.cancel = function() {

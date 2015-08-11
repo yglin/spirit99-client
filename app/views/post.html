@@ -22,7 +22,21 @@
             <!-- Post context -->
             <md-content layout-padding style='min-height:100px;' ng-bind-html='post.context'>
             </md-content>
-            <span></span>
+            
+            <md-divider></md-divider>
+
+            <!-- List user comments -->
+            <md-list>
+                <md-list-item class='md-3-line md-whiteframe-z2' ng-repeat='comment in comments'>
+                    <div class='md-list-item-text' layout-margin layout-padding>
+                        <h3>{{ comment.author }}</h3>
+                        <h5>{{ formatDatetime(comment.create_time) }}</h5>
+                        <md-content layout-padding style='min-height:50px;' ng-bind-html='comment.context'>
+                        </md-content>
+                    </div>
+                </md-list-item>
+            </md-list>
+            <br>
 
             <!-- New comment inputs -->
             <div layout='row' ng-show='commentsResource !== null'>
@@ -45,17 +59,6 @@
                 </div>
             </div>
 
-            <!-- List user comments -->
-            <md-list>
-                <md-list-item class='md-3-line' ng-repeat='comment in comments'>
-                    <div class='md-list-item-text'>
-                        <h3>{{ comment.author }}</h3>
-                        <h5>{{ formatDatetime(comment.create_time) }}</h5>
-                        <md-content layout-padding style='min-height:50px;' ng-bind-html='comment.context'>
-                        </md-content>
-                    </div>
-                </md-list-item>
-            </md-list>
         </md-content>
     </md-dialog-content>
 </md-dialog>
