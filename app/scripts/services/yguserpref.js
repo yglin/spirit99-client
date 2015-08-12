@@ -32,10 +32,10 @@ angular.module('spirit99App')
         self.lastSelectedServer = 'localstory';
         self.filterCircle = {
             center: {
-                latitude: 23.973875,
-                longitude: 120.982024
+                latitude: 24.081665,
+                longitude: 120.538539
             },
-            radius: 10000,
+            radius: 1000,
             stroke: {
                 color: '#08B21F',
                 weight: 1,
@@ -45,6 +45,7 @@ angular.module('spirit99App')
                 color: '#08B21F',
                 opacity: 0.25
             },
+            clickable: false,
             editable: true,
             visible: true
         };

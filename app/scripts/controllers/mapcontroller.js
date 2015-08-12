@@ -102,22 +102,28 @@ function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygUtils, yg
     };
 
     $scope.reloadPosts = function(){
-        if(ygServer.postResource !== null){
-            $scope.posts = ygServer.postResource.getMarkers(function(){
-                for (var i = 0; i < $scope.posts.length; i++) {
-                    $scope.posts[i].show = true;
-                    $scope.posts[i].events = {
-                        click: $scope.onClickPostMarker
-                    };
-                    if(!('icon' in $scope.posts[i]) || !($scope.posts[i].icon)){
-                        $scope.posts[i].icon = 'images/icon-chat-48.png';
-                    }
-                }
-            });
-        }
-        else{
+        if(ygServer.postResource === null){
             console.log("Post resource is null, maybe not connected to server?");
+            return false;
         }
+        var extraParams = {};
+        if($scope.filterCircle.visible = true){
+            extraParams.filterCircle = {
+                center: $scope.filterCircle.center,
+                radius: $scope.filterCircle.radius
+            };
+        }
+        $scope.posts = ygServer.postResource.getMarkers(extraParams, function(){
+            for (var i = 0; i < $scope.posts.length; i++) {
+                $scope.posts[i].show = true;
+                $scope.posts[i].events = {
+                    click: $scope.onClickPostMarker
+                };
+                if(!('icon' in $scope.posts[i]) || !($scope.posts[i].icon)){
+                    $scope.posts[i].icon = 'images/icon-chat-48.png';
+                }
+            }
+        });
     }
 
     $scope.map.events.click = function (googleMaps, eventName, args){
