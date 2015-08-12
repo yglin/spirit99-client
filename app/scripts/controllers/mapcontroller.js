@@ -49,6 +49,7 @@ function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygUtils, yg
         }
         $scope.newPost['latitude'] = $scope.clickedMarker.coords.latitude;
         $scope.newPost['longitude'] = $scope.clickedMarker.coords.longitude;
+        // console.log($scope.newPost);
         $mdDialog.show({
             templateUrl: 'views/posteditor.html',
             controller: 'PostEditorController',
@@ -61,8 +62,15 @@ function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygUtils, yg
                 var promise = $scope.newPost.$save()
                 .then(function (result) {
                         console.log('Success, post added!!');
+                        $scope.newPost.show = true;
+                        $scope.newPost.events = {
+                            click: $scope.onClickPostMarker
+                        };
+                        if(!('icon' in $scope.newPost) || !($scope.newPost.icon)){
+                            $scope.newPost.icon = 'images/icon-chat-48.png';
+                        }
+                        $scope.posts.push($scope.newPost);
                         $scope.newPost = null;
-                        $scope.reloadPosts();
                         $scope.clickedMarker.options.visible = false;
                     }, function (error) {
                         console.log('BoooooooM~!!!, adding post failed');
@@ -93,7 +101,7 @@ function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygUtils, yg
 
     $scope.reloadPosts = function(){
         if(ygServer.postResource !== null){
-            $scope.posts = ygServer.postResource.query(function(){
+            $scope.posts = ygServer.postResource.getMarkers(function(){
                 for (var i = 0; i < $scope.posts.length; i++) {
                     $scope.posts[i].show = true;
                     $scope.posts[i].events = {

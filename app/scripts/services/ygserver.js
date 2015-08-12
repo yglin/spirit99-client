@@ -20,6 +20,15 @@ function ($http, $resource, $q, portalRules, ygError, ygUserPref, ygProgress) {
     self.servers = ygUserPref.servers;
     self.currentServerName = '';
     self.postResource = null;
+    self.postResourceActions = {
+        'getMarkers': {
+            method: 'GET',
+            isArray: true,
+            params: {
+                fields: ['id', 'title', 'latitude', 'longitude', 'icon']
+            }
+        }
+    };
 
     self.validatePortal = function(portalData){
         for (var i = 0; i < portalRules.requiredFields.length; i++) {
@@ -44,7 +53,7 @@ function ($http, $resource, $q, portalRules, ygError, ygUserPref, ygProgress) {
             self.currentServer = self.servers[serverName];
 
             // Create new post resource for current server
-            self.postResource = $resource(self.currentServer.postUrl + '/:id');
+            self.postResource = $resource(self.currentServer.postUrl + '/:id', {}, self.postResourceActions);
         }
         else{
             console.log('沒有找到' + serverName + '啊！你是不是忘記load啦？');
