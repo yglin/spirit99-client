@@ -40,6 +40,14 @@ function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygUtils, yg
     };
 
     $scope.filterCircle = ygUserPref.filterCircle;
+    $scope.filterCircle.events = {
+        center_changed: function (circle, eventName, model) {
+            $scope.reloadPosts();
+        },
+        radius_changed: function (circle, eventName, model) {
+            $scope.reloadPosts();
+        }
+    };
 
     $scope.popStoryEditor = function () {
         if($scope.newPost === null){
