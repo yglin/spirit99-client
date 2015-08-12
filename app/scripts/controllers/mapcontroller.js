@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('MapController', ['$scope', 'uiGmapGoogleMapApi', '$mdDialog', 'ygError', 'ygProgress', 'ygUtils', 'ygServer',
-function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygUtils, ygServer) {
+.controller('MapController', ['$scope', 'uiGmapGoogleMapApi', '$mdDialog', 'ygError', 'ygProgress', 'ygUtils', 'ygUserPref', 'ygServer',
+function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygUtils, ygUserPref, ygServer) {
 
     $scope.posts = [];
     $scope.newPost = null;
@@ -38,6 +38,8 @@ function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygUtils, yg
         events: {
         }
     };
+
+    $scope.filterCircle = ygUserPref.filterCircle;
 
     $scope.popStoryEditor = function () {
         if($scope.newPost === null){

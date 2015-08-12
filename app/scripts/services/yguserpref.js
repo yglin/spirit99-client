@@ -30,6 +30,24 @@ angular.module('spirit99App')
             show: true
         };
         self.lastSelectedServer = 'localstory';
+        self.filterCircle = {
+            center: {
+                latitude: 23.973875,
+                longitude: 120.982024
+            },
+            radius: 10000,
+            stroke: {
+                color: '#08B21F',
+                weight: 1,
+                opacity: 0.25
+            },
+            fill: {
+                color: '#08B21F',
+                opacity: 0.25
+            },
+            editable: true,
+            visible: true
+        };
     };
 
 });
