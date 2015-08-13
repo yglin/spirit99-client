@@ -55,7 +55,7 @@
                             <input ng-model="newComment.author">
                         </md-input-container>
                         <div>
-                            <md-button ng-click='addComment(newComment)'>發表</md-button>
+                            <md-button ng-click='addComment(newComment)' ng-disabled='!newComment.context'>發表</md-button>
                         </div>
                     </div>
                 </div>
