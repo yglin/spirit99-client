@@ -109,8 +109,6 @@ function ($http, $resource, $q, portalRules, ygError, ygUserPref, ygProgress) {
 
     self.updateServers = function(){
         var updatePromises = {};
-        // TODO: Fix this strategy, each server update should be solved independently,
-        // TODO: and return the final promise to updatePromises[]
         for (var name in self.servers) {
             updatePromises[name] = $http.get(self.servers[name].portalUrl)
             .success(function (data, status, header, config) {

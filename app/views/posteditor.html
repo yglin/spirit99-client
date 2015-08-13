@@ -9,14 +9,25 @@
     </div>
 </md-toolbar>
 <md-dialog-content>
-    <md-input-container flex>
-        <label>標題</label>
-        <input ng-model="newPost.title">
-    </md-input-container>
-    <md-input-container flex>
-        <label>作者</label>
-        <input ng-model="newPost.author">
-    </md-input-container>    
+    <form name='postForm'>
+        <md-input-container>
+            <label>標題</label>
+            <!-- TODO: limit character length to 50  -->
+            <input md-maxlength='50' required name='title' ng-model="newPost.title">
+            <div ng-messages='postForm.title.$error'>
+                <div ng-message='required'>必須要有標題</div>
+                <div ng-message='md-maxlength'>標題請勿超過50字</div>
+            </div>
+        </md-input-container>
+        <md-input-container flex>
+            <!-- TODO: limit character length to 30 -->
+            <label>作者</label>
+            <input md-maxlength='20' name='author' ng-model="newPost.author">
+            <div ng-messages='postForm.author.$error'>
+                <div ng-message='md-maxlength'>作者請勿超過20字</div>
+            </div>
+        </md-input-container> 
+    </form>   
     <md-content layout="column" class='md-whiteframe-z3'>
         <!-- <div layout='row'> -->
         <md-toolbar class='md-accent md-hue-1'>
@@ -54,7 +65,7 @@
     我按錯了
 </md-button>
 <span flex></span>
-<md-button ng-click="post()" class="md-raised md-primary">
+<md-button ng-click="post()" class="md-raised md-primary" ng-disabled="postForm.title.$invalid || postForm.author.$invalid">
     好了，大家來看吧！
 </md-button>
 </div>

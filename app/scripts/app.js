@@ -10,6 +10,7 @@
  */
 angular
 .module('spirit99App', [
+    'ngMessages',
     'ngAnimate',
     'ngAria',
     'ngCookies',

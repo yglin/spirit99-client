@@ -2,7 +2,9 @@
     <md-toolbar>
         <div class="md-toolbar-tools md-toolbar-tools-bottom" ng-show='postLoaded'>
             <div flex='50'>
-                <h2 data-fittext data-fittext-max='36' data-fittext-min='18'>{{ post.title }}</h2>
+                <div>
+                <a data-fittext data-fittext-max='36' data-fittext-min='18'>{{ post.title | words: 20 | characters: 50 }}</a>
+                </div>
             </div>
             <span flex='20'></span>
             <div flex='30' layout='column'>
