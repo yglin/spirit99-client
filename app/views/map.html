@@ -13,10 +13,7 @@
 
         <!-- Post markers, load from server -->
         <ui-gmap-markers models='posts' coords='"self"' icon='"icon"' events='"events"' doCluster='true'>
-            <ui-gmap-windows ng-cloak>
-                <div ng-non-bindable>
-                    <p>{{ title | words: 5 | characters: 32 }}</p>
-                </div>
+            <ui-gmap-windows show='"showWindow"' templateUrl='"templateUrl"' templateParameter='"self"' options='"infoWindowOptions"'>
             </ui-gmap-windows>
         </ui-gmap-markers>
 

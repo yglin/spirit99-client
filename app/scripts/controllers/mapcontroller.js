@@ -18,6 +18,7 @@ function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygUtils, yg
     $scope.newPost = null;
     $scope.mapIsReady = false;
     $scope.mapEvents = {};
+    $scope.infoWindowTemplateUrl = 'views/infowindow.html';
 
     $scope.clickedMarker = {
         id: 'spirit99-map-clicked-marker',
@@ -118,10 +119,24 @@ function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygUtils, yg
         }
         $scope.posts = ygServer.postResource.getMarkers(extraParams, function(){
             for (var i = 0; i < $scope.posts.length; i++) {
-                $scope.posts[i].show = true;
+                // $scope.posts[i].show = true;
                 $scope.posts[i].events = {
                     click: $scope.onClickPostMarker
                 };
+
+                $scope.posts[i].templateUrl = $scope.infoWindowTemplateUrl;
+                $scope.posts[i].showWindow = false;
+                $scope.posts[i].infoWindowOptions = {
+                    disableAutoPan: true
+                };
+                // $scope.posts[i].onClickCloseWindow = function () {
+                //     console.log('Close me!! info window');
+                //     $event.stopPropagation();
+                // };
+                // $scope.posts[i].templateParameter = {
+                //     id: $scope.posts[i].id,
+                //     title: $scope.posts[i].title
+                // };
                 if(!('icon' in $scope.posts[i]) || !($scope.posts[i].icon)){
                     $scope.posts[i].icon = 'images/icon-chat-48.png';
                 }
