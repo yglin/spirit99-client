@@ -109,7 +109,8 @@ function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygUtils, yg
             return false;
         }
         var extraParams = {};
-        if($scope.filterCircle.visible = true){
+        // console.log($scope.filterCircle.visible);
+        if($scope.filterCircle.visible){
             extraParams.filterCircle = {
                 center: $scope.filterCircle.center,
                 radius: $scope.filterCircle.radius

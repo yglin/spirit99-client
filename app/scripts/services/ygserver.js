@@ -138,7 +138,7 @@ function ($http, $resource, $q, portalRules, ygError, ygUserPref, ygProgress) {
 
         var promise = $q.allSettled(updatePromises).then(function (dataArray) {
             if(ygUserPref.lastSelectedServer in self.servers){
-                console.log('last selected server is ' + ygUserPref.lastSelectedServer);
+                // console.log('last selected server is ' + ygUserPref.lastSelectedServer);
                 self.switchServer(ygUserPref.lastSelectedServer);
             }
         });

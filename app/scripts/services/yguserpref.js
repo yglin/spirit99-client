@@ -46,10 +46,10 @@ angular.module('spirit99App')
             },
             clickable: false,
             editable: true,
-            visible: true
+            visible: false
         },
         lastSelectedServer: 'localstory',
-        autoGeolocation: false,
+        autoGeolocation: true,
     });
 
     self.servers = self.$storage.servers;
