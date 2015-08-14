@@ -11,18 +11,13 @@ angular.module('spirit99App')
 .controller('MapController', ['$scope', 'uiGmapGoogleMapApi', '$mdDialog', 'ygError', 'ygProgress', 'ygUtils', 'ygUserPref', 'ygServer',
 function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygUtils, ygUserPref, ygServer) {
 
+    $scope.map = ygUserPref.map;
+    $scope.filterCircle = ygUserPref.filterCircle;
+
     $scope.posts = [];
     $scope.newPost = null;
     $scope.mapIsReady = false;
-    $scope.map = {
-        center:{
-            latitude: 23.973875,
-            longitude: 120.982024
-        },
-        zoom: 6,
-        events: {
-        }
-    };
+    $scope.mapEvents = {};
 
     $scope.clickedMarker = {
         id: 'spirit99-map-clicked-marker',
@@ -39,8 +34,7 @@ function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygUtils, yg
         }
     };
 
-    $scope.filterCircle = ygUserPref.filterCircle;
-    $scope.filterCircle.events = {
+    $scope.filterCircleEvents = {
         center_changed: function (circle, eventName, model) {
             $scope.reloadPosts();
         },
@@ -134,7 +128,7 @@ function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygUtils, yg
         });
     }
 
-    $scope.map.events.click = function (googleMaps, eventName, args){
+    $scope.mapEvents.click = function (googleMaps, eventName, args){
         $scope.clickedMarker.coords = {
             latitude: args[0].latLng.lat(),
             longitude: args[0].latLng.lng()
@@ -165,7 +159,9 @@ function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygUtils, yg
     // uiGmapGoogleMapApi is a promise.
     // The "then" callback function provides the google.maps object.
     uiGmapGoogleMapApi.then(function(maps) {
-        $scope.centerGeoLocation($scope.map);
+        if(ygUserPref.autoGeolocation){
+            $scope.centerGeoLocation($scope.map);
+        }
         $scope.mapIsReady = true;    
     });
 

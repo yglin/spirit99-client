@@ -23,7 +23,8 @@ angular
     'uiGmapgoogle-maps',
     'froala',
     'truncate',
-    'ngFitText'
+    'ngFitText',
+    'ngStorage'
 ])
 .value('portalRules', {
     requiredFields: [
@@ -62,7 +63,7 @@ angular
 })
 // Kick-start the app
 .run(['ygUserPref', 'ygServer', function (ygUserPref, ygServer) {
-    ygUserPref.loadPref();
+    // ygUserPref.loadPref();
     ygServer.updateServers();
 }])
 ;
