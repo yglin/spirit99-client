@@ -13,6 +13,9 @@ function($scope, $mdSidenav, ygUserPref, ygServer, ygFilter){
     $scope.keywords = ygFilter.keywords.title;
     $scope.serverTitle = '請選擇站點';
     $scope.serverLogo = '';
+    $scope.showInfoWindows = false;
+    $scope.toogleInfoWindowsButtonStyle = {color: 'white'};
+    $scope.toogleInfoWindowsButtonTooltip = '顯示全部標題';
 
     $scope.$watch(
         function(){
@@ -32,5 +35,17 @@ function($scope, $mdSidenav, ygUserPref, ygServer, ygFilter){
 
     $scope.openSidenav = function(){
         $mdSidenav('sidenav-left').open();
-    };    
+    };
+
+    $scope.toggleInfoWindows = function () {
+        $scope.showInfoWindows = !($scope.showInfoWindows);
+        if($scope.showInfoWindows){
+            $scope.toogleInfoWindowsButtonStyle = {color: 'grey'};
+            $scope.toogleInfoWindowsButtonTooltip = '隱藏全部標題';
+        }
+        else{
+            $scope.toogleInfoWindowsButtonStyle = {color: 'white'};
+            $scope.toogleInfoWindowsButtonTooltip = '顯示全部標題';
+        }
+    };
 }]);

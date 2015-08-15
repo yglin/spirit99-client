@@ -1,12 +1,18 @@
 <md-toolbar>
-    <div layout-gt-sm='row'>
+    <div div class="md-toolbar-tools">
         <md-button class='md-icon-button' aria-label='Open Side Menu' ng-click='openSidenav()'>
             <md-icon class='material-icons' ng-style="{color: 'white'}">keyboard_arrow_right</md-icon>
         </md-button>
-        <md-list-item>
-        <img alt="{{serverTitle}}" ng-src="{{serverLogo}}" class="md-avatar" ng-style="{'max-width':'64px', 'max-height':'64px'}" ng-hide='serverLogo == ""' />
-        <p flex>{{serverTitle}}</p>
-        </md-list-item>
+        <div flex='20'>
+            <md-list-item>
+            <img alt="{{serverTitle}}" ng-src="{{serverLogo}}" class="md-avatar" ng-style="{'max-width':'64px', 'max-height':'64px'}" ng-hide='serverLogo == ""' />
+            <p>{{serverTitle}}</p>
+            </md-list-item>
+        </div>
+        <md-button class='md-icon-button' aria-label='Toggle info windows' ng-click='toggleInfoWindows()'>
+            <md-icon class='material-icons' ng-style="toogleInfoWindowsButtonStyle">forum</md-icon>
+            <md-tooltip>{{ toogleInfoWindowsButtonTooltip }}</md-tooltip>
+        </md-button>
         <span flex></span>
         <md-icon class='material-icons' ng-style="{color: 'white'}">search</md-icon>
         <md-chips ng-model="keywords" placeholder='增加關鍵字' secondary-placeholder="搜尋">
