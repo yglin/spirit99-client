@@ -8,8 +8,8 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygServer', ['$http', '$resource', '$q', 'portalRules', 'ygError', 'ygUserPref', 'ygProgress',
-function ($http, $resource, $q, portalRules, ygError, ygUserPref, ygProgress) {
+.service('ygServer', ['$rootScope', '$http', '$resource', '$q', 'portalRules', 'ygError', 'ygUserPref', 'ygProgress',
+function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUserPref, ygProgress) {
     // AngularJS will instantiate a singleton by calling "new" on self function
     var self = this;
 
@@ -17,7 +17,7 @@ function ($http, $resource, $q, portalRules, ygError, ygUserPref, ygProgress) {
         show: true,
         logo: 'https://www.evansville.edu/residencelife/images/greenLogo.png',
     };
-    self.servers = ygUserPref.servers;
+    self.servers = ygUserPref.$storage.servers;
     self.currentServerName = '';
     self.postResource = null;
     self.postResourceActions = {
@@ -52,10 +52,8 @@ function ($http, $resource, $q, portalRules, ygError, ygUserPref, ygProgress) {
             self.currentServerName = serverName;
             self.currentServer = self.servers[serverName];
 
-            ygUserPref.selectServer(serverName);
             // Create new post resource for current server
             self.postResource = $resource(self.currentServer.postUrl + '/:id', {}, self.postResourceActions);
-
         }
         else{
             console.log('沒有找到' + serverName + '啊！你是不是忘記load啦？');
@@ -137,23 +135,25 @@ function ($http, $resource, $q, portalRules, ygError, ygUserPref, ygProgress) {
         }
 
         var promise = $q.allSettled(updatePromises).then(function (dataArray) {
-            if(ygUserPref.lastSelectedServer in self.servers){
-                // console.log('last selected server is ' + ygUserPref.lastSelectedServer);
-                self.switchServer(ygUserPref.lastSelectedServer);
+            if(ygUserPref.$storage.selectedServer in self.servers){
+                self.switchServer(ygUserPref.$storage.selectedServer);
             }
         });
 
         ygProgress.show('更新各站點...', promise);
     };
 
-    // self.postServer = function (data) {
-    //     self.postResource.save(data).then(function(){
-    //         self.postResource.query();
-    //     });
-    // };
-
     self.createCommentResource = function (post_id) {
         return $resource(self.currentServer.postUrl + '/:id/comments');
     };
+
+    // ===== $rootScope $watch functions
+    $rootScope.$watch(
+        function () {
+            return ygUserPref.$storage.selectedServer;
+        },
+        function (newValue, oldValue) {
+            self.switchServer(newValue);
+    });
 
 }]);

@@ -48,39 +48,8 @@ angular.module('spirit99App')
             editable: true,
             visible: false
         },
-        lastSelectedServer: 'localstory',
+        selectedServer: 'localstory',
         autoGeolocation: true,
     });
-
-    self.servers = self.$storage.servers;
-    self.map = self.$storage.map;
-    self.filterCircle = self.$storage.filterCircle;
-    self.lastSelectedServer = self.$storage.lastSelectedServer;
-    self.autoGeolocation = self.$storage.autoGeolocation;
-
-    self.selectServer = function (serverName) {
-        self.$storage.lastSelectedServer = serverName;
-    };
-
-    self.setAutoGeolocation = function (isAutoGeolocation) {
-        self.$storage.autoGeolocation = isAutoGeolocation;
-    };
-
-    // // load user prefs from local storage
-    // self.loadPref = function(){
-    //     // self.servers['localstory'] = {
-    //     //     name: ' localstory',
-    //     //     title: '在地的故事',
-    //     //     portalUrl: 'http://localhost:3000/portal/localstory',
-    //     //     show: true
-    //     // };
-    //     // self.servers['birdhome'] = {
-    //     //     name: 'birdhome',
-    //     //     title: '小小鳥兒要回家',
-    //     //     portalUrl: 'http://localhost:3000/portal/birdhome',
-    //     //     show: true
-    //     // };
-    //     // 
-    // };
 
 }]);

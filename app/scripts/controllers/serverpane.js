@@ -8,20 +8,15 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('ServerPaneController', ['$scope', '$mdDialog', 'ygServer', function($scope, $mdDialog, ygServer){
+.controller('ServerPaneController', ['$scope', '$mdDialog', 'ygUserPref', 'ygServer',
+function($scope, $mdDialog, ygUserPref, ygServer){
     // ============== Initilize scope model ==================
     // $scope.ygServer = ygServer;
     $scope.servers = ygServer.servers;
 
-    // ============== Scope utility functions ===================
-
-    // ============== Scope $watches =================
-
     // ============== Scope interaction functions =================
     $scope.addServer = function(portalUrl){
-        // console.log("load server from " + portalUrl);
         ygServer.loadServer(portalUrl);
-        //$scope.errorMessages.push('Testttttttesstttt');
     };
 
     $scope.removeServer = function(serverName){
@@ -44,12 +39,7 @@ angular.module('spirit99App')
     };
 
     $scope.switchServer = function(serverName){
-        console.log('Switch to ' + serverName);
-        ygServer.switchServer(serverName);
+        ygUserPref.$storage.selectedServer = serverName;
     };
-
-
-    // =================== Initializing actions ======================
-    // $scope.updateServers($scope.portals);
 
 }]);

@@ -11,8 +11,8 @@ angular.module('spirit99App')
 .controller('MapController', ['$scope', 'uiGmapGoogleMapApi', '$mdDialog', 'ygError', 'ygProgress', 'ygUtils', 'ygUserPref', 'ygServer',
 function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygUtils, ygUserPref, ygServer) {
 
-    $scope.map = ygUserPref.map;
-    $scope.filterCircle = ygUserPref.filterCircle;
+    $scope.map = ygUserPref.$storage.map;
+    $scope.filterCircle = ygUserPref.$storage.filterCircle;
 
     $scope.posts = [];
     $scope.newPost = null;
@@ -175,7 +175,7 @@ function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygUtils, yg
     // uiGmapGoogleMapApi is a promise.
     // The "then" callback function provides the google.maps object.
     uiGmapGoogleMapApi.then(function(maps) {
-        if(ygUserPref.autoGeolocation){
+        if(ygUserPref.$storage.autoGeolocation){
             $scope.centerGeoLocation($scope.map);
         }
         $scope.mapIsReady = true;    
