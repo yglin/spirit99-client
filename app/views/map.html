@@ -12,10 +12,15 @@
         </ui-gmap-marker>
 
         <!-- Post markers, load from server -->
-        <ui-gmap-markers models='posts' coords='"self"' icon='"icon"' events='"events"' doCluster='true'>
-            <ui-gmap-windows show='"showWindow"' templateUrl='"templateUrl"' templateParameter='"self"' options='"infoWindowOptions"'>
+        <ui-gmap-markers models='posts' coords='"self"' icon='"icon"' events='postMarkerEvents' doCluster='true'>
+<!--             <ui-gmap-windows show='"showWindow"' templateUrl='"templateUrl"' templateParameter='"self"' options='"infoWindowOptions"'>
             </ui-gmap-windows>
+ -->    
         </ui-gmap-markers>
+
+        <!-- pop up info window when bouse cursor over markers -->
+        <ui-gmap-window coords='infoWindow.coords' show='infoWindow.show' closeClick='infoWindow.closeClick()' options='infoWindow.options' templateUrl='infoWindow.templateUrl' templateParameter='infoWindow.templateParameter'>
+        </ui-gmap-window>    
 
         <!-- Filter circle -->
         <ui-gmap-circle center='filterCircle.center' radius='filterCircle.radius' stroke='filterCircle.stroke' fill='filterCircle.fill' clickable='filterCircle.clickable' editable='filterCircle.editable' visible='filterCircle.visible' events='filterCircleEvents'>
