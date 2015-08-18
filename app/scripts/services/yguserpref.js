@@ -50,6 +50,7 @@ angular.module('spirit99App')
         },
         selectedServer: 'localstory',
         autoGeolocation: true,
+        openListPosts: false,
     });
 
 }]);
