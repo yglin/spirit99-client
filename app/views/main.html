@@ -4,5 +4,8 @@
 <div class='container' ng-include='"views/headbar.html"' ng-controller="HeadBarController">
 </div>
 
-<div class='container' ng-include='"views/map.html"' ng-controller="MapController" style='height:500px'> 
+<div layout='row'>
+    <div class='container' ng-include='"views/listposts.html"' ng-controller='ListPostsController'></div>
+    <div flex class='container' ng-include='"views/map.html"' ng-controller="MapController" style='height:500px'> 
+    </div>
 </div>

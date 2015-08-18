@@ -124,20 +124,6 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
         .then(function(response){}, function(response){});
     };
 
-    $scope.delayCloseInfoWindow = false;
-
-    $scope.$watch('delayCloseInfoWindow',
-        function (newValue, oldValue) {
-            if(newValue){
-                this.promiseFunc = $timeout(function (argument) {
-                    $scope.infoWindow.show = false;
-                }, 3000);
-            }
-            else{
-                $timeout.cancel(this.promiseFunc);
-            }
-    });
-
     $scope.onMouseoverPostMarker = function (marker, eventName, model) {
         $scope.infoWindow.coords = {
             latitude: model.latitude,
@@ -145,12 +131,19 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
         };
         $scope.infoWindow.templateParameter = model;
         $scope.infoWindow.show = true;
-        $scope.delayCloseInfoWindow = false;
+        $timeout.cancel($scope.timeoutCloseInfoWindow);
+        $scope.timeoutOpenListPosts = $timeout(function () {
+            ygUserPref.$storage.openListPosts = true;
+        }, 3000);
     };
 
     $scope.onMouseoutPostMarker = function (marker, eventName, model) {
-        $scope.delayCloseInfoWindow = true;      
-    }
+        $scope.delayCloseInfoWindow = true;
+        $scope.timeoutCloseInfoWindow = $timeout(function () {
+            $scope.infoWindow.show = false;
+        }, 3000);
+        $timeout.cancel($scope.timeoutOpenListPosts);
+    };
 
     $scope.postMarkerEvents = {
         click: $scope.onClickPostMarker,
