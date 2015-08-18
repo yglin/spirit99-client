@@ -8,8 +8,11 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('MapController', ['$scope', 'uiGmapGoogleMapApi', '$mdDialog', 'ygError', 'ygProgress', 'ygUtils', 'ygUserPref', 'ygServer',
-function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygUtils, ygUserPref, ygServer) {
+.controller('MapController', ['$scope', 'uiGmapGoogleMapApi', '$mdDialog', 'ygError', 'ygProgress', 'ygUtils', 'ygUserPref', 'ygServer', '$timeout',
+function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygUtils, ygUserPref, ygServer, $timeout) {
+// uiGmapGoogleMapApi is a promise.
+// The "then" callback function provides the google.maps object.
+uiGmapGoogleMapApi.then(function(googlemaps) {
 
     $scope.map = ygUserPref.$storage.map;
     $scope.filterCircle = ygUserPref.$storage.filterCircle;
@@ -32,6 +35,23 @@ function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygUtils, yg
             visible: false
         },
         events: {
+        }
+    };
+
+    $scope.infoWindow = {
+        coords: {
+            latitude: 23.973875,
+            longitude: 120.982024
+        },
+        show: false,
+        templateUrl: 'views/infowindow.html',
+        templateParameter: {},
+        closeClick: function () {
+            $scope.infoWindow.show = false;
+        },
+        options: {
+            pixelOffset: new googlemaps.Size(0, -40),
+            maxWidth: 150
         }
     };
 
@@ -67,10 +87,10 @@ function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygUtils, yg
                 var promise = $scope.newPost.$save()
                 .then(function (result) {
                         console.log('Success, post added!!');
-                        $scope.newPost.show = true;
-                        $scope.newPost.events = {
-                            click: $scope.onClickPostMarker
-                        };
+                        // $scope.newPost.show = true;
+                        // $scope.newPost.events = {
+                        //     click: $scope.onClickPostMarker
+                        // };
                         if(!('icon' in $scope.newPost) || !($scope.newPost.icon)){
                             $scope.newPost.icon = 'images/icon-chat-48.png';
                         }
@@ -104,6 +124,40 @@ function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygUtils, yg
         .then(function(response){}, function(response){});
     };
 
+    $scope.delayCloseInfoWindow = false;
+
+    $scope.$watch('delayCloseInfoWindow',
+        function (newValue, oldValue) {
+            if(newValue){
+                this.promiseFunc = $timeout(function (argument) {
+                    $scope.infoWindow.show = false;
+                }, 3000);
+            }
+            else{
+                $timeout.cancel(this.promiseFunc);
+            }
+    });
+
+    $scope.onMouseoverPostMarker = function (marker, eventName, model) {
+        $scope.infoWindow.coords = {
+            latitude: model.latitude,
+            longitude: model.longitude
+        };
+        $scope.infoWindow.templateParameter = model;
+        $scope.infoWindow.show = true;
+        $scope.delayCloseInfoWindow = false;
+    };
+
+    $scope.onMouseoutPostMarker = function (marker, eventName, model) {
+        $scope.delayCloseInfoWindow = true;      
+    }
+
+    $scope.postMarkerEvents = {
+        click: $scope.onClickPostMarker,
+        mouseover: $scope.onMouseoverPostMarker,
+        mouseout: $scope.onMouseoutPostMarker
+    };
+
     $scope.reloadPosts = function(){
         if(ygServer.postResource === null){
             console.log("Post resource is null, maybe not connected to server?");
@@ -120,15 +174,13 @@ function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygUtils, yg
         $scope.posts = ygServer.postResource.getMarkers(extraParams, function(){
             for (var i = 0; i < $scope.posts.length; i++) {
                 // $scope.posts[i].show = true;
-                $scope.posts[i].events = {
-                    click: $scope.onClickPostMarker
-                };
+                // $scope.bindPostMarkerEvent($scope.posts[i]);
 
-                $scope.posts[i].templateUrl = $scope.infoWindowTemplateUrl;
-                $scope.posts[i].showWindow = false;
-                $scope.posts[i].infoWindowOptions = {
-                    disableAutoPan: true
-                };
+                // $scope.posts[i].templateUrl = $scope.infoWindowTemplateUrl;
+                // $scope.posts[i].showWindow = false;
+                // $scope.posts[i].infoWindowOptions = {
+                //     disableAutoPan: true
+                // };
                 // $scope.posts[i].onClickCloseWindow = function () {
                 //     console.log('Close me!! info window');
                 //     $event.stopPropagation();
@@ -172,15 +224,6 @@ function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygUtils, yg
         }
     };
 
-    // uiGmapGoogleMapApi is a promise.
-    // The "then" callback function provides the google.maps object.
-    uiGmapGoogleMapApi.then(function(maps) {
-        if(ygUserPref.$storage.autoGeolocation){
-            $scope.centerGeoLocation($scope.map);
-        }
-        $scope.mapIsReady = true;    
-    });
-
     // $watch-es
     $scope.$watch(function () {
         return ygServer.postResource;
@@ -189,5 +232,12 @@ function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygUtils, yg
             $scope.reloadPosts();
         }
     });
+
+    if(ygUserPref.$storage.autoGeolocation){
+        $scope.centerGeoLocation($scope.map);
+    }
+    $scope.mapIsReady = true;    
+
+});
 
 }]);
