@@ -112,12 +112,10 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
             longitude: args[0].latLng.lng()
         };
         $scope.clickedMarker.options.visible = true;
-        console.log($scope.clickedMarker);
-        $scope.$apply();
-        // ygPost.popStoryEditor(args[0].latLng.lat(), args[0].latLng.lng())
-        // .then(function () {
-        //     $scope.clickedMarker.options.visible = false;
-        // });
+        ygPost.popStoryEditor(args[0].latLng.lat(), args[0].latLng.lng())
+        .then(function () {
+            $scope.clickedMarker.options.visible = false;
+        });
     };
 
     $scope.clickedMarker.events.click = function (marker, eventName, model) {
