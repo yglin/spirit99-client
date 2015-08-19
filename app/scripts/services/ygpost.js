@@ -84,7 +84,12 @@ function ($rootScope, $resource, $mdDialog, ygUserPref, ygServer, ygProgress) {
                 newPost: self.newPost
             },
         })
-        .then(function(data){
+        .then(function(newPost){
+            for(var key in newPost){
+                if(self.newPost[key] !== newPost[key]){
+                    self.newPost[key] = newPost[key];
+                }
+            }
             if(self.postResource !== null){
                 var promise = self.newPost.$save()
                 .then(function (result) {
@@ -99,8 +104,12 @@ function ($rootScope, $resource, $mdDialog, ygUserPref, ygServer, ygProgress) {
             }else{
                 console.log('Not connected to post resources');
             }
-        }, function(){
-            console.log(self.newPost);
+        }, function(newPost){
+            for(var key in newPost){
+                if(self.newPost[key] !== newPost[key]){
+                    self.newPost[key] = newPost[key];
+                }
+            }
             console.log('你又按錯啦你');
         });
     };
