@@ -8,20 +8,23 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('MapController', ['$scope', 'uiGmapGoogleMapApi', '$mdDialog', 'ygError', 'ygProgress', 'ygUtils', 'ygUserPref', 'ygServer', '$timeout',
-function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygUtils, ygUserPref, ygServer, $timeout) {
+.controller('MapController', ['$scope', 'uiGmapGoogleMapApi', '$mdDialog', 'ygError', 'ygProgress', 'ygUtils', 'ygUserPref', 'ygPost', '$timeout',
+function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygUtils, ygUserPref, ygPost, $timeout) {
+
 // uiGmapGoogleMapApi is a promise.
 // The "then" callback function provides the google.maps object.
 uiGmapGoogleMapApi.then(function(googlemaps) {
 
+    $scope.mapIsReady = false;
+
     $scope.map = ygUserPref.$storage.map;
     $scope.filterCircle = ygUserPref.$storage.filterCircle;
 
-    $scope.posts = [];
     $scope.newPost = null;
-    $scope.mapIsReady = false;
     $scope.mapEvents = {};
-    $scope.infoWindowTemplateUrl = 'views/infowindow.html';
+
+    console.log($scope.clickedMarker);
+    $scope.posts = ygPost.posts;
 
     $scope.clickedMarker = {
         id: 'spirit99-map-clicked-marker',
@@ -29,7 +32,7 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
             latitude: 23.973875,
             longitude: 120.982024
         },
-        // show: false,
+        // show: true,
         options: {
             icon: 'images/icon-question-48.png',
             visible: false
@@ -64,54 +67,6 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
         }
     };
 
-    $scope.popStoryEditor = function () {
-        if($scope.newPost === null){
-            $scope.newPost = new ygServer.postResource();
-            // $scope.newPost.title = '';
-            // $scope.newPost.context = '';
-            // $scope.newPost.author = '';
-            $scope.newPost.icon = 'images/googlemap-marker-green-32.png';
-        }
-        $scope.newPost['latitude'] = $scope.clickedMarker.coords.latitude;
-        $scope.newPost['longitude'] = $scope.clickedMarker.coords.longitude;
-        // console.log($scope.newPost);
-        $mdDialog.show({
-            templateUrl: 'views/posteditor.html',
-            controller: 'PostEditorController',
-            clickOutsideToClose: true,
-            scope: $scope,
-            preserveScope: true,
-        })
-        .then(function(data){
-            if(ygServer.postResource !== null){
-                var promise = $scope.newPost.$save()
-                .then(function (result) {
-                        console.log('Success, post added!!');
-                        // $scope.newPost.show = true;
-                        // $scope.newPost.events = {
-                        //     click: $scope.onClickPostMarker
-                        // };
-                        if(!('icon' in $scope.newPost) || !($scope.newPost.icon)){
-                            $scope.newPost.icon = 'images/icon-chat-48.png';
-                        }
-                        $scope.posts.push($scope.newPost);
-                        $scope.newPost = null;
-                        $scope.clickedMarker.options.visible = false;
-                    }, function (error) {
-                        console.log('BoooooooM~!!!, adding post failed');
-                });
-                // console.log(promise);
-
-                ygProgress.show('新增資料...', promise);
-
-            }else{
-                console.log('Not connected to post resources');
-            }
-        }, function(){
-            console.log('你又按錯啦你');
-        });
-    };
-
     $scope.onClickPostMarker = function (marker, eventName, model) {
         $mdDialog.show({
             templateUrl: 'views/post.html',
@@ -134,7 +89,7 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
         $timeout.cancel($scope.timeoutCloseInfoWindow);
         $scope.timeoutOpenListPosts = $timeout(function () {
             ygUserPref.$storage.openListPosts = true;
-        }, 3000);
+        }, 2000);
     };
 
     $scope.onMouseoutPostMarker = function (marker, eventName, model) {
@@ -151,51 +106,18 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
         mouseout: $scope.onMouseoutPostMarker
     };
 
-    $scope.reloadPosts = function(){
-        if(ygServer.postResource === null){
-            console.log("Post resource is null, maybe not connected to server?");
-            return false;
-        }
-        var extraParams = {};
-        // console.log($scope.filterCircle.visible);
-        if($scope.filterCircle.visible){
-            extraParams.filterCircle = {
-                center: $scope.filterCircle.center,
-                radius: $scope.filterCircle.radius
-            };
-        }
-        $scope.posts = ygServer.postResource.getMarkers(extraParams, function(){
-            for (var i = 0; i < $scope.posts.length; i++) {
-                // $scope.posts[i].show = true;
-                // $scope.bindPostMarkerEvent($scope.posts[i]);
-
-                // $scope.posts[i].templateUrl = $scope.infoWindowTemplateUrl;
-                // $scope.posts[i].showWindow = false;
-                // $scope.posts[i].infoWindowOptions = {
-                //     disableAutoPan: true
-                // };
-                // $scope.posts[i].onClickCloseWindow = function () {
-                //     console.log('Close me!! info window');
-                //     $event.stopPropagation();
-                // };
-                // $scope.posts[i].templateParameter = {
-                //     id: $scope.posts[i].id,
-                //     title: $scope.posts[i].title
-                // };
-                if(!('icon' in $scope.posts[i]) || !($scope.posts[i].icon)){
-                    $scope.posts[i].icon = 'images/icon-chat-48.png';
-                }
-            }
-        });
-    }
-
     $scope.mapEvents.click = function (googleMaps, eventName, args){
         $scope.clickedMarker.coords = {
             latitude: args[0].latLng.lat(),
             longitude: args[0].latLng.lng()
         };
         $scope.clickedMarker.options.visible = true;
-        $scope.popStoryEditor();
+        console.log($scope.clickedMarker);
+        $scope.$apply();
+        // ygPost.popStoryEditor(args[0].latLng.lat(), args[0].latLng.lng())
+        // .then(function () {
+        //     $scope.clickedMarker.options.visible = false;
+        // });
     };
 
     $scope.clickedMarker.events.click = function (marker, eventName, model) {
@@ -217,18 +139,10 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
         }
     };
 
-    // $watch-es
-    $scope.$watch(function () {
-        return ygServer.postResource;
-    }, function (newValue, oldValue) {
-        if(ygServer.postResource !== null){
-            $scope.reloadPosts();
-        }
-    });
-
     if(ygUserPref.$storage.autoGeolocation){
         $scope.centerGeoLocation($scope.map);
     }
+
     $scope.mapIsReady = true;    
 
 });

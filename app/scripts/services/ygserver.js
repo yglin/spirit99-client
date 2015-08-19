@@ -18,17 +18,6 @@ function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUserPref, yg
         logo: 'https://www.evansville.edu/residencelife/images/greenLogo.png',
     };
     self.servers = ygUserPref.$storage.servers;
-    self.currentServerName = '';
-    self.postResource = null;
-    self.postResourceActions = {
-        'getMarkers': {
-            method: 'GET',
-            isArray: true,
-            params: {
-                fields: ['id', 'title', 'latitude', 'longitude', 'icon']
-            }
-        }
-    };
 
     self.validatePortal = function(portalData){
         for (var i = 0; i < portalRules.requiredFields.length; i++) {
@@ -42,20 +31,13 @@ function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUserPref, yg
 
     self.fillDefaultOptions = function (serverOptions) {
         for(var key in self.portalDataDefaults){
-            serverOptions[key] = typeof serverOptions[key] !== 'undefined' ? serverOptions[key] : self.portalDataDefaults[key];
+            serverOptions[key] = typeof serverOptions[key] === typeof self.portalDataDefaults[key] ? serverOptions[key] : self.portalDataDefaults[key];
         }
     };
 
     self.switchServer = function(serverName){
         if(serverName in self.servers){
             self.servers[serverName].show = true;
-            self.currentServerName = serverName;
-            self.currentServer = self.servers[serverName];
-
-            // Create new post resource for current server
-            if(self.currentServer.postUrl){
-                self.postResource = $resource(self.currentServer.postUrl + '/:id', {}, self.postResourceActions);
-            }
         }
         else{
             console.log('沒有找到' + serverName + '啊！你是不是忘記load啦？');
