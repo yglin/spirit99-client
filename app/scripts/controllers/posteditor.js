@@ -8,7 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('PostEditorController', ['$scope', '$mdDialog', 'ygServer', function ($scope, $mdDialog, ygServer){    
+.controller('PostEditorController', ['$scope', '$mdDialog', 'ygUserPref', 'ygServer', 'newPost',
+function ($scope, $mdDialog, ygUserPref, ygServer, newPost){    
     $scope.froalaOptions = {
         inlineMode: true,
         minHeight: 150,
@@ -16,8 +17,10 @@ angular.module('spirit99App')
         placeholder: '內文...'
     };
 
-    var server = ygServer.servers[ygServer.currentServerName];
-    $scope.iconSet = server.markerIconSet;
+    $scope.newPost = newPost;    
+
+    var selectedServer = ygServer.servers[ygUserPref.$storage.selectedServer];
+    $scope.iconSet = selectedServer.markerIconSet;
     
     $scope.selectMarkerIcon = function (iconUrl) {
         $scope.newPost.icon = iconUrl;
@@ -35,7 +38,7 @@ angular.module('spirit99App')
     };
 
     $scope.cancel = function() {
-        $mdDialog.cancel();
+        $mdDialog.cancel($scope.newPost);
     };
 
     $scope.post = function(){

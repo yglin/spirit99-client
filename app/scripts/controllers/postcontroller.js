@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('PostController', ['$scope', '$resource', '$mdDialog', 'ygUtils', 'ygServer', 'postID',
-function ($scope, $resource, $mdDialog, ygUtils, ygServer, postID) {
+.controller('PostController', ['$scope', '$resource', '$mdDialog', 'ygUtils', 'ygPost', 'postID',
+function ($scope, $resource, $mdDialog, ygUtils, ygPost, postID) {
     $scope.froalaOptions = {
         inlineMode: true,
         minHeight: 50,
@@ -27,7 +27,7 @@ function ($scope, $resource, $mdDialog, ygUtils, ygServer, postID) {
     };
 
     $scope.postLoaded = false;
-    ygServer.postResource.get({id:postID},
+    ygPost.postResource.get({id:postID},
     function(result, getResponseHeaders){
         $scope.post = result;
         $scope.postLoaded = true;
