@@ -4,16 +4,8 @@
 		"selected_items":
 		[
 			[
-				"crea",
-				"create_time"
-			],
-			[
-				"date",
-				"dateString"
-			],
-			[
-				"pos",
-				"post"
+				"cick",
+				"clickedMarker"
 			],
 			[
 				"post",
@@ -24,20 +16,184 @@
 				"newPost"
 			],
 			[
-				"controll",
-				"Controller"
+				"po",
+				"postData"
+			],
+			[
+				"serve",
+				"servers"
+			],
+			[
+				"$root",
+				"$rootScope	AngularJS"
+			],
+			[
+				"time",
+				"timeoutOpenListPosts"
+			],
+			[
+				"tim",
+				"timeoutCloseInfoWindow"
+			],
+			[
+				"mouse",
+				"mouseover"
+			],
+			[
+				"tri",
+				"triggerName"
+			],
+			[
+				"dela",
+				"delayInfoWindowShow"
+			],
+			[
+				"de",
+				"delayCloseInfoWindow"
+			],
+			[
+				"delay",
+				"delayOff"
+			],
+			[
+				"da",
+				"delayTrigger"
+			],
+			[
+				"eve",
+				"eventName"
+			],
+			[
+				"pro",
+				"promiseFunc"
+			],
+			[
+				"onMouse",
+				"onMouseoutPostMarker"
 			],
 			[
 				"even",
 				"eventName"
 			],
 			[
+				"info",
+				"infoWindow"
+			],
+			[
+				"templ",
+				"templateParameter"
+			],
+			[
+				"infoWind",
+				"infowindow"
+			],
+			[
+				"show",
+				"showAllInfoWindows"
+			],
+			[
+				"pos",
+				"posts"
+			],
+			[
+				"for",
+				"for	for (…) {…}"
+			],
+			[
+				"user",
+				"userCtrls"
+			],
+			[
+				"to",
+				"toogleInfoWindowsButtonStyle"
+			],
+			[
+				"ng",
+				"ng-cloak	AngularJS"
+			],
+			[
+				"yg",
+				"ygUserPref"
+			],
+			[
+				"$lo",
+				"$localStorage"
+			],
+			[
+				"lo",
+				"localstory"
+			],
+			[
+				"event",
+				"eventName"
+			],
+			[
+				"$sc",
+				"$scope	AngularJS"
+			],
+			[
+				"ygU",
+				"ygUserPref"
+			],
+			[
+				"fo",
+				"for	for (…) {…}"
+			],
+			[
+				"comm",
+				"comments"
+			],
+			[
+				"comme",
+				"comments"
+			],
+			[
 				"fun",
 				"fun	Function"
 			],
 			[
-				"eve",
-				"events"
+				"resul",
+				"results"
+			],
+			[
+				"p",
+				"p	Tag"
+			],
+			[
+				"comment",
+				"commentsResource"
+			],
+			[
+				"link",
+				"link"
+			],
+			[
+				"get",
+				"getResponseHeaders"
+			],
+			[
+				"match",
+				"matchResult"
+			],
+			[
+				"mat",
+				"matchResult"
+			],
+			[
+				"ma",
+				"matchResult"
+			],
+			[
+				"crea",
+				"create_time"
+			],
+			[
+				"date",
+				"dateString"
+			],
+			[
+				"controll",
+				"Controller"
 			],
 			[
 				"click",
@@ -100,24 +256,12 @@
 				"portalDataDefaults"
 			],
 			[
-				"for",
-				"for	for (…) {…} (Improved Native For-Loop)"
-			],
-			[
-				"yg",
-				"ygProgress"
-			],
-			[
 				"proge",
 				"progressDialog"
 			],
 			[
 				"con",
 				"console"
-			],
-			[
-				"pro",
-				"progressDialog"
 			],
 			[
 				"test",
@@ -160,10 +304,6 @@
 				"currentServerName"
 			],
 			[
-				"$root",
-				"$rootScope	AngularJS"
-			],
-			[
 				"md-list",
 				"md-list-item"
 			],
@@ -196,10 +336,6 @@
 				"circle	jsProp"
 			],
 			[
-				"resul",
-				"resultContainer"
-			],
-			[
 				"resu",
 				"resultContainer"
 			],
@@ -218,10 +354,6 @@
 			[
 				"mark",
 				"markerIcon"
-			],
-			[
-				"$lo",
-				"$logProvider	AngularJS"
 			],
 			[
 				"$local",
@@ -246,10 +378,6 @@
 			[
 				"story",
 				"storyID"
-			],
-			[
-				"show",
-				"showDetail"
 			],
 			[
 				"err",
@@ -280,10 +408,6 @@
 				"templateCreateNewStory"
 			],
 			[
-				"templ",
-				"templateCreateNewStory"
-			],
-			[
 				"temp",
 				"templateCreateNewStory"
 			],
@@ -298,10 +422,6 @@
 			[
 				"onCli",
 				"onClickMarkers"
-			],
-			[
-				"lo",
-				"longitude"
 			],
 			[
 				"la",
@@ -348,10 +468,6 @@
 				"clickedUI"
 			],
 			[
-				"$sc",
-				"$scope"
-			],
-			[
 				"clicked",
 				"clickedUI"
 			],
@@ -392,128 +508,12 @@
 				"renderVars"
 			],
 			[
-				"link",
-				"linking_line"
-			],
-			[
 				"stro",
 				"stroke-width"
 			],
 			[
 				"visu",
 				"visual_group"
-			],
-			[
-				"tmp",
-				"tmp_data"
-			],
-			[
-				"drag",
-				"dragend"
-			],
-			[
-				"stop",
-				"stopPropagation"
-			],
-			[
-				"event",
-				"event_name"
-			],
-			[
-				"func",
-				"function	jsProp"
-			],
-			[
-				"mouse",
-				"mouseout"
-			],
-			[
-				"trans",
-				"translate"
-			],
-			[
-				"sugg",
-				"suggestion"
-			],
-			[
-				"style",
-				"stylesheet"
-			],
-			[
-				"subNo",
-				"subNode"
-			],
-			[
-				"Ori",
-				"OriginoLink"
-			],
-			[
-				"Origin",
-				"OriginoLink"
-			],
-			[
-				"call",
-				"callback"
-			],
-			[
-				"Orin",
-				"OriginoLink"
-			],
-			[
-				"vis",
-				"visible"
-			],
-			[
-				"ele",
-				"element"
-			],
-			[
-				"vi",
-				"visual_data"
-			],
-			[
-				"visi",
-				"visible"
-			],
-			[
-				"visib",
-				"visible_links"
-			],
-			[
-				"ref",
-				"refByName"
-			],
-			[
-				"retu",
-				"returnRef"
-			],
-			[
-				"visua",
-				"visual_data"
-			],
-			[
-				"ind",
-				"index"
-			],
-			[
-				"strok",
-				"stroke-width"
-			],
-			[
-				"el",
-				"element"
-			],
-			[
-				"en",
-				"enter"
-			],
-			[
-				"nod",
-				"nodesEnter"
-			],
-			[
-				"nodes",
-				"nodesEnter"
 			]
 		]
 	},
@@ -523,47 +523,47 @@
 			"file": "app/scripts/controllers/mapcontroller.js",
 			"settings":
 			{
-				"buffer_size": 5166,
+				"buffer_size": 4437,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "app/scripts/services/ygutils.js",
+			"file": "app/views/listposts.html",
 			"settings":
 			{
-				"buffer_size": 561,
+				"buffer_size": 374,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "app/views/post.html",
+			"file": "app/scripts/controllers/listposts.js",
 			"settings":
 			{
-				"buffer_size": 1469,
+				"buffer_size": 599,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "app/scripts/controllers/postcontroller.js",
+			"file": "app/scripts/services/yguserpref.js",
 			"settings":
 			{
-				"buffer_size": 742,
+				"buffer_size": 1398,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "app/scripts/services/ygserver.js",
+			"file": "app/scripts/services/ygpost.js",
 			"settings":
 			{
-				"buffer_size": 5540,
+				"buffer_size": 4105,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "app/scripts/controllers/posteditorcontroller.js",
+			"file": "app/scripts/controllers/headbar.js",
 			"settings":
 			{
-				"buffer_size": 1207,
+				"buffer_size": 1098,
 				"line_ending": "Unix"
 			}
 		}
@@ -627,29 +627,41 @@
 		"/Users/yglin/Sites/spirit99/client/app/scripts",
 		"/Users/yglin/Sites/spirit99/client/app/scripts/controllers",
 		"/Users/yglin/Sites/spirit99/client/app/scripts/services",
-		"/Users/yglin/Sites/spirit99/client/app/views"
+		"/Users/yglin/Sites/spirit99/client/app/views",
+		"/Users/yglin/Sites/spirit99/client/bower_components"
 	],
 	"file_history":
 	[
-		"/Users/yglin/Sites/spirit99/client/app/views/progress.html",
 		"/Users/yglin/Sites/spirit99/client/app/views/map.html",
-		"/Users/yglin/Sites/spirit99/client/app/scripts/services/ygserver.js",
 		"/Users/yglin/Sites/spirit99/client/app/views/posteditor.html",
-		"/Users/yglin/Sites/spirit99/client/app/scripts/controllers/posteditorcontroller.js",
-		"/Users/yglin/Sites/spirit99/client/app/scripts/controllers/mapcontroller.js",
-		"/Users/yglin/Sites/spirit99/client/app/views/post.html",
-		"/Users/yglin/Sites/spirit99/client/app/scripts/controllers/postcontroller.js",
-		"/Users/yglin/Sites/spirit99/client/app/views/headbar.html",
-		"/Users/yglin/Sites/spirit99/client/app/views/sidenav.html",
-		"/Users/yglin/Sites/spirit99/client/app/views/main.html",
+		"/Users/yglin/Sites/spirit99/client/app/scripts/services/ygpost.js",
+		"/Users/yglin/Sites/spirit99/client/app/scripts/controllers/posteditor.js",
 		"/Users/yglin/Sites/spirit99/client/app/index.html",
+		"/Users/yglin/Sites/spirit99/client/app/scripts/controllers/posteditorcontroller.js",
+		"/Users/yglin/Sites/spirit99/client/app/scripts/services/ygserver.js",
+		"/Users/yglin/Sites/spirit99/client/app/scripts/controllers/postcontroller.js",
+		"/Users/yglin/Sites/spirit99/client/app/scripts/controllers/mapcontroller.js",
+		"/Users/yglin/Sites/spirit99/client/app/scripts/services/yguserpref.js",
+		"/Users/yglin/Sites/spirit99/client/app/scripts/controllers/listposts.js",
+		"/Users/yglin/Sites/spirit99/client/app/views/listposts.html",
+		"/Users/yglin/Sites/spirit99/client/app/views/main.html",
+		"/Users/yglin/Sites/spirit99/client/app/views/infowindow.html",
+		"/Users/yglin/Sites/spirit99/client/app/scripts/controllers/infowindowcontroller.js",
+		"/Users/yglin/Sites/spirit99/client/app/scripts/controllers/headbar.js",
+		"/Users/yglin/Sites/spirit99/client/app/views/sidenav.html",
+		"/Users/yglin/Sites/spirit99/client/app/views/headbar.html",
+		"/Users/yglin/Sites/spirit99/client/app/scripts/controllers/serverpane.js",
+		"/Users/yglin/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/Users/yglin/Sites/spirit99/client/app/scripts/services/ygprogress.js",
+		"/Users/yglin/Sites/spirit99/client/app/views/post.html",
+		"/Users/yglin/Sites/spirit99/client/app/scripts/app.js",
+		"/Users/yglin/Sites/spirit99/client/bower_components/angular-readmore/js/angular-readmore.js",
+		"/Users/yglin/Sites/spirit99/client/app/scripts/services/ygutils.js",
+		"/Users/yglin/Sites/spirit99/client/app/views/progress.html",
 		"/Users/yglin/Sites/spirit99/client/app/scripts/controllers/storyeditorcontroller.js",
 		"/Users/yglin/Sites/spirit99/client/app/views/storyeditor.html",
-		"/Users/yglin/Sites/spirit99/client/app/scripts/services/ygprogress.js",
-		"/Users/yglin/Sites/spirit99/client/app/scripts/app.js",
 		"/Users/yglin/Sites/spirit99/client/README.md",
 		"/Users/yglin/Sites/spirit99/client/app/scripts/controllers/progresscontroller.js",
-		"/Users/yglin/Sites/spirit99/client/app/scripts/services/yguserpref.js",
 		"/Users/yglin/Sites/spirit99/client/app/scripts/controllers/main.js",
 		"/Users/yglin/Sites/spirit99/client/app/scripts/services/ygerror.js",
 		"/Users/yglin/Sites/LocalStories/localstory/package.json",
@@ -663,7 +675,6 @@
 		"/Users/yglin/Sites/spirit99/yeoman/app/index.html",
 		"/Users/yglin/Sites/tutorials/mytodo/test/spec/controllers/main.js",
 		"/Users/yglin/Sites/tutorials/mytodo/app/index.html",
-		"/Users/yglin/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
 		"/Users/yglin/Sites/spirit99/frontend/side-menu.less",
 		"/Users/yglin/Downloads/phpMyAdmin-4.3.9-english/setup/lib/ConfigGenerator.class.php",
 		"/Users/yglin/Sites/spirit99/frontend/controlPanel.html",
@@ -748,14 +759,7 @@
 		"/Users/yglin/Projects/eMovements/eCourt/eCourt/.gitignore",
 		"/Users/yglin/Projects/eMovements/eCourt/eCourt/initdb.js",
 		"/Users/yglin/Study/NodeBeginnerBook/exercise/server.js",
-		"/Users/yglin/Study/NodeBeginnerBook/exercise/index.js",
-		"/Users/yglin/Study/NodeBeginnerBook/exercise/router.js",
-		"/Users/yglin/Study/NodeBeginnerBook/exercise/requestHandlers.js",
-		"/Users/yglin/Study/NodeBeginnerBook/exercise/formidable.js",
-		"/Users/yglin/Study/NodeBeginnerBook/code/helloworld/helloworld.js",
-		"/Users/yglin/Study/NodeBeginnerBook/code/application/index.js",
-		"/Users/yglin/Study/NodeBeginnerBook/code/application/server.js",
-		"/Users/yglin/Study/NodeBeginnerBook/code-es/aplicacion/server.js"
+		"/Users/yglin/Study/NodeBeginnerBook/exercise/index.js"
 	],
 	"find":
 	{
@@ -766,6 +770,8 @@
 		"height": 93.0,
 		"where_history":
 		[
+			"/Users/yglin/Sites/spirit99/client/app",
+			"/Users/yglin/Sites/spirit99/client",
 			"/Users/yglin/Sites/spirit99/web/app/views/country"
 		]
 	},
@@ -774,6 +780,14 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"ygServer",
+			"self",
+			"$scope.showInfoWindows",
+			"$storage",
+			"$storgage",
+			"lastSelectedServer",
+			"TODO",
+			"query",
 			"console",
 			"$rootScope",
 			"mapClickedHandler",
@@ -800,6 +814,9 @@
 		"regex": false,
 		"replace_history":
 		[
+			"$scope",
+			"ygUserPref.userCtrls.showAllInfoWindows",
+			"selectedServer",
 			"onMapClicked",
 			"linkSlots",
 			"self.",
@@ -820,7 +837,7 @@
 	"groups":
 	[
 		{
-			"selected": 4,
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -829,15 +846,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5166,
+						"buffer_size": 4437,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2870,
-								2870
+								3471,
+								3471
 							]
 						],
 						"settings":
@@ -846,35 +863,7 @@
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
-						"translation.x": 0.0,
-						"translation.y": 629.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "app/scripts/services/ygutils.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 561,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								381,
-								381
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
-						},
-						"translation.x": 0.0,
+						"translation.x": 4.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
@@ -882,50 +871,48 @@
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"file": "app/views/post.html",
+					"buffer": 1,
+					"file": "app/views/listposts.html",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1469,
+						"buffer_size": 374,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1294,
-								1294
+								361,
+								361
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/HTML/HTML.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
-					"file": "app/scripts/controllers/postcontroller.js",
+					"buffer": 2,
+					"file": "app/scripts/controllers/listposts.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 742,
+						"buffer_size": 599,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								497,
-								497
+								585,
+								585
 							]
 						],
 						"settings":
@@ -940,20 +927,20 @@
 					"type": "text"
 				},
 				{
-					"buffer": 4,
-					"file": "app/scripts/services/ygserver.js",
+					"buffer": 3,
+					"file": "app/scripts/services/yguserpref.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5540,
+						"buffer_size": 1398,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5526,
-								5526
+								1382,
+								1382
 							]
 						],
 						"settings":
@@ -963,27 +950,57 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2005.0,
+						"translation.y": 315.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
-					"buffer": 5,
-					"file": "app/scripts/controllers/posteditorcontroller.js",
+					"buffer": 4,
+					"file": "app/scripts/services/ygpost.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1207,
+						"buffer_size": 4105,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								467,
-								467
+								13,
+								13
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "app/scripts/controllers/headbar.js",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 1098,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
 							]
 						],
 						"settings":
@@ -1040,7 +1057,7 @@
 	"project": "spirit99-client.sublime-project",
 	"replace":
 	{
-		"height": 48.0
+		"height": 64.0
 	},
 	"save_all_on_build": true,
 	"select_file":

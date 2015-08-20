@@ -96,7 +96,7 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
         $scope.delayCloseInfoWindow = true;
         $scope.timeoutCloseInfoWindow = $timeout(function () {
             $scope.infoWindow.show = false;
-        }, 3000);
+        }, 1000);
         $timeout.cancel($scope.timeoutOpenListPosts);
     };
 
