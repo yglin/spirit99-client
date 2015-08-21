@@ -27,18 +27,24 @@ function ($scope, $interval, $mdSidenav, ygUserPref, ygPost) {
 
 
     $scope.focusedPostId = -1;
+    $scope.isScrolling = false;
     $interval(function () {
         if(!$mdSidenav('sidenav-listposts').isLockedOpen()){
             return;
         }
-        if($scope.focusedPostId != ygUserPref.$storage.focusedPostId){
-        var post_id = ygUserPref.$storage.focusedPostId;
-        var container = angular.element(document.getElementById('post-list-container'));
-            var target = angular.element(document.getElementById('post-' + post_id));
+        if($scope.focusedPostId != ygUserPref.$storage.focusedPostId && !$scope.isScrolling){
+            // var post_id = ygUserPref.$storage.focusedPostId;
+            var container = angular.element(document.getElementById('post-list-container'));
+            var target = angular.element(document.getElementById('post-' + ygUserPref.$storage.focusedPostId));
             if(container.length > 0 && target.length > 0){
-                container.scrollToElement(target, 0, 2000);
-                // console.log('Scroll to ' + post_id);
-                $scope.focusedPostId = post_id;
+                $scope.isScrolling = true;
+                console.log('Start scroll!!');
+                container.scrollToElement(target, 50, 2000)
+                .then(function () {
+                    $scope.focusedPostId = ygUserPref.$storage.focusedPostId;
+                    $scope.isScrolling = false;
+                    console.log('Stop scroll!!');
+                })
             }        
         }
     }, 100);
