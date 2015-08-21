@@ -24,7 +24,8 @@ angular
     'froala',
     'truncate',
     'ngFitText',
-    'ngStorage'
+    'ngStorage',
+    'duScroll'
 ])
 .value('portalRules', {
     requiredFields: [
