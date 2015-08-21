@@ -55,6 +55,7 @@ module.exports = function(config) {
       'bower_components/ngFitText/src/ng-FitText.js',
       'bower_components/angular-messages/angular-messages.js',
       'bower_components/ngstorage/ngStorage.js',
+      'bower_components/angular-scroll/angular-scroll.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       "app/scripts/**/*.js",

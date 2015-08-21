@@ -23,7 +23,7 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
     $scope.newPost = null;
     $scope.mapEvents = {};
 
-    console.log($scope.clickedMarker);
+    // console.log($scope.clickedMarker);
     $scope.posts = ygPost.posts;
 
     $scope.clickedMarker = {
@@ -86,6 +86,7 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
         };
         $scope.infoWindow.templateParameter = model;
         $scope.infoWindow.show = true;
+        ygUserPref.$storage.focusedPostId = model.id;
         $timeout.cancel($scope.timeoutCloseInfoWindow);
         $scope.timeoutOpenListPosts = $timeout(function () {
             ygUserPref.$storage.openListPosts = true;

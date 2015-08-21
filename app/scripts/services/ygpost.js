@@ -16,6 +16,7 @@ function ($rootScope, $resource, $mdDialog, ygUserPref, ygServer, ygProgress) {
         icon: 'images/icon-chat-48.png'
     };
     self.posts = [];
+    self.indexedPosts = {};
     self.newPost = null;
     self.postResource = null;
     self.postResourceActions = {
@@ -37,6 +38,7 @@ function ($rootScope, $resource, $mdDialog, ygUserPref, ygServer, ygProgress) {
 
     self.reloadPosts = function(){
         self.posts = [];
+        self.indexedPosts = {};
         self.postResource = null;
         var selectedServer = ygUserPref.$storage.selectedServer
         if(!(selectedServer in ygServer.servers)){
@@ -64,6 +66,7 @@ function ($rootScope, $resource, $mdDialog, ygUserPref, ygServer, ygProgress) {
         self.posts = self.postResource.getMarkers(extraParams, function(){
             for (var i = 0; i < self.posts.length; i++) {
                 self.fillDefaultOptions(self.posts[i]);
+                self.indexedPosts[self.posts[i].id] = self.posts[i];
             }
         });
     }

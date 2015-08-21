@@ -4,9 +4,9 @@
     </a>
 </div>
 <md-sidenav class='md-sidenav-left md-whiteframe-z2' md-component-id='sidenav-listposts' md-is-locked-open='lockedOpen' style='height:100%;'>
-    <md-content layout-padding style='height:100%;padding:10px;'>
+    <md-content id='post-list-container' layout-padding style='height:100%;padding:10px;'>
         <md-list>
-            <md-list-item ng-repeat="post in posts">
+            <md-list-item id='post-{{post.id}}' ng-repeat="post in posts" class='md-whiteframe-z1' layout-margin layout-padding>
                 <div>
                     {{post.title}}
                 </div>
