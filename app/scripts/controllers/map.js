@@ -55,7 +55,7 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
         },
         options: {
             pixelOffset: new googlemaps.Size(0, -40),
-            maxWidth: 150
+            maxWidth: 250
         }
     };
 
