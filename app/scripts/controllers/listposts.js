@@ -12,6 +12,9 @@ angular.module('spirit99App')
 function ($scope, $interval, $mdSidenav, ygUserPref, ygPost) {
     $scope.mdComponentID = 'sidenav-listposts';
     $scope.lockedOpen = true;
+    $scope.focusedPostId = -1;
+    $scope.isMouseOverList = false;
+    $scope.isScrolling = false;   
     
     $scope.$watch(function () {
         return ygUserPref.$storage.openListPosts;
@@ -25,25 +28,33 @@ function ($scope, $interval, $mdSidenav, ygUserPref, ygPost) {
         $scope.posts = ygPost.posts;
     })
 
+    $scope.onMouseOverList = function () {
+        $scope.isMouseOverList = true;
+        // console.log($scope.isMouseOverList);
+    };
 
-    $scope.focusedPostId = -1;
-    $scope.isScrolling = false;
+    $scope.onMouseLeaveList = function () {
+        $scope.isMouseOverList = false;
+        // console.log($scope.isMouseOverList);
+    };
+
     $interval(function () {
         if(!$mdSidenav('sidenav-listposts').isLockedOpen()){
             return;
         }
-        if($scope.focusedPostId != ygUserPref.$storage.focusedPostId && !$scope.isScrolling){
+        // console.log($scope.isMouseOverList);
+        if($scope.focusedPostId != ygUserPref.$storage.focusedPostId && !$scope.isMouseOverList && !$scope.isScrolling){
             // var post_id = ygUserPref.$storage.focusedPostId;
             var container = angular.element(document.getElementById('post-list-container'));
             var target = angular.element(document.getElementById('post-' + ygUserPref.$storage.focusedPostId));
             if(container.length > 0 && target.length > 0){
                 $scope.isScrolling = true;
-                console.log('Start scroll!!');
+                // console.log('Start scroll!!');
                 container.scrollToElement(target, 50, 2000)
                 .then(function () {
                     $scope.focusedPostId = ygUserPref.$storage.focusedPostId;
                     $scope.isScrolling = false;
-                    console.log('Stop scroll!!');
+                    // console.log('Stop scroll!!');
                 })
             }        
         }
@@ -53,5 +64,10 @@ function ($scope, $interval, $mdSidenav, ygUserPref, ygPost) {
         ygUserPref.$storage.openListPosts = false;
     };
 
+    $scope.onMouseOverPosts = function (post_id) {
+        $scope.focusedPostId = post_id;
+        ygUserPref.$storage.focusedPostId = post_id;
+    };
 
+    // Temp for test
 }]);

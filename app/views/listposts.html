@@ -4,9 +4,9 @@
     </a>
 </div>
 <md-sidenav class='md-sidenav-left md-whiteframe-z2' md-component-id='sidenav-listposts' md-is-locked-open='lockedOpen' style='height:100%;'>
-    <md-content id='post-list-container' layout-padding style='height:100%;padding:10px;'>
+    <md-content id='post-list-container' layout-padding style='height:100%;padding:10px;' ng-mouseover="onMouseOverList()" ng-mouseleave="onMouseLeaveList()">
         <md-list>
-            <md-list-item id='post-{{post.id}}' ng-repeat="post in posts" ng-class='{"md-whiteframe-z1":post.id!=focusedPostId, "md-accent md-title md-whiteframe-z5":post.id==focusedPostId}'>
+            <md-list-item id='post-{{post.id}}' ng-repeat="post in posts" ng-class='{"md-whiteframe-z1":post.id!=focusedPostId, "md-accent md-title md-whiteframe-z5":post.id==focusedPostId}' ng-mouseover="onMouseOverPosts(post.id)">
                 <div layout-margin layout-padding>
                     {{post.title}}
                 </div>
