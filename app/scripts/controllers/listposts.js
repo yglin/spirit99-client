@@ -50,7 +50,7 @@ function ($scope, $interval, $mdSidenav, ygUserPref, ygPost) {
             if(container.length > 0 && target.length > 0){
                 $scope.isScrolling = true;
                 // console.log('Start scroll!!');
-                container.scrollToElement(target, 50, 2000)
+                container.scrollToElementAnimated(target, 50, 2000)
                 .then(function () {
                     $scope.focusedPostId = ygUserPref.$storage.focusedPostId;
                     $scope.isScrolling = false;
