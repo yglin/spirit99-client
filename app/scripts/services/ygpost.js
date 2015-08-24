@@ -118,6 +118,19 @@ function ($rootScope, $resource, $mdDialog, ygUserPref, ygServer, ygProgress) {
         });
     };
 
+    self.showPostDetail = function (postID) {
+        $mdDialog.show({
+            templateUrl: 'views/post.html',
+            controller: 'PostController',
+            clickOutsideToClose: true,
+            locals: {
+                postID: postID
+            }
+        })
+        .then(function(response){}, function(response){});
+
+    };
+
     // $watch-es
     $rootScope.$watch(function () {
         return ygUserPref.$storage.selectedServer;

@@ -64,10 +64,13 @@ function ($scope, $interval, $mdSidenav, ygUserPref, ygPost) {
         ygUserPref.$storage.openListPosts = false;
     };
 
-    $scope.onMouseOverPosts = function (post_id) {
-        $scope.focusedPostId = post_id;
-        ygUserPref.$storage.focusedPostId = post_id;
+    $scope.onMouseOverPosts = function (postID) {
+        $scope.focusedPostId = postID;
+        ygUserPref.$storage.focusedPostId = postID;
     };
 
+    $scope.onClickPost = function (postID) {
+        ygPost.showPostDetail(postID);
+    };
     // Temp for test
 }]);

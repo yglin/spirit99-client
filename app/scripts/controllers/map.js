@@ -69,15 +69,7 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
     };
 
     $scope.onClickPostMarker = function (marker, eventName, model) {
-        $mdDialog.show({
-            templateUrl: 'views/post.html',
-            controller: 'PostController',
-            clickOutsideToClose: true,
-            locals: {
-                postID: model.id
-            }
-        })
-        .then(function(response){}, function(response){});
+        ygPost.showPostDetail(model.id);
     };
 
     $scope.onMouseoverPostMarker = function (marker, eventName, model) {
