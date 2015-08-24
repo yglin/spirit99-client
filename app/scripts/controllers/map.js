@@ -136,7 +136,7 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
         return ygUserPref.$storage.focusedPostId;
     }, function(newValue, oldValue){
         if(!$scope.isMouseOverMap){
-            console.log(ygUserPref.$storage.focusedPostId);
+            // console.log(ygUserPref.$storage.focusedPostId);
             var post = ygPost.indexedPosts[ygUserPref.$storage.focusedPostId];
             if(post){
                 $scope.infoWindow.coords = {
