@@ -132,6 +132,27 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
         $scope.popStoryEditor();
     };
 
+    $scope.$watch(function () {
+        return ygUserPref.$storage.focusedPostId;
+    }, function(newValue, oldValue){
+        if(!$scope.isMouseOverMap){
+            console.log(ygUserPref.$storage.focusedPostId);
+            var post = ygPost.indexedPosts[ygUserPref.$storage.focusedPostId];
+            if(post){
+                $scope.infoWindow.coords = {
+                    latitude: post.latitude,
+                    longitude: post.longitude
+                };
+                $scope.infoWindow.templateParameter = post;
+                $scope.infoWindow.show = true;
+                $scope.map.center = {
+                    latitude: post.latitude,
+                    longitude: post.longitude                    
+                };
+            }
+        }
+    });
+
     // Center map at user's current location
     $scope.centerGeoLocation = function(map, zoom){
         zoom = typeof zoom !== 'undefined' ? zoom : 15;
