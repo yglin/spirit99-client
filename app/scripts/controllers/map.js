@@ -22,6 +22,7 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
 
     $scope.newPost = null;
     $scope.mapEvents = {};
+    $scope.isMouseOverMap = false;
 
     // console.log($scope.clickedMarker);
     $scope.posts = ygPost.posts;
@@ -117,6 +118,14 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
         .then(function () {
             $scope.clickedMarker.options.visible = false;
         });
+    };
+
+    $scope.mapEvents.mouseover = function (googleMaps, eventName, args) {
+        $scope.isMouseOverMap = true;
+    };
+
+    $scope.mapEvents.mouseout = function (googleMaps, eventName, args) {
+        $scope.isMouseOverMap = false;
     };
 
     $scope.clickedMarker.events.click = function (marker, eventName, model) {
