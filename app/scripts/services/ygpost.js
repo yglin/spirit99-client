@@ -70,6 +70,9 @@ function ($rootScope, $resource, $mdDialog, ygUserPref, ygServer, ygProgress) {
                 self.indexedPosts[self.posts[i].id] = self.posts[i];
             }
         });
+        // self.posts.promise.then(function(){}, function(){}, function(){
+        //     console.log('notify!!');
+        // });
     }
 
     self.popStoryEditor = function (latitude, longitude) {

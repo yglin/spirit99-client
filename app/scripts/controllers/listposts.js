@@ -72,5 +72,4 @@ function ($scope, $interval, $mdSidenav, ygUserPref, ygPost) {
     $scope.onClickPost = function (postID) {
         ygPost.showPostDetail(postID);
     };
-    // Temp for test
 }]);
