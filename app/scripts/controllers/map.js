@@ -21,13 +21,11 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
     $scope.filterCircle = ygUserPref.$storage.filterCircle;
 
     $scope.newPost = null;
+    $scope.mapControl = {};
     $scope.mapEvents = {};
 
     // console.log($scope.clickedMarker);
     $scope.posts = [];
-    ygInit.promise.then(function () {
-        $scope.posts = ygPost.posts;
-    });
 
     $scope.clickedMarker = {
         id: 'spirit99-map-clicked-marker',
@@ -102,7 +100,8 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
         mouseout: $scope.onMouseoutPostMarker
     };
 
-    $scope.mapEvents.click = function (googleMaps, eventName, args){
+    $scope.onClickMap = function (googleMaps, eventName, args){
+        // console.log('Click map~!!');
         $scope.clickedMarker.coords = {
             latitude: args[0].latLng.lat(),
             longitude: args[0].latLng.lng()
@@ -114,42 +113,55 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
         });
     };
 
-    $scope.mapEvents.dragend = function (googleMaps, eventName, args) {
+    $scope.onDragendMap = function (googleMaps, eventName, args) {
         $timeout.cancel(this.promise);
-        // this.promise = $timeout(ygPost.loadPosts, 1500);
+        this.promise = $timeout(ygPost.loadPosts, 1500);
     };
 
-    $scope.mapEvents.zoom_changed = function (googleMaps, eventName, args) {
+    $scope.onZoomChangedMap = function (googleMaps, eventName, args) {
         $timeout.cancel(this.promise);
-        // this.promise = $timeout(ygPost.loadPosts, 1500);
+        this.promise = $timeout(ygPost.loadPosts, 1500);
     };
 
-    $scope.mapEvents.mouseover = function (googleMaps, eventName, args) {
+    $scope.onMouseOverMap = function (googleMaps, eventName, args) {
         ygUserCtrl.isMouseOverMap = true;
     };
 
-    $scope.mapEvents.mouseout = function (googleMaps, eventName, args) {
+    $scope.onMouseOutMap = function (googleMaps, eventName, args) {
         ygUserCtrl.isMouseOverMap = false;
     };
 
-    $scope.$watch(function () {
-        return ygUserCtrl.focusedPostId;
-    }, function(newValue, oldValue){
-        if(!ygUserCtrl.isMouseOverMap){
-            var post = ygPost.indexedPosts[ygUserCtrl.focusedPostId];
-            if(post){
-                $scope.infoWindow.coords = {
-                    latitude: post.latitude,
-                    longitude: post.longitude
-                };
-                $scope.infoWindow.templateParameter = post;
-                $scope.infoWindow.show = true;
-                $scope.map.center = {
-                    latitude: post.latitude,
-                    longitude: post.longitude                    
-                };
+    $scope.mapEvents = {
+        click: $scope.onClickMap,
+        mouseover: $scope.onMouseOverMap,
+        mouseout: $scope.onMouseOutMap,
+        dragend: $scope.onDragendMap,
+        zoom_changed: $scope.onZoomChangedMap
+    };
+
+    ygInit.promise.then(function () {
+        $scope.posts = ygPost.posts;
+
+        $scope.$watch(function () {
+            return ygUserCtrl.focusedPostId;
+        }, function(newValue, oldValue){
+            if(!ygUserCtrl.isMouseOverMap){
+                var post = ygPost.indexedPosts[ygUserCtrl.focusedPostId];
+                if(post){
+                    $scope.infoWindow.coords = {
+                        latitude: post.latitude,
+                        longitude: post.longitude
+                    };
+                    $scope.infoWindow.templateParameter = post;
+                    $scope.infoWindow.show = true;
+                    $scope.map.center = {
+                        latitude: post.latitude,
+                        longitude: post.longitude                    
+                    };
+                }
             }
-        }
+        });
+
     });
 
     $scope.mapIsReady = true;    
