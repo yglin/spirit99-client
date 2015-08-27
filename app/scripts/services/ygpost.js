@@ -30,6 +30,10 @@ function ($rootScope, $timeout, $resource, $mdDialog, ygUserPref, ygUserCtrl, yg
         }
     };
 
+    self.validatePostData = function (postData) {
+        // XXX: to be implemented
+        return true;
+    };
 
     self.fillDefaultOptions = function (postData) {
         for(var key in self.postDataDefaults){
@@ -37,31 +41,30 @@ function ($rootScope, $timeout, $resource, $mdDialog, ygUserPref, ygUserCtrl, yg
         }
     };
 
-    self.loadPosts = function () {
-        console.log('Load Posts!!');
-    };
-
-    self.reloadPosts = function(){
-        self.posts = [];
-        self.indexedPosts = {};
-        self.postResource = null;
-        var selectedServer = ygUserPref.$storage.selectedServer
+    self.buildPostResource = function (selectedServer) {
         if(!(selectedServer in ygServer.servers)){
             console.log('Can not find server: ' + selectedServer);
-            return;
+            return false;
         }
         var postUrl = ygServer.servers[selectedServer].postUrl;
         if(!postUrl){
             console.log('Not found postUrl in server portal data: ');
             console.log(ygServer.servers[selectedServer]);
+            return false;
+        }
+        // Create new post resource for current server
+        return $resource(postUrl + '/:id', {}, self.postResourceActions);                
+    };
+
+    self.loadPosts = function () {
+        console.log('Load Posts!!');
+        if(typeof self.postResource === 'undefined' || self.postResource === null){
+            console.log('Post resource not created');
             return;
         }
-
-        // Create new post resource for current server
-        self.postResource = $resource(postUrl + '/:id', {}, self.postResourceActions);
+        var extraParams = {};
 
         var filterCircle = ygUserPref.$storage.filterCircle;
-        var extraParams = {};
         if(filterCircle.visible){
             extraParams.filterCircle = {
                 center: filterCircle.center,
@@ -69,17 +72,30 @@ function ($rootScope, $timeout, $resource, $mdDialog, ygUserPref, ygUserCtrl, yg
             };
         }
         extraParams.bounds = ygUserPref.$storage.map.bounds;
-        console.log(extraParams);
-        self.posts = self.postResource.getMarkers(extraParams, function(){
-            for (var i = 0; i < self.posts.length; i++) {
-                self.fillDefaultOptions(self.posts[i]);
-                self.indexedPosts[self.posts[i].id] = self.posts[i];
+
+        // console.log(extraParams);
+
+        return self.postResource.getMarkers(extraParams, function(responses){
+            for (var i = 0; i < responses.length; i++) {
+                if(!(responses[i].id in self.indexedPosts) && self.validatePostData(responses[i])){
+                    var newPost = responses[i];
+                    self.fillDefaultOptions(newPost);
+                    self.indexedPosts[newPost.id] = newPost;
+                    self.posts.push(newPost);
+                }
             }
-        });
-        // self.posts.promise.then(function(){}, function(){}, function(){
-        //     console.log('notify!!');
-        // });
-    }
+        }).$promise;
+    };
+
+    self.reloadPosts = function(){
+        console.log('Reload posts~ ');
+        self.posts = [];
+        self.indexedPosts = {};
+        if(typeof self.postResource === 'undefined' || self.postResource === null){
+            self.postResource = self.buildPostResource(ygUserPref.$storage.selectedServer);
+        }
+        return self.loadPosts();
+    };
 
     self.popStoryEditor = function (latitude, longitude) {
         if(self.newPost === null){
@@ -139,4 +155,10 @@ function ($rootScope, $timeout, $resource, $mdDialog, ygUserPref, ygUserCtrl, yg
         .then(function(response){}, function(response){});
     };
 
+    // $rootScope.$watch(function () {
+    //     return ygUserPref.$storage.selectedServer;
+    // }, function (newValue, oldValue) {
+    //     self.postResource = self.buildPostResource(ygUserPref.$storage.selectedServer);
+    //     self.reloadPosts();
+    // });
 }]);

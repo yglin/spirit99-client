@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('MapController', ['$scope', 'uiGmapGoogleMapApi', 'uiGmapIsReady', '$mdDialog', 'ygError', 'ygProgress', 'ygUtils', 'ygUserPref', 'ygUserCtrl', 'ygPost', '$timeout',
-function($scope, uiGmapGoogleMapApi, uiGmapIsReady, $mdDialog, ygError, ygProgress, ygUtils, ygUserPref, ygUserCtrl, ygPost, $timeout) {
+.controller('MapController', ['$scope', '$timeout', 'uiGmapGoogleMapApi', 'ygInit', 'ygUtils', 'ygUserPref', 'ygUserCtrl', 'ygPost',
+function($scope, $timeout, uiGmapGoogleMapApi, ygInit, ygUtils, ygUserPref, ygUserCtrl, ygPost) {
 
 // uiGmapGoogleMapApi is a promise.
 // The "then" callback function provides the google.maps object.
@@ -25,12 +25,8 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
 
     // console.log($scope.clickedMarker);
     $scope.posts = [];
-    $scope.$watch(function () {
-        return ygPost.posts;
-    }, function (newValue, oldValue) {
-        if(Array.isArray(newValue)){
-            $scope.posts = newValue;
-        }
+    ygInit.promise.then(function () {
+        $scope.posts = ygPost.posts;
     });
 
     $scope.clickedMarker = {
@@ -65,14 +61,14 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
         }
     };
 
-    $scope.filterCircleEvents = {
-        center_changed: function (circle, eventName, model) {
-            $scope.reloadPosts();
-        },
-        radius_changed: function (circle, eventName, model) {
-            $scope.reloadPosts();
-        }
-    };
+    // $scope.filterCircleEvents = {
+    //     center_changed: function (circle, eventName, model) {
+    //         $scope.reloadPosts();
+    //     },
+    //     radius_changed: function (circle, eventName, model) {
+    //         $scope.reloadPosts();
+    //     }
+    // };
 
     $scope.onClickPostMarker = function (marker, eventName, model) {
         ygPost.showPostDetail(model.id);
@@ -120,12 +116,12 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
 
     $scope.mapEvents.dragend = function (googleMaps, eventName, args) {
         $timeout.cancel(this.promise);
-        this.promise = $timeout(ygPost.loadPosts, 1500);
+        // this.promise = $timeout(ygPost.loadPosts, 1500);
     };
 
     $scope.mapEvents.zoom_changed = function (googleMaps, eventName, args) {
         $timeout.cancel(this.promise);
-        this.promise = $timeout(ygPost.loadPosts, 1500);
+        // this.promise = $timeout(ygPost.loadPosts, 1500);
     };
 
     $scope.mapEvents.mouseover = function (googleMaps, eventName, args) {

@@ -8,29 +8,32 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('HeadBarController', ['$scope', '$mdSidenav', 'ygUserPref', 'ygServer', 'ygFilter',
-function($scope, $mdSidenav, ygUserPref, ygServer, ygFilter){
+.controller('HeadBarController', ['$scope', '$mdSidenav', 'ygUserPref', 'ygInit', 'ygServer', 'ygFilter',
+function($scope, $mdSidenav, ygUserPref, ygInit, ygServer, ygFilter){
     $scope.keywords = ygFilter.keywords.title;
-    $scope.serverTitle = '請選擇站點';
-    $scope.serverLogo = '';
     $scope.showInfoWindows = false;
     $scope.toogleInfoWindowsButtonStyle = {color: 'white'};
     $scope.toogleInfoWindowsButtonTooltip = '顯示全部標題';
 
-    $scope.$watch(
-        function(){
-            return ygUserPref.$storage.selectedServer;
-        },
-        function(newValue, oldValue){
-        // console.log('Got you~!! ' + oldValue + ' --> ' + newValue);
-            if(newValue in ygServer.servers){
-                $scope.serverTitle = ygServer.servers[newValue].title;
-                $scope.serverLogo = ygServer.servers[newValue].logo;
-            }
-            else{
-                $scope.serverTitle = '請選擇站點';
-                $scope.serverLogo = '';            
-            }
+    ygInit.promise.then(function () {
+        $scope.serverTitle = ygServer.servers[ygUserPref.$storage.selectedServer].title;
+        $scope.serverLogo = ygServer.servers[ygUserPref.$storage.selectedServer].logo;
+
+        $scope.$watch(
+            function(){
+                return ygUserPref.$storage.selectedServer;
+            },
+            function(newValue, oldValue){
+            // console.log('Got you~!! ' + oldValue + ' --> ' + newValue);
+                if(newValue in ygServer.servers){
+                    $scope.serverTitle = ygServer.servers[newValue].title;
+                    $scope.serverLogo = ygServer.servers[newValue].logo;
+                }
+                else{
+                    $scope.serverTitle = '請選擇站點';
+                    $scope.serverLogo = '';            
+                }
+        });
     });
 
     $scope.openSidenav = function(){
