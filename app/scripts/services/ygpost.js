@@ -8,8 +8,8 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygPost', ['$rootScope', '$resource', '$mdDialog', 'ygUserPref', 'ygServer', 'ygProgress',
-function ($rootScope, $resource, $mdDialog, ygUserPref, ygServer, ygProgress) {
+.service('ygPost', ['$rootScope', '$timeout', '$resource', '$mdDialog', 'ygUserPref', 'ygServer', 'ygProgress',
+function ($rootScope, $timeout, $resource, $mdDialog, ygUserPref, ygServer, ygProgress) {
     var self = this;
 
     self.postDataDefaults = {
@@ -64,6 +64,8 @@ function ($rootScope, $resource, $mdDialog, ygUserPref, ygServer, ygProgress) {
                 radius: filterCircle.radius
             };
         }
+        extraParams.bounds = ygUserPref.$storage.map.bounds;
+        console.log(extraParams.bounds);
         self.posts = self.postResource.getMarkers(extraParams, function(){
             for (var i = 0; i < self.posts.length; i++) {
                 self.fillDefaultOptions(self.posts[i]);
@@ -131,14 +133,21 @@ function ($rootScope, $resource, $mdDialog, ygUserPref, ygServer, ygProgress) {
             }
         })
         .then(function(response){}, function(response){});
-
     };
 
-    // $watch-es
-    $rootScope.$watch(function () {
-        return ygUserPref.$storage.selectedServer;
-    }, function (newValue, oldValue) {
-        self.reloadPosts();
-    });
+    self.startWatches = function () {
+        $rootScope.$watch(function () {
+            return ygUserPref.$storage.selectedServer;
+        }, function (newValue, oldValue) {
+            self.reloadPosts();
+        });
+
+        $rootScope.$watch(function () {
+            return ygUserPref.$storage.map.bounds;
+        }, function (newValue, oldValue) {
+            $timeout.cancel(this.promise);
+            this.promise = $timeout(self.reloadPosts, 1500);
+        }, true);
+    };
 
 }]);

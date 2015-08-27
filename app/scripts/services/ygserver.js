@@ -92,6 +92,7 @@ function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUserPref, yg
     };
 
     self.updateServers = function(){
+        console.log('Start update servers');
         var updatePromises = {};
         for (var name in self.servers) {
             updatePromises[name] = $http.get(self.servers[name].portalUrl)
@@ -108,9 +109,13 @@ function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUserPref, yg
                         console.log('Failed to update server: status = ' + status + ', data = ' + data);
                     });
                 }
-                else{
+                else if(self.validatePortal(data)){
                     data.portalUrl = portalUrl;
                     self.updateServer(data.name, data);
+                }
+                else{
+                    console.log('Invalid portal data from ' + portalUrl);
+                    console.log(data);
                 }
             })
             .error(function (data, status){
@@ -122,22 +127,15 @@ function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUserPref, yg
             if(ygUserPref.$storage.selectedServer in self.servers){
                 self.switchServer(ygUserPref.$storage.selectedServer);
             }
+            console.log('Finish update servers');
         });
 
         ygProgress.show('更新各站點...', promise);
+        return promise;
     };
 
     self.createCommentResource = function (post_id) {
         return $resource(self.currentServer.postUrl + '/:id/comments');
     };
-
-    // ===== $rootScope $watch functions
-    $rootScope.$watch(
-        function () {
-            return ygUserPref.$storage.selectedServer;
-        },
-        function (newValue, oldValue) {
-            self.switchServer(newValue);
-    });
 
 }]);

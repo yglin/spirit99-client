@@ -63,8 +63,49 @@ angular
     });
 })
 // Kick-start the app
-.run(['ygUserPref', 'ygServer', function (ygUserPref, ygServer) {
+.run(['$q', 'ygUserPref', 'ygServer', 'ygPost', 'uiGmapIsReady',
+function ($q, ygUserPref, ygServer, ygPost, uiGmapIsReady) {
     // ygUserPref.loadPref();
-    ygServer.updateServers();
+    console.log('Start initialization');
+
+    var promiseGetGeolocation = function (map, zoom) {
+        console.log('Start get geolocation');
+        zoom = typeof zoom !== 'undefined' ? zoom : 15;
+        var deferred = $q.defer();
+        if(navigator.geolocation){
+            navigator.geolocation.getCurrentPosition(
+                function(position){
+                    map.center = {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
+                    };
+                    map.zoom = zoom;
+                    console.log('Finish get geolocation');
+                    deferred.resolve();
+                },
+                deferred.reject);
+        }
+        else{
+            deferred.reject("Not support Navigator.geolocation");
+        }
+        return deferred.promise;
+    };
+
+    var promiseUiGmapIsReady = function () {
+        return uiGmapIsReady.promise(1).then(function (instances) {
+            console.log('uiGmap is ready');
+        });
+    };
+
+    var initialPromises = [ygServer.updateServers(), promiseUiGmapIsReady()];
+    if(ygUserPref.$storage.autoGeolocation){
+        initialPromises.push(promiseGetGeolocation(ygUserPref.$storage.map, 16));
+    }
+
+    $q.allSettled(initialPromises).then(function () {
+        ygPost.reloadPosts();
+        ygPost.startWatches();
+        console.log('Finish initialization');
+    });
 }])
 ;

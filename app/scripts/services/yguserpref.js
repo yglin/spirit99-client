@@ -27,7 +27,20 @@ angular.module('spirit99App')
                 latitude: 23.973875,
                 longitude: 120.982024
             },
+            bounds: {
+                northeast: {
+                    latitude: 18.862283857359866,
+                    longitude: 106.13949470312502
+                },
+                southwest: {
+                    latitude: 28.89053701901714,
+                    longitude: 135.82455329687502                    
+                }
+            },
             zoom: 6,
+        },
+        filter: {
+
         },
         filterCircle: {
             center: {

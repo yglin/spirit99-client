@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('MapController', ['$scope', 'uiGmapGoogleMapApi', '$mdDialog', 'ygError', 'ygProgress', 'ygUtils', 'ygUserPref', 'ygPost', '$timeout',
-function($scope, uiGmapGoogleMapApi, $mdDialog, ygError, ygProgress, ygUtils, ygUserPref, ygPost, $timeout) {
+.controller('MapController', ['$scope', 'uiGmapGoogleMapApi', 'uiGmapIsReady', '$mdDialog', 'ygError', 'ygProgress', 'ygUtils', 'ygUserPref', 'ygPost', '$timeout',
+function($scope, uiGmapGoogleMapApi, uiGmapIsReady, $mdDialog, ygError, ygProgress, ygUtils, ygUserPref, ygPost, $timeout) {
 
 // uiGmapGoogleMapApi is a promise.
 // The "then" callback function provides the google.maps object.
@@ -25,7 +25,14 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
     $scope.isMouseOverMap = false;
 
     // console.log($scope.clickedMarker);
-    $scope.posts = ygPost.posts;
+    $scope.posts = [];
+    $scope.$watch(function () {
+        return ygPost.posts;
+    }, function (newValue, oldValue) {
+        if(Array.isArray(newValue)){
+            $scope.posts = newValue;
+        }
+    });
 
     $scope.clickedMarker = {
         id: 'spirit99-map-clicked-marker',
@@ -120,9 +127,9 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
         $scope.isMouseOverMap = false;
     };
 
-    $scope.clickedMarker.events.click = function (marker, eventName, model) {
-        $scope.popStoryEditor();
-    };
+    // $scope.mapEvents.bounds_changed = function (googleMaps, eventName, args) {
+    //     console.log(googleMaps.getBounds().toString());
+    // };
 
     $scope.$watch(function () {
         return ygUserPref.$storage.focusedPostId;
@@ -143,25 +150,6 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
             }
         }
     });
-
-    // Center map at user's current location
-    $scope.centerGeoLocation = function(map, zoom){
-        zoom = typeof zoom !== 'undefined' ? zoom : 15;
-        if(navigator.geolocation){
-            navigator.geolocation.getCurrentPosition(function(position){
-                map.center = {
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude
-                };
-                map.zoom = zoom;
-                $scope.$apply();
-            });
-        }
-    };
-
-    if(ygUserPref.$storage.autoGeolocation){
-        $scope.centerGeoLocation($scope.map);
-    }
 
     $scope.mapIsReady = true;    
 
