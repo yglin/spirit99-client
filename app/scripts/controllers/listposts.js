@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('ListPostsController', ['$scope', '$interval', '$mdSidenav', 'ygUserPref', 'ygPost',
-function ($scope, $interval, $mdSidenav, ygUserPref, ygPost) {
+.controller('ListPostsController', ['$scope', '$interval', '$mdSidenav', 'ygUserCtrl', 'ygPost',
+function ($scope, $interval, $mdSidenav, ygUserCtrl, ygPost) {
     $scope.mdComponentID = 'sidenav-listposts';
     $scope.lockedOpen = true;
     $scope.focusedPostId = -1;
@@ -17,7 +17,7 @@ function ($scope, $interval, $mdSidenav, ygUserPref, ygPost) {
     $scope.isScrolling = false;   
     
     $scope.$watch(function () {
-        return ygUserPref.$storage.openListPosts;
+        return ygUserCtrl.openListPosts;
     }, function (newValue, oldValue) {
         $scope.lockedOpen = newValue;
     });
@@ -43,16 +43,15 @@ function ($scope, $interval, $mdSidenav, ygUserPref, ygPost) {
             return;
         }
         // console.log($scope.isMouseOverList);
-        if($scope.focusedPostId != ygUserPref.$storage.focusedPostId && !$scope.isMouseOverList && !$scope.isScrolling){
-            // var post_id = ygUserPref.$storage.focusedPostId;
+        if($scope.focusedPostId != ygUserCtrl.focusedPostId && !$scope.isMouseOverList && !$scope.isScrolling){
             var container = angular.element(document.getElementById('post-list-container'));
-            var target = angular.element(document.getElementById('post-' + ygUserPref.$storage.focusedPostId));
+            var target = angular.element(document.getElementById('post-' + ygUserCtrl.focusedPostId));
             if(container.length > 0 && target.length > 0){
                 $scope.isScrolling = true;
                 // console.log('Start scroll!!');
                 container.scrollToElementAnimated(target, 50, 2000)
                 .then(function () {
-                    $scope.focusedPostId = ygUserPref.$storage.focusedPostId;
+                    $scope.focusedPostId = ygUserCtrl.focusedPostId;
                     $scope.isScrolling = false;
                     // console.log('Stop scroll!!');
                 })
@@ -61,12 +60,12 @@ function ($scope, $interval, $mdSidenav, ygUserPref, ygPost) {
     }, 100);
 
     $scope.close = function () {
-        ygUserPref.$storage.openListPosts = false;
+        ygUserCtrl.openListPosts = false;
     };
 
     $scope.onMouseOverPosts = function (postID) {
         $scope.focusedPostId = postID;
-        ygUserPref.$storage.focusedPostId = postID;
+        ygUserCtrl.focusedPostId = postID;
     };
 
     $scope.onClickPost = function (postID) {

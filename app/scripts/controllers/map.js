@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('MapController', ['$scope', 'uiGmapGoogleMapApi', 'uiGmapIsReady', '$mdDialog', 'ygError', 'ygProgress', 'ygUtils', 'ygUserPref', 'ygPost', '$timeout',
-function($scope, uiGmapGoogleMapApi, uiGmapIsReady, $mdDialog, ygError, ygProgress, ygUtils, ygUserPref, ygPost, $timeout) {
+.controller('MapController', ['$scope', 'uiGmapGoogleMapApi', 'uiGmapIsReady', '$mdDialog', 'ygError', 'ygProgress', 'ygUtils', 'ygUserPref', 'ygUserCtrl', 'ygPost', '$timeout',
+function($scope, uiGmapGoogleMapApi, uiGmapIsReady, $mdDialog, ygError, ygProgress, ygUtils, ygUserPref, ygUserCtrl, ygPost, $timeout) {
 
 // uiGmapGoogleMapApi is a promise.
 // The "then" callback function provides the google.maps object.
@@ -86,10 +86,10 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
         };
         $scope.infoWindow.templateParameter = model;
         $scope.infoWindow.show = true;
-        ygUserPref.$storage.focusedPostId = model.id;
+        ygUserCtrl.focusedPostId = model.id;
         $timeout.cancel($scope.timeoutCloseInfoWindow);
         $scope.timeoutOpenListPosts = $timeout(function () {
-            ygUserPref.$storage.openListPosts = true;
+            ygUserCtrl.openListPosts = true;
         }, 2000);
     };
 
@@ -132,10 +132,10 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
     // };
 
     $scope.$watch(function () {
-        return ygUserPref.$storage.focusedPostId;
+        return ygUserCtrl.focusedPostId;
     }, function(newValue, oldValue){
         if(!$scope.isMouseOverMap){
-            var post = ygPost.indexedPosts[ygUserPref.$storage.focusedPostId];
+            var post = ygPost.indexedPosts[ygUserCtrl.focusedPostId];
             if(post){
                 $scope.infoWindow.coords = {
                     latitude: post.latitude,
