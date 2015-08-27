@@ -8,8 +8,8 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygPost', ['$rootScope', '$timeout', '$resource', '$mdDialog', 'ygUserPref', 'ygServer', 'ygProgress',
-function ($rootScope, $timeout, $resource, $mdDialog, ygUserPref, ygServer, ygProgress) {
+.service('ygPost', ['$rootScope', '$timeout', '$resource', '$mdDialog', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygProgress',
+function ($rootScope, $timeout, $resource, $mdDialog, ygUserPref, ygUserCtrl, ygServer, ygProgress) {
     var self = this;
 
     self.postDataDefaults = {
@@ -35,6 +35,10 @@ function ($rootScope, $timeout, $resource, $mdDialog, ygUserPref, ygServer, ygPr
         for(var key in self.postDataDefaults){
             postData[key] = typeof postData[key] === typeof self.postDataDefaults[key] ? postData[key] : self.postDataDefaults[key];
         }
+    };
+
+    self.loadPosts = function () {
+        console.log('Load Posts!!');
     };
 
     self.reloadPosts = function(){
@@ -65,7 +69,7 @@ function ($rootScope, $timeout, $resource, $mdDialog, ygUserPref, ygServer, ygPr
             };
         }
         extraParams.bounds = ygUserPref.$storage.map.bounds;
-        console.log(extraParams.bounds);
+        console.log(extraParams);
         self.posts = self.postResource.getMarkers(extraParams, function(){
             for (var i = 0; i < self.posts.length; i++) {
                 self.fillDefaultOptions(self.posts[i]);
@@ -133,21 +137,6 @@ function ($rootScope, $timeout, $resource, $mdDialog, ygUserPref, ygServer, ygPr
             }
         })
         .then(function(response){}, function(response){});
-    };
-
-    self.startWatches = function () {
-        $rootScope.$watch(function () {
-            return ygUserPref.$storage.selectedServer;
-        }, function (newValue, oldValue) {
-            self.reloadPosts();
-        });
-
-        $rootScope.$watch(function () {
-            return ygUserPref.$storage.map.bounds;
-        }, function (newValue, oldValue) {
-            $timeout.cancel(this.promise);
-            this.promise = $timeout(self.reloadPosts, 1500);
-        }, true);
     };
 
 }]);

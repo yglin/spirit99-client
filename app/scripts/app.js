@@ -104,7 +104,6 @@ function ($q, ygUserPref, ygServer, ygPost, uiGmapIsReady) {
 
     $q.allSettled(initialPromises).then(function () {
         ygPost.reloadPosts();
-        ygPost.startWatches();
         console.log('Finish initialization');
     });
 }])

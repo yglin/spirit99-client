@@ -12,4 +12,5 @@ angular.module('spirit99App')
     var self = this;
     self.openListPosts = false;
     self.focusedPostId = -1;
+    self.isMouseOverMap = false;
 });

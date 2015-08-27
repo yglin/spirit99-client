@@ -22,7 +22,6 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
 
     $scope.newPost = null;
     $scope.mapEvents = {};
-    $scope.isMouseOverMap = false;
 
     // console.log($scope.clickedMarker);
     $scope.posts = [];
@@ -119,22 +118,28 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
         });
     };
 
+    $scope.mapEvents.dragend = function (googleMaps, eventName, args) {
+        $timeout.cancel(this.promise);
+        this.promise = $timeout(ygPost.loadPosts, 1500);
+    };
+
+    $scope.mapEvents.zoom_changed = function (googleMaps, eventName, args) {
+        $timeout.cancel(this.promise);
+        this.promise = $timeout(ygPost.loadPosts, 1500);
+    };
+
     $scope.mapEvents.mouseover = function (googleMaps, eventName, args) {
-        $scope.isMouseOverMap = true;
+        ygUserCtrl.isMouseOverMap = true;
     };
 
     $scope.mapEvents.mouseout = function (googleMaps, eventName, args) {
-        $scope.isMouseOverMap = false;
+        ygUserCtrl.isMouseOverMap = false;
     };
-
-    // $scope.mapEvents.bounds_changed = function (googleMaps, eventName, args) {
-    //     console.log(googleMaps.getBounds().toString());
-    // };
 
     $scope.$watch(function () {
         return ygUserCtrl.focusedPostId;
     }, function(newValue, oldValue){
-        if(!$scope.isMouseOverMap){
+        if(!ygUserCtrl.isMouseOverMap){
             var post = ygPost.indexedPosts[ygUserCtrl.focusedPostId];
             if(post){
                 $scope.infoWindow.coords = {
