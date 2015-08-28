@@ -69,7 +69,7 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
         }
         var extraParams = {};
 
-        extraParams.postsLoaded = Object.keys(self.indexedPosts);
+        // extraParams.postsLoaded = Object.keys(self.indexedPosts);
 
         var filterCircle = ygUserPref.$storage.filterCircle;
         if(filterCircle.visible){
