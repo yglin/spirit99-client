@@ -8,8 +8,8 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygInit', ['$q', 'ygUserPref', 'ygServer', 'ygPost', 'uiGmapIsReady',
-function ($q, ygUserPref, ygServer, ygPost, uiGmapIsReady) {
+.service('ygInit', ['$q', '$timeout', 'ygUserPref', 'ygServer', 'ygPost', 'uiGmapGoogleMapApi', 'uiGmapIsReady',
+function ($q, $timeout, ygUserPref, ygServer, ygPost, uiGmapGoogleMapApi, uiGmapIsReady) {
     var self = this;
 
     console.log('Start initialization');
@@ -36,23 +36,34 @@ function ($q, ygUserPref, ygServer, ygPost, uiGmapIsReady) {
         }
         return deferred.promise;
     };
+    
+    uiGmapGoogleMapApi.then(function(maps) {
+        self.GoogleMapsAPI = maps;
+    });
 
-    var promiseUiGmapIsReady = function () {
-        return uiGmapIsReady.promise(1).then(function (instances) {
+    uiGmapIsReady.promise(1).then(function (instances) {
             console.log('uiGmap is ready');
-        });
-    };
+    });
 
     var level1Processes = [
         ygServer.updateServers(),
-        promiseUiGmapIsReady()
+        uiGmapGoogleMapApi,
+        uiGmapIsReady.promise(1),
     ];
     if(ygUserPref.$storage.autoGeolocation){
         level1Processes.push(promiseGetGeolocation(ygUserPref.$storage.map, 16));
     }
 
     var level2Processes = $q.allSettled(level1Processes).then(function () {
-        return ygPost.reloadPosts();
+        var deferred = $q.defer();
+        $timeout(function () {
+            ygPost.reloadPosts().then(function () {
+                deferred.resolve();
+            }, function () {
+                deferred.reject();
+            });
+        }, 3000);
+        return deferred.promise;
     });
 
     self.promise = level2Processes;

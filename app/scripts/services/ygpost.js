@@ -8,8 +8,8 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygPost', ['$rootScope', '$timeout', '$resource', '$mdDialog', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygProgress',
-function ($rootScope, $timeout, $resource, $mdDialog, ygUserPref, ygUserCtrl, ygServer, ygProgress) {
+.service('ygPost', ['$rootScope', '$timeout', '$q', '$resource', '$mdDialog', 'ygUtils', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygProgress',
+function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, ygUserCtrl, ygServer, ygProgress) {
     var self = this;
 
     self.postDataDefaults = {
@@ -57,12 +57,19 @@ function ($rootScope, $timeout, $resource, $mdDialog, ygUserPref, ygUserCtrl, yg
     };
 
     self.loadPosts = function () {
-        console.log('Load Posts!!');
+        // console.log('Load Posts!!');
         if(typeof self.postResource === 'undefined' || self.postResource === null){
             console.log('Post resource not created');
-            return;
+            return $q.reject('Post resource not created');
+        }
+
+        if(ygUtils.withinMaxBounds(ygUserPref.$storage.map.bounds)){
+            console.log('Bounds within max bounds, no need to load new posts');
+            return $q.resolve('Bounds within max bounds, no need to load new posts');
         }
         var extraParams = {};
+
+        extraParams.postsLoaded = Object.keys(self.indexedPosts);
 
         var filterCircle = ygUserPref.$storage.filterCircle;
         if(filterCircle.visible){
@@ -76,6 +83,7 @@ function ($rootScope, $timeout, $resource, $mdDialog, ygUserPref, ygUserCtrl, yg
         // console.log(extraParams);
 
         return self.postResource.getMarkers(extraParams, function(responses){
+            console.log('Load ' + responses.length + ' posts');
             for (var i = 0; i < responses.length; i++) {
                 if(!(responses[i].id in self.indexedPosts) && self.validatePostData(responses[i])){
                     var newPost = responses[i];
@@ -84,6 +92,7 @@ function ($rootScope, $timeout, $resource, $mdDialog, ygUserPref, ygUserCtrl, yg
                     self.posts.push(newPost);
                 }
             }
+            ygUtils.updateMaxBounds(extraParams.bounds);
         }).$promise;
     };
 

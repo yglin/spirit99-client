@@ -8,7 +8,7 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygUtils', function () {
+.service('ygUtils', ['uiGmapGoogleMapApi', function (uiGmapGoogleMapApi) {
 // AngularJS will instantiate a singleton by calling "new" on this function
     var self = this;
 
@@ -36,4 +36,56 @@ angular.module('spirit99App')
         }
         return links;
     };
-});
+
+    self.historyBoundsUnion = null;
+    self.maxBounds = null;
+
+    self.updateMaxBounds = function (bounds) {
+        return;
+    };
+
+    self.withinMaxBounds = function (bounds) {
+        return false;
+    };
+
+    uiGmapGoogleMapApi.then(function (GMapAPI) {
+        self.withinBounds = function (inBounds, outBounds) {
+            if(outBounds.contains(inBounds.getSouthWest()) && outBounds.contains(inBounds.getNorthEast())){
+                return true;
+            }
+            else{
+                return false;
+            }
+        };
+
+        self.updateMaxBounds = function (bounds) {
+            var GMapBounds = new GMapAPI.LatLngBounds(
+                new GMapAPI.LatLng(bounds.southwest.latitude, bounds.southwest.longitude),
+                new GMapAPI.LatLng(bounds.northeast.latitude, bounds.northeast.longitude));
+            if(self.historyBoundsUnion === null){
+                self.historyBoundsUnion = GMapBounds;
+                self.maxBounds = angular.copy(GMapBounds);
+            }
+            else{
+                if(self.withinBounds(self.historyBoundsUnion, GMapBounds)){
+                    // console.log('Update maxBounds!!');
+                    self.maxBounds = GMapBounds;
+                }
+                self.historyBoundsUnion = self.historyBoundsUnion.union(GMapBounds);
+                // console.log('Update historyBoundsUnion: ' + self.historyBoundsUnion.toString());
+                // console.log('maxBounds: ' + self.maxBounds.toString());
+            }
+        };
+
+        self.withinMaxBounds = function (bounds) {
+            if(self.maxBounds === null){
+                return false;
+            }
+            var GMapBounds = new GMapAPI.LatLngBounds(
+                new GMapAPI.LatLng(bounds.southwest.latitude, bounds.southwest.longitude),
+                new GMapAPI.LatLng(bounds.northeast.latitude, bounds.northeast.longitude));
+            return self.withinBounds(GMapBounds, self.maxBounds);
+        };
+    });
+
+}]);

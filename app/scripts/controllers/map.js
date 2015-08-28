@@ -115,12 +115,12 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
 
     $scope.onDragendMap = function (googleMaps, eventName, args) {
         $timeout.cancel(this.promise);
-        this.promise = $timeout(ygPost.loadPosts, 1500);
+        this.promise = $timeout(ygPost.loadPosts, 1000);
     };
 
     $scope.onZoomChangedMap = function (googleMaps, eventName, args) {
         $timeout.cancel(this.promise);
-        this.promise = $timeout(ygPost.loadPosts, 1500);
+        this.promise = $timeout(ygPost.loadPosts, 1000);
     };
 
     $scope.onMouseOverMap = function (googleMaps, eventName, args) {
@@ -138,6 +138,11 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
         dragend: $scope.onDragendMap,
         zoom_changed: $scope.onZoomChangedMap
     };
+
+    // $scope.rectangleBounds = new googlemaps.LatLngBounds(
+    //         new googlemaps.LatLng(24.084, 120.551),
+    //         new googlemaps.LatLng(24.085, 120.552)
+    //     );
 
     ygInit.promise.then(function () {
         $scope.posts = ygPost.posts;
@@ -161,10 +166,9 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
                 }
             }
         });
-
     });
 
-    $scope.mapIsReady = true;    
+    $scope.mapIsReady = true;
 
 });
 
