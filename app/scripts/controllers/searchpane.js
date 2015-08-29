@@ -8,6 +8,7 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('SearchPaneController', ['$scope', 'ygFilter', function($scope, ygFilter){
-    $scope.keywords = ygFilter.keywords.title;
+.controller('SearchPaneController', ['$scope', 'ygUserPref',
+function($scope, ygUserPref){
+    $scope.keywords = ygUserPref.$storage.filters.title;
 }]);
