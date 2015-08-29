@@ -14,9 +14,10 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
 
     self.postDataDefaults = {
         icon: 'images/icon-chat-48.png',
+        options: {}
         // thumbnail: 'http://at-cdn-s01.audiotool.com/2012/05/28/documents/ei368KjdlP5qy6gILDLtH9cEAf6H/0/cover256x256-b31436c2a9bc4645b1ad67bc09705cd7.jpg'
     };
-    self.posts = [];
+    self.filteredPosts = [];
     self.indexedPosts = {};
     self.newPost = null;
     self.postResource = null;
@@ -38,6 +39,32 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
     self.fillDefaultOptions = function (postData) {
         for(var key in self.postDataDefaults){
             postData[key] = typeof postData[key] === typeof self.postDataDefaults[key] ? postData[key] : self.postDataDefaults[key];
+        }
+    };
+
+    self.filterPost = function (post, filteredPosts, filters) {
+        filteredPosts = Array.isArray(filteredPosts) ? filteredPosts : self.filteredPosts;
+        filters = typeof filters === 'undefined' ? ygUserPref.$storage.filters : filters;
+
+        var matchAll = true;
+        for(var key in filters){
+            if(key in post && typeof post[key] === 'string'){
+                for (var i = 0; i < filters[key].length; i++) {
+                    var keyword = filters[key][i];
+                    if(post[key].indexOf(keyword) == -1){
+                        matchAll = false;
+                    }
+                    if(!matchAll)break;
+                }
+            }
+            else{
+                matchAll = false;
+            }
+            if(!matchAll)break;
+        }            
+
+        if(matchAll){
+            filteredPosts.push(post);
         }
     };
 
@@ -89,7 +116,7 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
                     var newPost = responses[i];
                     self.fillDefaultOptions(newPost);
                     self.indexedPosts[newPost.id] = newPost;
-                    self.posts.push(newPost);
+                    self.filterPost(newPost);
                 }
             }
             ygUtils.updateMaxBounds(extraParams.bounds);
@@ -98,7 +125,7 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
 
     self.reloadPosts = function(){
         console.log('Reload posts~ ');
-        self.posts = [];
+        self.filteredPosts = [];
         self.indexedPosts = {};
         if(typeof self.postResource === 'undefined' || self.postResource === null){
             self.postResource = self.buildPostResource(ygUserPref.$storage.selectedServer);
@@ -133,7 +160,7 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
                 .then(function (result) {
                         console.log('Success, post added!!');
                         self.fillDefaultOptions(self.newPost);
-                        self.posts.push(self.newPost);
+                        self.filteredPosts.push(self.newPost);
                         self.newPost = null;
                     }, function (error) {
                         console.log('BoooooooM~!!!, adding post failed');
@@ -164,6 +191,29 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
         .then(function(response){}, function(response){});
     };
 
+    self.startWatches = function () {
+        $rootScope.$watch(function () {
+            return ygUserPref.$storage.filters;
+        }, function  (newValue, oldValue) {
+            self.filteredPosts = [];
+            console.log(self.filteredPosts);
+            for(var id in self.indexedPosts){
+                self.filterPost(self.indexedPosts[id]);
+                // console.log('post ' + id + ' visible is ' + self.indexedPosts[id].options.visible);
+            }
+            console.log(self.filteredPosts);
+            // for (var i = 0; i < self.filteredPosts.length; i++) {
+            //     if(!self.filteredPosts[i].options.visible){
+            //         console.log('post ' + self.filteredPosts[i].id + ' is hide!!');
+            //     }
+            // }
+            // for(var id in self.indexedPosts){
+            //     if(self.indexedPosts[id].options.visible){
+            //         console.log('post ' + id + ' is visible!!');
+            //     }                
+            // }
+        }, true);        
+    };
     // $rootScope.$watch(function () {
     //     return ygUserPref.$storage.selectedServer;
     // }, function (newValue, oldValue) {

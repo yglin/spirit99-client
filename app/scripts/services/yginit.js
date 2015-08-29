@@ -45,6 +45,7 @@ function ($q, $timeout, ygUserPref, ygServer, ygPost, uiGmapGoogleMapApi, uiGmap
             console.log('uiGmap is ready');
     });
 
+    // Level 1 processes: Initialize servers and google-map
     var level1Processes = [
         ygServer.updateServers(),
         uiGmapGoogleMapApi,
@@ -54,6 +55,7 @@ function ($q, $timeout, ygUserPref, ygServer, ygPost, uiGmapGoogleMapApi, uiGmap
         level1Processes.push(promiseGetGeolocation(ygUserPref.$storage.map, 16));
     }
 
+    // Level 2 processes: load posts
     var level2Processes = $q.allSettled(level1Processes).then(function () {
         var deferred = $q.defer();
         $timeout(function () {
@@ -66,5 +68,11 @@ function ($q, $timeout, ygUserPref, ygServer, ygPost, uiGmapGoogleMapApi, uiGmap
         return deferred.promise;
     });
 
-    self.promise = level2Processes;
+    // Level 3 processes: start $rootscope watches in services
+    var level3Processes = level2Processes.then(function () {
+        ygPost.startWatches();
+        return $q.resolve();
+    });
+
+    self.promise = level3Processes;
 }]);

@@ -39,8 +39,8 @@ angular.module('spirit99App')
             },
             zoom: 6,
         },
-        filter: {
-
+        filters: {
+            title: []
         },
         filterCircle: {
             center: {

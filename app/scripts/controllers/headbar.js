@@ -10,7 +10,7 @@
 angular.module('spirit99App')
 .controller('HeadBarController', ['$scope', '$mdSidenav', 'ygUserPref', 'ygInit', 'ygServer', 'ygFilter',
 function($scope, $mdSidenav, ygUserPref, ygInit, ygServer, ygFilter){
-    $scope.keywords = ygFilter.keywords.title;
+    $scope.keywords = ygUserPref.$storage.filters.title;
     $scope.showInfoWindows = false;
     $scope.toogleInfoWindowsButtonStyle = {color: 'white'};
     $scope.toogleInfoWindowsButtonTooltip = '顯示全部標題';

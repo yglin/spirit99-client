@@ -23,9 +23,9 @@ function ($scope, $interval, $mdSidenav, ygUserCtrl, ygPost) {
     });
 
     $scope.$watch(function () {
-        return ygPost.posts;
+        return ygPost.filteredPosts;
     }, function () {
-        $scope.posts = ygPost.posts;
+        $scope.posts = ygPost.filteredPosts;
     })
 
     $scope.onMouseOverList = function () {

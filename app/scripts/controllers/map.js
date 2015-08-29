@@ -145,7 +145,13 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
     //     );
 
     ygInit.promise.then(function () {
-        $scope.posts = ygPost.posts;
+        
+        $scope.posts = ygPost.filteredPosts;
+        $scope.$watch(function () {
+            return ygPost.filteredPosts;
+        }, function (newValue, oldValue) {
+            $scope.posts = ygPost.filteredPosts;
+        });
 
         $scope.$watch(function () {
             return ygUserCtrl.focusedPostId;
