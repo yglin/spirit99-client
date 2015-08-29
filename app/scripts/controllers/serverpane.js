@@ -8,11 +8,13 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('ServerPaneController', ['$scope', '$mdDialog', 'ygUserPref', 'ygServer',
-function($scope, $mdDialog, ygUserPref, ygServer){
+.controller('ServerPaneController', ['$scope', '$mdDialog', 'ygInit', 'ygUserPref', 'ygServer',
+function($scope, $mdDialog, ygInit, ygUserPref, ygServer){
     // ============== Initilize scope model ==================
     // $scope.ygServer = ygServer;
-    $scope.servers = ygServer.servers;
+    ygInit.promise.then(function () {
+        $scope.servers = ygServer.servers;
+    });
 
     // ============== Scope interaction functions =================
     $scope.addServer = function(portalUrl){
