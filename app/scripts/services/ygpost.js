@@ -14,7 +14,7 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
 
     self.postDataDefaults = {
         icon: 'images/icon-chat-48.png',
-        options: {}
+        // options: {}
         // thumbnail: 'http://at-cdn-s01.audiotool.com/2012/05/28/documents/ei368KjdlP5qy6gILDLtH9cEAf6H/0/cover256x256-b31436c2a9bc4645b1ad67bc09705cd7.jpg'
     };
     self.filteredPosts = [];
@@ -156,18 +156,28 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
                 }
             }
             if(self.postResource !== null){
-                var promise = self.newPost.$save()
+                return self.newPost.$save()
                 .then(function (result) {
-                        console.log('Success, post added!!');
-                        self.fillDefaultOptions(self.newPost);
-                        self.filteredPosts.push(self.newPost);
+                    if(self.validatePostData(result)){
+                        self.fillDefaultOptions(result);
+                        self.indexedPosts[result.id] = result;
+                        self.filterPost(result);
                         self.newPost = null;
-                    }, function (error) {
-                        console.log('BoooooooM~!!!, adding post failed');
+                        console.log('Success, post added!!');
+                        return $q.resolve();                        
+                    }
+                    else{
+                        return $q.reject();
+                    }
+                }, function (error) {
+                    console.log('BoooooooM~!!!, adding post failed');
+                    console.log(error);
+                    return $q.reject();
                 });
                 ygProgress.show('新增資料...', promise);
             }else{
                 console.log('Not connected to post resources');
+                return $q.reject();
             }
         }, function(newPost){
             for(var key in newPost){
@@ -176,6 +186,7 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
                 }
             }
             console.log('你又按錯啦你');
+            return $q.reject();
         });
     };
 
@@ -196,12 +207,12 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
             return ygUserPref.$storage.filters;
         }, function  (newValue, oldValue) {
             self.filteredPosts = [];
-            console.log(self.filteredPosts);
+            // console.log(self.filteredPosts);
             for(var id in self.indexedPosts){
                 self.filterPost(self.indexedPosts[id]);
                 // console.log('post ' + id + ' visible is ' + self.indexedPosts[id].options.visible);
             }
-            console.log(self.filteredPosts);
+            // console.log(self.filteredPosts);
             // for (var i = 0; i < self.filteredPosts.length; i++) {
             //     if(!self.filteredPosts[i].options.visible){
             //         console.log('post ' + self.filteredPosts[i].id + ' is hide!!');

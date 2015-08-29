@@ -11,6 +11,22 @@ angular.module('spirit99App')
 .controller('MapController', ['$scope', '$timeout', 'uiGmapGoogleMapApi', 'ygInit', 'ygUtils', 'ygUserPref', 'ygUserCtrl', 'ygPost',
 function($scope, $timeout, uiGmapGoogleMapApi, ygInit, ygUtils, ygUserPref, ygUserCtrl, ygPost) {
 
+    $scope.clickedMarker = {
+        id: 'spirit99-map-clicked-marker',
+        coords: {
+            latitude: 23.973875,
+            longitude: 120.982024
+        },
+        // show: true,
+        options: {
+            icon: 'images/icon-question-48.png',
+            visible: false,
+            draggable: true
+        },
+        events: {},
+        control: {}
+    };
+
 // uiGmapGoogleMapApi is a promise.
 // The "then" callback function provides the google.maps object.
 uiGmapGoogleMapApi.then(function(googlemaps) {
@@ -26,21 +42,6 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
 
     // console.log($scope.clickedMarker);
     $scope.posts = [];
-
-    $scope.clickedMarker = {
-        id: 'spirit99-map-clicked-marker',
-        coords: {
-            latitude: 23.973875,
-            longitude: 120.982024
-        },
-        // show: true,
-        options: {
-            icon: 'images/icon-question-48.png',
-            visible: false
-        },
-        events: {
-        }
-    };
 
     $scope.infoWindow = {
         coords: {
@@ -101,15 +102,22 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
     };
 
     $scope.onClickMap = function (googleMaps, eventName, args){
-        // console.log('Click map~!!');
-        $scope.clickedMarker.coords = {
-            latitude: args[0].latLng.lat(),
-            longitude: args[0].latLng.lng()
-        };
+        // I have to use google.maps.Marker API to move the clickedMarker,
+        // because somehow all bindings to the clickedMarker properties are lost after initialization 
+        var markers = $scope.clickedMarker.control.getGMarkers();
+        if(markers.length >=1){
+            markers[0].setPosition(args[0].latLng);
+            markers[0].setVisible(true);
+        }
+
         $scope.clickedMarker.options.visible = true;
         ygPost.popStoryEditor(args[0].latLng.lat(), args[0].latLng.lng())
-        .then(function () {
-            $scope.clickedMarker.options.visible = false;
+        .then(function (result) {
+            if(markers.length >=1){
+                markers[0].setVisible(false);
+            }
+        }, function (error) {
+            // Do nothing...
         });
     };
 
@@ -145,7 +153,7 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
     //     );
 
     ygInit.promise.then(function () {
-        
+
         $scope.posts = ygPost.filteredPosts;
         $scope.$watch(function () {
             return ygPost.filteredPosts;

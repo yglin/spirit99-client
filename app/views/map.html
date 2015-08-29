@@ -8,7 +8,7 @@
     </div>
     <ui-gmap-google-map center='map.center' pan='true' zoom='map.zoom' bounds='map.bounds' events='mapEvents' control='mapControl' ng-show="mapIsReady">
         <!-- New post marker, show up when clicked on map -->
-        <ui-gmap-marker coords="clickedMarker.coords" options="clickedMarker.options" events="clickedMarker.events" idkey="clickedMarker.id">
+        <ui-gmap-marker idkey="clickedMarker.id" coords="clickedMarker.coords" options="clickedMarker.options" events="clickedMarker.events" control='clickedMarker.control'>
         </ui-gmap-marker>
 
         <!-- Post markers, load from server -->
