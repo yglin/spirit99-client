@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('ListPostsController', ['$scope', '$interval', '$mdSidenav', 'ygUserCtrl', 'ygPost',
-function ($scope, $interval, $mdSidenav, ygUserCtrl, ygPost) {
+.controller('ListPostsController', ['$scope', '$interval', '$mdSidenav', 'ygUserCtrl', 'ygPost', 'ygAudio',
+function ($scope, $interval, $mdSidenav, ygUserCtrl, ygPost, ygAudio) {
     $scope.mdComponentID = 'sidenav-listposts';
     $scope.lockedOpen = true;
     $scope.focusedPostId = -1;
@@ -60,6 +60,10 @@ function ($scope, $interval, $mdSidenav, ygUserCtrl, ygPost) {
     }, 100);
 
     $scope.close = function () {
+        if(ygAudio.closeListPosts){
+            // console.log(ygAudio.closeListPosts);
+            ygAudio.closeListPosts.play();
+        }
         ygUserCtrl.openListPosts = false;
     };
 

@@ -12,7 +12,7 @@ angular.module('spirit99App')
 // AngularJS will instantiate a singleton by calling "new" on this function
     var self = this;
 
-    // $localStorage.$reset();
+    $localStorage.$reset();
     self.$storage = $localStorage.$default({
         servers: {
             localstory: {

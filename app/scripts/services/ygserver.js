@@ -24,6 +24,10 @@ function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUserPref, yg
                 openListPosts: {
                     file: 'sounds/bubbles_blown_into_glass_through_drinking_straw_version_2.mp3',
                     volume: 0.5
+                },
+                closeListPosts: {
+                    file: 'sounds/large_water_drip.mp3',
+                    volume: 0.5
                 }
             }
     };
@@ -39,6 +43,7 @@ function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUserPref, yg
         return true;
     };
 
+    // XXX: Should implement deep object update
     self.fillDefaultOptions = function (serverOptions) {
         for(var key in self.portalDataDefaults){
             serverOptions[key] = typeof serverOptions[key] === typeof self.portalDataDefaults[key] ? serverOptions[key] : self.portalDataDefaults[key];
