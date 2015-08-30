@@ -29,7 +29,8 @@ angular.module('spirit99App')
             options = options.circularProgress;
         }
         var dialog = $mdDialog.show(options);
-        promise.then(function () {
+        promise.finally(function () {
+            console.log('ygProcess done!!');
             $mdDialog.hide();
         });
     };
