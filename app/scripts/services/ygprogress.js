@@ -30,7 +30,7 @@ angular.module('spirit99App')
         }
         var dialog = $mdDialog.show(options);
         promise.finally(function () {
-            console.log('ygProcess done!!');
+            // console.log('ygProcess done!!');
             $mdDialog.hide();
         });
     };
