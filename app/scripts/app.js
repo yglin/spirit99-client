@@ -25,7 +25,8 @@ angular
     'truncate',
     'ngFitText',
     'ngStorage',
-    'duScroll'
+    'duScroll',
+    'ngAudio'
 ])
 .value('portalRules', {
     requiredFields: [

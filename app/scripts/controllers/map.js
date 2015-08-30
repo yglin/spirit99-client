@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('MapController', ['$scope', '$timeout', 'uiGmapGoogleMapApi', 'ygInit', 'ygUtils', 'ygUserPref', 'ygUserCtrl', 'ygPost',
-function($scope, $timeout, uiGmapGoogleMapApi, ygInit, ygUtils, ygUserPref, ygUserCtrl, ygPost) {
+.controller('MapController', ['$scope', '$timeout', 'uiGmapGoogleMapApi', 'ygInit', 'ygUtils', 'ygUserPref', 'ygUserCtrl', 'ygPost', 'ygAudio',
+function($scope, $timeout, uiGmapGoogleMapApi, ygInit, ygUtils, ygUserPref, ygUserCtrl, ygPost, ygAudio) {
 
     $scope.clickedMarker = {
         id: 'spirit99-map-clicked-marker',
@@ -74,6 +74,10 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
     };
 
     $scope.onMouseoverPostMarker = function (marker, eventName, model) {
+        if(ygAudio.mouseOverPostMarker){
+            // ygAudio.mouseOverPostMarker.stop();
+            ygAudio.mouseOverPostMarker.play();
+        }
         $scope.infoWindow.coords = {
             latitude: model.latitude,
             longitude: model.longitude
@@ -81,10 +85,15 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
         $scope.infoWindow.templateParameter = model;
         $scope.infoWindow.show = true;
         ygUserCtrl.focusedPostId = model.id;
-        $timeout.cancel($scope.timeoutCloseInfoWindow);
-        $scope.timeoutOpenListPosts = $timeout(function () {
-            ygUserCtrl.openListPosts = true;
-        }, 2000);
+        if(!ygUserCtrl.openListPosts){
+            $timeout.cancel($scope.timeoutCloseInfoWindow);
+            $scope.timeoutOpenListPosts = $timeout(function () {
+                if(ygAudio.openListPosts){
+                    ygAudio.openListPosts.play();
+                }
+                ygUserCtrl.openListPosts = true;
+            }, 2000);
+        }
     };
 
     $scope.onMouseoutPostMarker = function (marker, eventName, model) {

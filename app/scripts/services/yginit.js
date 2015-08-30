@@ -8,8 +8,8 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygInit', ['$q', '$timeout', 'ygUserPref', 'ygServer', 'ygPost', 'uiGmapGoogleMapApi', 'uiGmapIsReady',
-function ($q, $timeout, ygUserPref, ygServer, ygPost, uiGmapGoogleMapApi, uiGmapIsReady) {
+.service('ygInit', ['$q', '$timeout', 'ygUserPref', 'ygServer', 'ygPost', 'ygAudio', 'uiGmapGoogleMapApi', 'uiGmapIsReady',
+function ($q, $timeout, ygUserPref, ygServer, ygPost, ygAudio, uiGmapGoogleMapApi, uiGmapIsReady) {
     var self = this;
 
     console.log('Start initialization');
@@ -57,6 +57,7 @@ function ($q, $timeout, ygUserPref, ygServer, ygPost, uiGmapGoogleMapApi, uiGmap
 
     // Level 2 processes: load posts
     var level2Processes = $q.allSettled(level1Processes).then(function () {
+        ygAudio.loadSoundSet();
         var deferred = $q.defer();
         $timeout(function () {
             ygPost.reloadPosts().then(function () {
