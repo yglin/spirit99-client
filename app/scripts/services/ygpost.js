@@ -8,8 +8,8 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygPost', ['$rootScope', '$timeout', '$q', '$resource', '$mdDialog', 'ygUtils', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygProgress',
-function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, ygUserCtrl, ygServer, ygProgress) {
+.service('ygPost', ['$rootScope', '$timeout', '$q', '$resource', '$mdDialog', 'ygUtils', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygProgress', 'ygError',
+function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, ygUserCtrl, ygServer, ygProgress, ygError) {
     var self = this;
 
     self.postDataDefaults = {
@@ -156,7 +156,7 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
                 }
             }
             if(self.postResource !== null){
-                return self.newPost.$save()
+                var promise = self.newPost.$save()
                 .then(function (result) {
                     if(self.validatePostData(result)){
                         self.fillDefaultOptions(result);
@@ -167,17 +167,17 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
                         return $q.resolve();                        
                     }
                     else{
-                        return $q.reject();
+                        return $q.reject('Invalid post data: ' + result.toString());
                     }
                 }, function (error) {
-                    console.log('BoooooooM~!!!, adding post failed');
-                    console.log(error);
-                    return $q.reject();
+                    ygError.errorMessages.push('新增資料至遠端伺服器失敗');
+                    return $q.reject(error);
                 });
                 ygProgress.show('新增資料...', promise);
+                return promise;
             }else{
                 console.log('Not connected to post resources');
-                return $q.reject();
+                return $q.reject('Post resource not created yet');
             }
         }, function(newPost){
             for(var key in newPost){
