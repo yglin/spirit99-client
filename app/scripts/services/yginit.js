@@ -57,7 +57,10 @@ function ($q, $timeout, ygUserPref, ygServer, ygPost, ygAudio, uiGmapGoogleMapAp
 
     // Level 2 processes: load posts
     var level2Processes = $q.allSettled(level1Processes).then(function () {
-        ygAudio.loadSoundSet();
+        var portalData = ygServer.servers[ygUserPref.$storage.selectedServer];
+        if('soundSet' in portalData){
+            ygAudio.loadSoundSet(portalData.soundSet);
+        }
         var deferred = $q.defer();
         $timeout(function () {
             ygPost.reloadPosts().then(function () {
