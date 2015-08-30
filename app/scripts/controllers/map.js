@@ -85,8 +85,8 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
         $scope.infoWindow.templateParameter = model;
         $scope.infoWindow.show = true;
         ygUserCtrl.focusedPostId = model.id;
+        $timeout.cancel($scope.timeoutCloseInfoWindow);
         if(!ygUserCtrl.openListPosts){
-            $timeout.cancel($scope.timeoutCloseInfoWindow);
             $scope.timeoutOpenListPosts = $timeout(function () {
                 if(ygAudio.openListPosts){
                     ygAudio.openListPosts.play();
