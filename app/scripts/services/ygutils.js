@@ -12,6 +12,22 @@ angular.module('spirit99App')
 // AngularJS will instantiate a singleton by calling "new" on this function
     var self = this;
 
+    self.clearNullAndEmptyStrings = function (object) {
+        for(var key in object){
+            if(object[key] === null || object[key] === ''){
+                delete object[key];
+            }
+            else if(typeof object[key] === 'object'){
+                self.clearNullAndEmptyStrings(object[key]);
+            }
+        }        
+    }
+
+    self.fillDefaults = function (data, defaults) {
+        self.clearNullAndEmptyStrings(data);
+        return angular.extend({}, defaults, data);  
+    };
+
     self.formatDatetime = function(dateString){
         var date = new Date(dateString);
         return date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate()

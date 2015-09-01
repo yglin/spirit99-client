@@ -36,11 +36,11 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
         return true;
     };
 
-    self.fillDefaultOptions = function (postData) {
-        for(var key in self.postDataDefaults){
-            postData[key] = typeof postData[key] === typeof self.postDataDefaults[key] ? postData[key] : self.postDataDefaults[key];
-        }
-    };
+    // self.fillDefaultOptions = function (postData) {
+    //     for(var key in self.postDataDefaults){
+    //         postData[key] = typeof postData[key] === typeof self.postDataDefaults[key] ? postData[key] : self.postDataDefaults[key];
+    //     }
+    // };
 
     self.filterPost = function (post, filteredPosts, filters) {
         filteredPosts = Array.isArray(filteredPosts) ? filteredPosts : self.filteredPosts;
@@ -113,8 +113,7 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
             console.log('Load ' + responses.length + ' posts');
             for (var i = 0; i < responses.length; i++) {
                 if(!(responses[i].id in self.indexedPosts) && self.validatePostData(responses[i])){
-                    var newPost = responses[i];
-                    self.fillDefaultOptions(newPost);
+                    var newPost = ygUtils.fillDefaults(responses[i], self.postDataDefaults);
                     self.indexedPosts[newPost.id] = newPost;
                     self.filterPost(newPost);
                 }
