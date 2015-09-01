@@ -205,24 +205,13 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
     self.startWatches = function () {
         $rootScope.$watch(function () {
             return ygUserPref.$storage.filters;
-        }, function  (newValue, oldValue) {
+        }, function  () {
             self.filteredPosts = [];
             // console.log(self.filteredPosts);
             for(var id in self.indexedPosts){
                 self.filterPost(self.indexedPosts[id]);
                 // console.log('post ' + id + ' visible is ' + self.indexedPosts[id].options.visible);
             }
-            // console.log(self.filteredPosts);
-            // for (var i = 0; i < self.filteredPosts.length; i++) {
-            //     if(!self.filteredPosts[i].options.visible){
-            //         console.log('post ' + self.filteredPosts[i].id + ' is hide!!');
-            //     }
-            // }
-            // for(var id in self.indexedPosts){
-            //     if(self.indexedPosts[id].options.visible){
-            //         console.log('post ' + id + ' is visible!!');
-            //     }                
-            // }
         }, true);        
     };
     // $rootScope.$watch(function () {

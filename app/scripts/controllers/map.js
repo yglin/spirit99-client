@@ -43,6 +43,10 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
     // console.log($scope.clickedMarker);
     $scope.posts = [];
 
+    // $scope.markersOptions = {
+    //     animation: googlemaps.Animation.BOUNCE
+    // };
+
     $scope.infoWindow = {
         coords: {
             latitude: 23.973875,
@@ -156,6 +160,13 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
         zoom_changed: $scope.onZoomChangedMap
     };
 
+    // $scope.addMarkerAnimation = function (post, interval) {
+    //     post.options = typeof post.options === 'undefined' ? {} : post.options;
+    //     post.options.animation = googlemaps.Animation.BOUNCE;
+    //     $timeout(function () {
+    //         post.options.animation = null;
+    //     }, interval);
+    // };
     // $scope.rectangleBounds = new googlemaps.LatLngBounds(
     //         new googlemaps.LatLng(24.084, 120.551),
     //         new googlemaps.LatLng(24.085, 120.552)
@@ -163,12 +174,22 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
 
     ygInit.promise.then(function () {
 
-        $scope.posts = ygPost.filteredPosts;
         $scope.$watch(function () {
             return ygPost.filteredPosts;
-        }, function (newValue, oldValue) {
+        }, function () {
             $scope.posts = ygPost.filteredPosts;
-        });
+        })
+        // $scope.pervCountPosts = $scope.posts.length;
+        // $scope.$watchCollection(function () {
+        //     return ygPost.filteredPosts;
+        // }, function () {
+        //     $scope.posts = ygPost.filteredPosts;
+        //     for (var i = $scope.pervCountPosts; i < $scope.posts.length; i++) {
+        //         $scope.addMarkerAnimation($scope.posts[i], 2000);
+        //     }
+        //     $scope.pervCountPosts = $scope.posts.length;
+
+        // });
 
         $scope.$watch(function () {
             return ygUserCtrl.focusedPostId;
