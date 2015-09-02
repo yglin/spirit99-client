@@ -1,14 +1,16 @@
 <md-toolbar>
-    <div class="md-toolbar-tools" layout-align='space-between center'>
+    <div layout='row' layout-align='space-between center'>
+        <div flex='40'>
         <md-button class='md-icon-button' aria-label='Open Side Menu' ng-click='openSidenav()'>
             <md-icon class='material-icons' ng-style="{color: 'white'}">keyboard_arrow_right</md-icon>
         </md-button>
+        </div>
         <!-- <span flex></span> -->
-        <div>
-            <md-list-item>
-            <img alt="{{serverTitle}}" ng-src="{{serverLogo}}" class="md-avatar" ng-style="{'max-width':'64px', 'max-height':'64px'}" ng-hide='serverLogo == ""' />
-            <p>{{serverTitle}}</p>
-            </md-list-item>
+        <div flex='20' layout='row' layout-align='center center'>
+            <div layout-margin>
+                <img alt="{{serverTitle}}" ng-src="{{serverLogo}}" class="md-avatar" ng-style="{'max-width':'48px', 'max-height':'48px'}" ng-hide='serverLogo == ""' />
+            </div>
+            <h1 class='md-headline'>{{serverTitle}}</h1>
         </div>
 <!--         <md-button class='md-icon-button' aria-label='Toggle info windows' ng-click='toggleInfoWindows()'>
             <md-icon class='material-icons' ng-style="toogleInfoWindowsButtonStyle">forum</md-icon>
@@ -16,8 +18,10 @@
         </md-button>
  -->        
         <!-- <span flex></span> -->
-        <div layout='row'>
-            <md-icon class='material-icons' ng-style="{color: 'white'}">search</md-icon>
+        <div flex layout='row' layout-align='end center'>
+            <div>
+                <md-icon class='material-icons' ng-style="{color: 'white'}">search</md-icon>
+            </div>
             <md-chips ng-model="keywords" placeholder='增加關鍵字' secondary-placeholder="搜尋">
             </md-chips>
         </div>
