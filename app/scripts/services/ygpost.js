@@ -63,9 +63,7 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
             if(!matchAll)break;
         }            
 
-        if(matchAll){
-            filteredPosts.push(post);
-        }
+        return matchAll;
     };
 
     self.buildPostResource = function (selectedServer) {
@@ -115,7 +113,9 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
                 if(!(responses[i].id in self.indexedPosts) && self.validatePostData(responses[i])){
                     var newPost = ygUtils.fillDefaults(responses[i], self.postDataDefaults);
                     self.indexedPosts[newPost.id] = newPost;
-                    self.filterPost(newPost);
+                    if(self.filterPost(newPost)){
+                        self.filteredPosts.push(newPost);
+                    }
                 }
             }
             ygUtils.updateMaxBounds(extraParams.bounds);
@@ -157,10 +157,12 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
             if(self.postResource !== null){
                 var promise = self.newPost.$save()
                 .then(function (result) {
-                    if(self.validatePostData(result)){
+                    if(self.validatePostData(result) && !(result.id in self.indexedPosts)){
                         self.fillDefaultOptions(result);
                         self.indexedPosts[result.id] = result;
-                        self.filterPost(result);
+                        if(self.filterPost(result)){
+                            self.filteredPosts.push(result);
+                        }
                         self.newPost = null;
                         console.log('Success, post added!!');
                         return $q.resolve();                        
@@ -206,10 +208,10 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
             return ygUserPref.$storage.filters;
         }, function  () {
             self.filteredPosts = [];
-            // console.log(self.filteredPosts);
             for(var id in self.indexedPosts){
-                self.filterPost(self.indexedPosts[id]);
-                // console.log('post ' + id + ' visible is ' + self.indexedPosts[id].options.visible);
+                if(self.filterPost(self.indexedPosts[id])){
+                    self.filteredPosts.push(self.indexedPosts[id]);
+                }
             }
         }, true);        
     };
