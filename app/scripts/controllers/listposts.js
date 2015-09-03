@@ -15,6 +15,7 @@ function ($scope, $interval, $mdSidenav, ygUserCtrl, ygPost, ygAudio) {
     $scope.focusedPostId = -1;
     $scope.isMouseOverList = false;
     $scope.isScrolling = false;   
+    $scope.posts = ygPost.filteredPosts;
     
     $scope.$watch(function () {
         return ygUserCtrl.openListPosts;
@@ -22,11 +23,11 @@ function ($scope, $interval, $mdSidenav, ygUserCtrl, ygPost, ygAudio) {
         $scope.lockedOpen = newValue;
     });
 
-    $scope.$watch(function () {
-        return ygPost.filteredPosts;
-    }, function () {
-        $scope.posts = ygPost.filteredPosts;
-    })
+    // $scope.$watch(function () {
+    //     return ygPost.filteredPosts;
+    // }, function () {
+    //     $scope.posts = ygPost.filteredPosts;
+    // })
 
     $scope.onMouseOverList = function () {
         $scope.isMouseOverList = true;
