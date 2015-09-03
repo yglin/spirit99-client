@@ -12,18 +12,31 @@
             </div>
             <h1 class='md-headline'>{{serverTitle}}</h1>
         </div>
-<!--         <md-button class='md-icon-button' aria-label='Toggle info windows' ng-click='toggleInfoWindows()'>
-            <md-icon class='material-icons' ng-style="toogleInfoWindowsButtonStyle">forum</md-icon>
-            <md-tooltip>{{ toogleInfoWindowsButtonTooltip }}</md-tooltip>
-        </md-button>
- -->        
-        <!-- <span flex></span> -->
         <div flex layout='row' layout-align='end center'>
-            <div>
-                <md-icon class='material-icons' ng-style="{color: 'white'}">search</md-icon>
+             <div style='position:relative;width:48px;height:48px;'>
+                <div style='position:absolute;top:0px;left:0px;'>
+                    <md-fab-speed-dial md-direction="down" class="md-fling">
+                        <md-fab-trigger>
+                            <md-button class='md-fab md-mini'>
+                                <md-icon class='material-icons' ng-style="{color: 'white'}">{{selectedToolIcon}}</md-icon>
+                            </md-button>
+                        </md-fab-trigger>
+                        <md-fab-actions>
+                            <md-button class='md-fab md-mini'>
+                                <md-icon class='material-icons' ng-style="{color: 'white'}">search</md-icon>
+                            </md-button>
+                            <md-button class='md-fab md-mini'>
+                                <md-icon class='material-icons' ng-style="{color: 'white'}">my_location</md-icon>
+                            </md-button>
+                        </md-fab-actions>
+                    </md-fab-speed-dial>
+                </div>
             </div>
-            <md-chips ng-model="keywords" placeholder='增加關鍵字' secondary-placeholder="搜尋">
-            </md-chips>
-        </div>
+            <div flex layout-padding>
+                <md-chips ng-model="keywords">
+                    <input placeholder='增加關鍵字' secondary-placeholder="搜尋" style='font-size:24px;color:white;' />
+                </md-chips>
+            </div>
+         </div>
     </div>
 </md-toolbar>
