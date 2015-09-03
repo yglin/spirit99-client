@@ -17,11 +17,11 @@ function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUtils, ygUse
         show: true,
         logo: 'https://www.evansville.edu/residencelife/images/greenLogo.png',
         soundSet: {
-                mouseOverPostMarker: {
+                focusOnPost: {
                     file: 'sounds/big_bubble_blown_into_glass_through_drinking_straw_version_1.mp3',
                     volume: 0.5
                 },
-                openListPosts: {
+                scrollListPosts: {
                     file: 'sounds/bubbles_blown_into_glass_through_drinking_straw_version_2.mp3',
                     volume: 0.5
                 },

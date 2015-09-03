@@ -83,10 +83,7 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
     };
 
     $scope.onMouseoverPostMarker = function (marker, eventName, model) {
-        if(ygAudio.mouseOverPostMarker){
-            // ygAudio.mouseOverPostMarker.stop();
-            ygAudio.mouseOverPostMarker.play();
-        }
+        ygAudio.focusOnPost.play();
         $scope.infoWindow.coords = {
             latitude: model.latitude,
             longitude: model.longitude
@@ -97,9 +94,6 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
         $timeout.cancel($scope.timeoutCloseInfoWindow);
         if(!ygUserCtrl.openListPosts){
             $scope.timeoutOpenListPosts = $timeout(function () {
-                if(ygAudio.openListPosts){
-                    ygAudio.openListPosts.play();
-                }
                 ygUserCtrl.openListPosts = true;
             }, 2000);
         }

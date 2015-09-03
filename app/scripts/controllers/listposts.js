@@ -50,6 +50,7 @@ function ($scope, $interval, $mdSidenav, ygUserCtrl, ygPost, ygAudio) {
             if(container.length > 0 && target.length > 0){
                 $scope.isScrolling = true;
                 // console.log('Start scroll!!');
+                ygAudio.scrollListPosts.play();
                 container.scrollToElementAnimated(target, 50, 2000)
                 .then(function () {
                     $scope.focusedPostId = ygUserCtrl.focusedPostId;
@@ -69,6 +70,7 @@ function ($scope, $interval, $mdSidenav, ygUserCtrl, ygPost, ygAudio) {
     };
 
     $scope.onMouseOverPosts = function (postID) {
+        ygAudio.focusOnPost.play();
         $scope.focusedPostId = postID;
         ygUserCtrl.focusedPostId = postID;
     };
