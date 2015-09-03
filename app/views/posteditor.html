@@ -16,49 +16,51 @@
             <input md-maxlength='50' required name='title' ng-model="newPost.title">
             <div ng-messages='postForm.title.$error'>
                 <div ng-message='required'>必須要有標題</div>
-                <div ng-message='md-maxlength'>標題請勿超過50字</div>
+                <div ng-message='md-maxlength'>請勿超過50字</div>
             </div>
         </md-input-container>
-        <md-input-container flex>
+        <br>
+        <md-content layout="column" class='md-whiteframe-z3'>
+            <!-- <div layout='row'> -->
+            <md-toolbar class='md-accent md-hue-1'>
+                <div class="md-toolbar-tools md-toolbar-tools-bottom">
+                    <md-button aria-label="Show Tools" class="md-fab md-raised md-mini" ng-click='triggerToolbar()'>
+                        <md-icon class='material-icons'>menu</md-icon>
+                        <md-tooltip>工具列</md-tooltip>
+                    </md-button>
+                    <md-button aria-label="Insert Image" class="md-fab md-raised md-mini" ng-click='insertImage()'>
+                        <md-icon class='material-icons'>image</md-icon>
+                        <md-tooltip>上傳圖片</md-tooltip>
+                    </md-button>
+                    <span flex></span>
+                    <md-fab-speed-dial md-direction="left" class="md-fling">
+                        <md-fab-trigger ng-show='iconSet.length > 0'>
+                            <md-button aria-label="menu" class="md-fab md-raised md-mini">
+                                <img ng-src='{{newPost.icon}}' width='100%' height='100%'/>
+                                <md-tooltip>選擇地圖標示</md-tooltip>
+                            </md-button>
+                        </md-fab-trigger>
+                        <md-fab-actions>
+                            <md-button ng-repeat='iconUrl in iconSet' aria-label="Marker Icon" class="md-fab md-raised md-mini" ng-click="selectMarkerIcon(iconUrl)">
+                                <img ng-src='{{iconUrl}}' width='100%' height='100%'/>
+                            </md-button>
+                        </md-fab-actions>
+                    </md-fab-speed-dial>
+                </div>
+            </md-toolbar>
+            <!-- </div> -->
+            <textarea froala='froalaOptions' ng-model="newPost.context"></textarea>
+        </md-content>
+        <br>
+        <md-input-container>
             <!-- TODO: limit character length to 30 -->
-            <label>作者</label>
-            <input md-maxlength='20' name='author' ng-model="newPost.author">
+            <label>作者或聯絡方式</label>
+            <input md-maxlength='30' name='author' ng-model="newPost.author">
             <div ng-messages='postForm.author.$error'>
-                <div ng-message='md-maxlength'>作者請勿超過20字</div>
+                <div ng-message='md-maxlength'>請勿超過30字</div>
             </div>
         </md-input-container> 
     </form>   
-    <md-content layout="column" class='md-whiteframe-z3'>
-        <!-- <div layout='row'> -->
-        <md-toolbar class='md-accent md-hue-1'>
-            <div class="md-toolbar-tools md-toolbar-tools-bottom">
-                <md-button aria-label="Show Tools" class="md-fab md-raised md-mini" ng-click='triggerToolbar()'>
-                    <md-icon class='material-icons'>menu</md-icon>
-                    <md-tooltip>工具列</md-tooltip>
-                </md-button>
-                <md-button aria-label="Insert Image" class="md-fab md-raised md-mini" ng-click='insertImage()'>
-                    <md-icon class='material-icons'>image</md-icon>
-                    <md-tooltip>上傳圖片</md-tooltip>
-                </md-button>
-                <span flex></span>
-                <md-fab-speed-dial md-direction="left" class="md-fling">
-                    <md-fab-trigger ng-show='iconSet.length > 0'>
-                        <md-button aria-label="menu" class="md-fab md-raised md-mini">
-                            <img ng-src='{{newPost.icon}}' width='100%' height='100%'/>
-                            <md-tooltip>選擇地圖標示</md-tooltip>
-                        </md-button>
-                    </md-fab-trigger>
-                    <md-fab-actions>
-                        <md-button ng-repeat='iconUrl in iconSet' aria-label="Marker Icon" class="md-fab md-raised md-mini" ng-click="selectMarkerIcon(iconUrl)">
-                            <img ng-src='{{iconUrl}}' width='100%' height='100%'/>
-                        </md-button>
-                    </md-fab-actions>
-                </md-fab-speed-dial>
-            </div>
-        </md-toolbar>
-        <!-- </div> -->
-        <textarea froala='froalaOptions' ng-model="newPost.context"></textarea>
-    </md-content>
 </md-dialog-content>
 <div class="md-actions" layout="row">
 <md-button ng-click="cancel()" class="md-raised md-primary">
