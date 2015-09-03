@@ -48,7 +48,18 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
             visible: false,
             draggable: true
         },
-        events: {},
+        events: {
+            click: function (argument) {
+                ygPost.popStoryEditor().then(function (result) {
+                    var markers = $scope.clickedMarker.control.getGMarkers();
+                    if(markers.length >=1){
+                        markers[0].setVisible(false);
+                    }
+                }, function (error) {
+                    // body...
+                });
+            }
+        },
         control: {}
     };
 
@@ -112,6 +123,7 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
         mouseover: $scope.onMouseoverPostMarker,
         mouseout: $scope.onMouseoutPostMarker
     };
+
 
     $scope.onClickMap = function (googleMaps, eventName, args){
         // I have to use google.maps.Marker API to move the clickedMarker,

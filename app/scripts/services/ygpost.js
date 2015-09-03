@@ -143,8 +143,12 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
             self.newPost = new self.postResource();
             // self.newPost = ygUtils.fillDefaults(self.newPost, self.postDataDefaults);
         }
-        self.newPost['latitude'] = latitude;
-        self.newPost['longitude'] = longitude;
+        if(latitude){
+            self.newPost['latitude'] = latitude;
+        }
+        if(longitude){
+            self.newPost['longitude'] = longitude;
+        }
         // // console.log($scope.newPost);
         return $mdDialog.show({
             templateUrl: 'views/posteditor.html',
