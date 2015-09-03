@@ -31,6 +31,11 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
         }
     };
 
+    // This function should be override in map.js
+    self.filteredPosts.addAsMarker = function (postData) {
+          this.push(postData);
+    };
+
     self.validatePostData = function (postData) {
         // XXX: to be implemented
         return true;
@@ -114,7 +119,8 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
                     var newPost = ygUtils.fillDefaults(responses[i], self.postDataDefaults);
                     self.indexedPosts[newPost.id] = newPost;
                     if(self.filterPost(newPost)){
-                        self.filteredPosts.push(newPost);
+                        // self.filteredPosts.push(newPost);
+                        self.filteredPosts.addAsMarker(newPost);
                     }
                 }
             }
@@ -124,7 +130,7 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
 
     self.reloadPosts = function(){
         console.log('Reload posts~ ');
-        self.filteredPosts = [];
+        self.filteredPosts.length = 0;
         self.indexedPosts = {};
         if(typeof self.postResource === 'undefined' || self.postResource === null){
             self.postResource = self.buildPostResource(ygUserPref.$storage.selectedServer);
@@ -161,7 +167,8 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
                         self.fillDefaultOptions(result);
                         self.indexedPosts[result.id] = result;
                         if(self.filterPost(result)){
-                            self.filteredPosts.push(result);
+                            // self.filteredPosts.push(result);
+                            self.filteredPosts.addAsMarker(result);
                         }
                         self.newPost = null;
                         console.log('Success, post added!!');
@@ -207,10 +214,11 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
         $rootScope.$watch(function () {
             return ygUserPref.$storage.filters;
         }, function  () {
-            self.filteredPosts = [];
+            self.filteredPosts.length = 0;
             for(var id in self.indexedPosts){
                 if(self.filterPost(self.indexedPosts[id])){
-                    self.filteredPosts.push(self.indexedPosts[id]);
+                    // self.filteredPosts.push(self.indexedPosts[id]);
+                    self.filteredPosts.addAsMarker(self.indexedPosts[id]);
                 }
             }
         }, true);        

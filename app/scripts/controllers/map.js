@@ -11,6 +11,31 @@ angular.module('spirit99App')
 .controller('MapController', ['$scope', '$timeout', 'uiGmapGoogleMapApi', 'ygInit', 'ygUtils', 'ygUserPref', 'ygUserCtrl', 'ygPost', 'ygAudio',
 function($scope, $timeout, uiGmapGoogleMapApi, ygInit, ygUtils, ygUserPref, ygUserCtrl, ygPost, ygAudio) {
 
+// uiGmapGoogleMapApi is a promise.
+// The "then" callback function provides the google.maps object.
+uiGmapGoogleMapApi.then(function(googlemaps) {
+
+    $scope.mapIsReady = false;
+
+    $scope.map = ygUserPref.$storage.map;
+    $scope.filterCircle = ygUserPref.$storage.filterCircle;
+
+    $scope.newPost = null;
+    $scope.mapControl = {};
+    $scope.mapEvents = {};
+
+    // console.log($scope.clickedMarker);
+    $scope.posts = ygPost.filteredPosts;
+    $scope.posts.addAsMarker = function (postData) {
+        // console.log('Add post marker ' + postData.id);
+        $scope.addMarkerAnimation(postData, 2500);
+        this.push(postData);
+    };
+
+    // $scope.markersOptions = {
+    //     animation: googlemaps.Animation.BOUNCE
+    // };
+
     $scope.clickedMarker = {
         id: 'spirit99-map-clicked-marker',
         coords: {
@@ -26,26 +51,6 @@ function($scope, $timeout, uiGmapGoogleMapApi, ygInit, ygUtils, ygUserPref, ygUs
         events: {},
         control: {}
     };
-
-// uiGmapGoogleMapApi is a promise.
-// The "then" callback function provides the google.maps object.
-uiGmapGoogleMapApi.then(function(googlemaps) {
-
-    $scope.mapIsReady = false;
-
-    $scope.map = ygUserPref.$storage.map;
-    $scope.filterCircle = ygUserPref.$storage.filterCircle;
-
-    $scope.newPost = null;
-    $scope.mapControl = {};
-    $scope.mapEvents = {};
-
-    // console.log($scope.clickedMarker);
-    $scope.posts = [];
-
-    // $scope.markersOptions = {
-    //     animation: googlemaps.Animation.BOUNCE
-    // };
 
     $scope.infoWindow = {
         coords: {
@@ -160,13 +165,13 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
         zoom_changed: $scope.onZoomChangedMap
     };
 
-    // $scope.addMarkerAnimation = function (post, interval) {
-    //     post.options = typeof post.options === 'undefined' ? {} : post.options;
-    //     post.options.animation = googlemaps.Animation.BOUNCE;
-    //     $timeout(function () {
-    //         post.options.animation = null;
-    //     }, interval);
-    // };
+    $scope.addMarkerAnimation = function (post, interval) {
+        post.options = typeof post.options === 'undefined' ? {} : post.options;
+        post.options.animation = googlemaps.Animation.BOUNCE;
+        $timeout(function () {
+            post.options.animation = null;
+        }, interval);
+    };
     // $scope.rectangleBounds = new googlemaps.LatLngBounds(
     //         new googlemaps.LatLng(24.084, 120.551),
     //         new googlemaps.LatLng(24.085, 120.552)
@@ -174,21 +179,26 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
 
     ygInit.promise.then(function () {
 
-        $scope.$watch(function () {
-            return ygPost.filteredPosts;
-        }, function () {
-            $scope.posts = ygPost.filteredPosts;
-        })
-        // $scope.pervCountPosts = $scope.posts.length;
-        // $scope.$watchCollection(function () {
+        // $scope.$watch(function () {
         //     return ygPost.filteredPosts;
         // }, function () {
         //     $scope.posts = ygPost.filteredPosts;
-        //     for (var i = $scope.pervCountPosts; i < $scope.posts.length; i++) {
-        //         $scope.addMarkerAnimation($scope.posts[i], 2000);
-        //     }
-        //     $scope.pervCountPosts = $scope.posts.length;
+        // })
 
+        // $scope.$watch(function () {
+        //     return ygPost.filteredPosts.length;
+        // }, function (newValue, oldValue) {
+        //     $scope.posts = ygPost.filteredPosts;
+        //     if(newValue > oldValue){
+        //         for (var i = oldValue; i < newValue; i++) {
+        //             $scope.addMarkerAnimation($scope.posts[i], 2000);
+        //         }
+        //     }
+        //     else{
+        //         for (var i = 0; i < newValue; i++) {
+        //             $scope.addMarkerAnimation($scope.posts[i], 2000);
+        //         }                
+        //     }
         // });
 
         $scope.$watch(function () {
