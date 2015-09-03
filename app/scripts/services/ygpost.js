@@ -141,7 +141,7 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
     self.popStoryEditor = function (latitude, longitude) {
         if(self.newPost === null){
             self.newPost = new self.postResource();
-            self.fillDefaultOptions(self.newPost);
+            // self.newPost = ygUtils.fillDefaults(self.newPost, self.postDataDefaults);
         }
         self.newPost['latitude'] = latitude;
         self.newPost['longitude'] = longitude;
@@ -150,6 +150,7 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
             templateUrl: 'views/posteditor.html',
             controller: 'PostEditorController',
             clickOutsideToClose: true,
+            escapeToClose: false,
             locals: {
                 newPost: self.newPost
             },
@@ -164,11 +165,9 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
                 var promise = self.newPost.$save()
                 .then(function (result) {
                     if(self.validatePostData(result) && !(result.id in self.indexedPosts)){
-                        self.fillDefaultOptions(result);
-                        self.indexedPosts[result.id] = result;
-                        if(self.filterPost(result)){
-                            // self.filteredPosts.push(result);
-                            self.filteredPosts.addAsMarker(result);
+                        self.indexedPosts[result.id] = ygUtils.fillDefaults(result, self.postDataDefaults);
+                        if(self.filterPost(self.indexedPosts[result.id])){
+                            self.filteredPosts.addAsMarker(self.indexedPosts[result.id]);
                         }
                         self.newPost = null;
                         console.log('Success, post added!!');
