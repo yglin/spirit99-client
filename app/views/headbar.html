@@ -35,7 +35,7 @@
                 </md-chips>
             </div>
             <div flex layout-padding ng-show='selectedTool == "address"'>
-                <md-input-container flex>
+                <md-input-container flex md-no-float>
                     <input placeholder='輸入地址' style='color:white;' ng-model='userAddress' ng-keypress="$event.keyCode == 13 && onEnterAddress(userAddress)"/>
                 </md-input-container>
             </div>
