@@ -28,6 +28,31 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
 
     self.geocoder = new googlemaps.Geocoder();
 
+    self.focusOnLocation = function (location, viewport) {
+        $scope.map.center = {
+            latitude: location.lat(),
+            longitude: location.lng()
+        };
+        $scope.map.bounds = {
+            southwest: {
+                latitude: viewport.getSouthWest().lat(),
+                longitude: viewport.getSouthWest().lng()
+            },
+            northeast: {
+                latitude: viewport.getNorthEast().lat(),
+                longitude: viewport.getNorthEast().lng()                                
+            }
+        };
+
+        var markers = $scope.clickedMarker.control.getGMarkers();
+        if(markers.length > 0){
+            markers[0].setPosition(location);
+            markers[0].setVisible(true);
+        }
+        $timeout.cancel($scope.timeoutLoadPosts);
+        $scope.timeoutLoadPosts = $timeout(ygPost.loadPosts, 1000);
+    };
+
     // console.log($scope.clickedMarker);
     $scope.posts = ygPost.filteredPosts;
     $scope.posts.addAsMarker = function (postData) {
@@ -235,31 +260,27 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
             return ygUserCtrl.userAddress;
         }, function (newValue) {
             if(newValue.length > 0){
+                if(typeof self.watchNextGeocodeLocation === 'function'){
+                    self.watchNextGeocodeLocation();
+                }
+                ygUserCtrl.geocode.results = [];
+                ygUserCtrl.geocode.currentIndex = 0;                
                 self.geocoder.geocode({address: newValue}, function (results, status) {
                     if(status == googlemaps.GeocoderStatus.OK){
-                        $scope.map.center = {
-                            latitude: results[0].geometry.location.lat(),
-                            longitude: results[0].geometry.location.lng()
-                        };
-                        $scope.map.bounds = {
-                            southwest: {
-                                latitude: results[0].geometry.viewport.getSouthWest().lat(),
-                                longitude: results[0].geometry.viewport.getSouthWest().lng()
-                            },
-                            northeast: {
-                                latitude: results[0].geometry.viewport.getNorthEast().lat(),
-                                longitude: results[0].geometry.viewport.getNorthEast().lng()                                
-                            }
-                        };
-
-                        var markers = $scope.clickedMarker.control.getGMarkers();
-                        if(markers.length > 0){
-                            markers[0].setPosition(results[0].geometry.location);
-                            markers[0].setVisible(true);
+                        self.focusOnLocation(results[0].geometry.location, results[0].geometry.viewport);
+                        if(results.length > 1){
+                            ygUserCtrl.geocode.results = results;
+                            ygUserCtrl.geocode.currentIndex = 0;
+                            self.watchNextGeocodeLocation = $scope.$watch(
+                                function () {
+                                    return ygUserCtrl.geocode.currentIndex;
+                                },
+                                function (newValue) {
+                                    var geoLoc = ygUserCtrl.geocode.results[newValue];
+                                    self.focusOnLocation(geoLoc.geometry.location, geoLoc.geometry.viewport);
+                                }
+                            );
                         }
-
-                        $timeout.cancel($scope.timeoutLoadPosts);
-                        $scope.timeoutLoadPosts = $timeout(ygPost.loadPosts, 1000);
                     }
                     else{
                         console.log("Geocode was not successful for the following reason: " + status);

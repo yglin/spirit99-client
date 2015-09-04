@@ -34,10 +34,13 @@
                     <input placeholder='搜尋標題' style='font-size:20px;color:white;' />
                 </md-chips>
             </div>
-            <div flex layout-padding ng-show='selectedTool == "address"'>
+            <div flex layout='row' layout-padding ng-show='selectedTool == "address"'>
                 <md-input-container flex md-no-float>
                     <input placeholder='輸入地址' style='color:white;' ng-model='userAddress' ng-keypress="$event.keyCode == 13 && onEnterAddress(userAddress)"/>
                 </md-input-container>
+                <md-button class='md-icon-button' aria-label='Next location' ng-click='nextGeocodeLocation()' ng-show='isMultipleGeocodeLocations'>
+                    <md-icon class='material-icons' ng-style="{color: 'white'}">swap_horiz</md-icon>
+                </md-button>
             </div>
          </div>
     </div>

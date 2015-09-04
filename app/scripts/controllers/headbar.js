@@ -59,6 +59,22 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygInit, ygServer, ygFilter)
         }
     };
 
+    $scope.isMultipleGeocodeLocations = false;
+    $scope.$watch(function () {
+        return ygUserCtrl.geocode.results.length;
+    }, function (newValue) {
+        if(newValue > 1){
+            $scope.isMultipleGeocodeLocations = true;
+        }
+        else{
+            $scope.isMultipleGeocodeLocations = false;            
+        }
+    });
+
+    $scope.nextGeocodeLocation = function () {
+        ygUserCtrl.geocode.currentIndex = (ygUserCtrl.geocode.currentIndex + 1) % ygUserCtrl.geocode.results.length;
+    }
+
     // $scope.toggleInfoWindows = function () {
     //     $scope.showInfoWindows = !($scope.showInfoWindows);
     //     if($scope.showInfoWindows){

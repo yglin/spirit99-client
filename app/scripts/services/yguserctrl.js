@@ -14,4 +14,8 @@ angular.module('spirit99App')
     self.focusedPostId = -1;
     self.isMouseOverMap = true;
     self.userAddress = '';
+    self.geocode = {
+        results: [],
+        currentIndex: 0
+    }
 });
