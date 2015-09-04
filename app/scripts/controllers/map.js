@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('MapController', ['$scope', '$timeout', 'uiGmapGoogleMapApi', 'ygInit', 'ygUtils', 'ygUserPref', 'ygUserCtrl', 'ygPost', 'ygAudio',
-function($scope, $timeout, uiGmapGoogleMapApi, ygInit, ygUtils, ygUserPref, ygUserCtrl, ygPost, ygAudio) {
+.controller('MapController', ['$scope', '$timeout', 'uiGmapGoogleMapApi', 'ygInit', 'ygUtils', 'ygError', 'ygUserPref', 'ygUserCtrl', 'ygPost', 'ygAudio',
+function($scope, $timeout, uiGmapGoogleMapApi, ygInit, ygUtils, ygError, ygUserPref, ygUserCtrl, ygPost, ygAudio) {
 
     var self = this;
 // uiGmapGoogleMapApi is a promise.
@@ -263,6 +263,12 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
                     }
                     else{
                         console.log("Geocode was not successful for the following reason: " + status);
+                        if(status == googlemaps.GeocoderStatus.ZERO_RESULTS){
+                            ygError.errorMessages.push('找不到符合搜尋條件的地點');
+                        }
+                        else{
+                            ygError.errorMessages.push('搜尋失敗，請稍候再試');
+                        }
                     }
                 });
             }
