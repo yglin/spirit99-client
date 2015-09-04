@@ -13,4 +13,5 @@ angular.module('spirit99App')
     self.openListPosts = false;
     self.focusedPostId = -1;
     self.isMouseOverMap = true;
+    self.userAddress = '';
 });

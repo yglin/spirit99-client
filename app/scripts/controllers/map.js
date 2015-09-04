@@ -11,6 +11,7 @@ angular.module('spirit99App')
 .controller('MapController', ['$scope', '$timeout', 'uiGmapGoogleMapApi', 'ygInit', 'ygUtils', 'ygUserPref', 'ygUserCtrl', 'ygPost', 'ygAudio',
 function($scope, $timeout, uiGmapGoogleMapApi, ygInit, ygUtils, ygUserPref, ygUserCtrl, ygPost, ygAudio) {
 
+    var self = this;
 // uiGmapGoogleMapApi is a promise.
 // The "then" callback function provides the google.maps object.
 uiGmapGoogleMapApi.then(function(googlemaps) {
@@ -23,6 +24,9 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
     $scope.newPost = null;
     $scope.mapControl = {};
     $scope.mapEvents = {};
+    $scope.timeoutLoadPosts = null;
+
+    self.geocoder = new googlemaps.Geocoder();
 
     // console.log($scope.clickedMarker);
     $scope.posts = ygPost.filteredPosts;
@@ -146,13 +150,13 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
     };
 
     $scope.onDragendMap = function (googleMaps, eventName, args) {
-        $timeout.cancel(this.promise);
-        this.promise = $timeout(ygPost.loadPosts, 1000);
+        $timeout.cancel($scope.timeoutLoadPosts);
+        $scope.timeoutLoadPosts = $timeout(ygPost.loadPosts, 1000);
     };
 
     $scope.onZoomChangedMap = function (googleMaps, eventName, args) {
-        $timeout.cancel(this.promise);
-        this.promise = $timeout(ygPost.loadPosts, 1000);
+        $timeout.cancel($scope.timeoutLoadPosts);
+        $scope.timeoutLoadPosts = $timeout(ygPost.loadPosts, 1000);
     };
 
     $scope.onMouseOverMap = function (googleMaps, eventName, args) {
@@ -224,6 +228,43 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
                         longitude: post.longitude                    
                     };
                 }
+            }
+        });
+
+        $scope.$watch(function () {
+            return ygUserCtrl.userAddress;
+        }, function (newValue) {
+            if(newValue.length > 0){
+                self.geocoder.geocode({address: newValue}, function (results, status) {
+                    if(status == googlemaps.GeocoderStatus.OK){
+                        $scope.map.center = {
+                            latitude: results[0].geometry.location.lat(),
+                            longitude: results[0].geometry.location.lng()
+                        };
+                        $scope.map.bounds = {
+                            southwest: {
+                                latitude: results[0].geometry.viewport.getSouthWest().lat(),
+                                longitude: results[0].geometry.viewport.getSouthWest().lng()
+                            },
+                            northeast: {
+                                latitude: results[0].geometry.viewport.getNorthEast().lat(),
+                                longitude: results[0].geometry.viewport.getNorthEast().lng()                                
+                            }
+                        };
+
+                        var markers = $scope.clickedMarker.control.getGMarkers();
+                        if(markers.length > 0){
+                            markers[0].setPosition(results[0].geometry.location);
+                            markers[0].setVisible(true);
+                        }
+
+                        $timeout.cancel($scope.timeoutLoadPosts);
+                        $scope.timeoutLoadPosts = $timeout(ygPost.loadPosts, 1000);
+                    }
+                    else{
+                        console.log("Geocode was not successful for the following reason: " + status);
+                    }
+                });
             }
         });
     });

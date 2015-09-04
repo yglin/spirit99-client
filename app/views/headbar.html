@@ -18,24 +18,26 @@
                     <md-fab-speed-dial md-direction="down" class="md-fling">
                         <md-fab-trigger>
                             <md-button class='md-fab md-mini'>
-                                <md-icon class='material-icons' ng-style="{color: 'white'}">{{selectedToolIcon}}</md-icon>
+                                <md-icon class='material-icons' ng-style="{color: 'white'}">{{tools[selectedTool].fontIcon}}</md-icon>
                             </md-button>
                         </md-fab-trigger>
                         <md-fab-actions>
-                            <md-button class='md-fab md-mini'>
-                                <md-icon class='material-icons' ng-style="{color: 'white'}">search</md-icon>
-                            </md-button>
-                            <md-button class='md-fab md-mini'>
-                                <md-icon class='material-icons' ng-style="{color: 'white'}">my_location</md-icon>
+                            <md-button ng-repeat='(name, tool) in tools' class='md-fab md-mini' ng-click="selectTool(name)">
+                                <md-icon class='material-icons' ng-style="{color: 'white'}">{{tool.fontIcon}}</md-icon>
                             </md-button>
                         </md-fab-actions>
                     </md-fab-speed-dial>
                 </div>
             </div>
-            <div flex layout-padding>
+            <div flex layout-padding ng-show='selectedTool == "search"'>
                 <md-chips ng-model="keywords">
-                    <input placeholder='增加關鍵字' secondary-placeholder="搜尋" style='font-size:24px;color:white;' />
+                    <input placeholder='搜尋標題' style='font-size:20px;color:white;' />
                 </md-chips>
+            </div>
+            <div flex layout-padding ng-show='selectedTool == "address"'>
+                <md-input-container flex>
+                    <input placeholder='輸入地址' style='color:white;' ng-model='userAddress' ng-keypress="$event.keyCode == 13 && onEnterAddress(userAddress)"/>
+                </md-input-container>
             </div>
          </div>
     </div>

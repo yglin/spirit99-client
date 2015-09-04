@@ -8,12 +8,24 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('HeadBarController', ['$scope', '$mdSidenav', 'ygUserPref', 'ygInit', 'ygServer', 'ygFilter',
-function($scope, $mdSidenav, ygUserPref, ygInit, ygServer, ygFilter){
+.controller('HeadBarController', ['$scope', '$mdSidenav', 'ygUserPref', 'ygUserCtrl', 'ygInit', 'ygServer', 'ygFilter',
+function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygInit, ygServer, ygFilter){
     $scope.keywords = ygUserPref.$storage.filters.title;
-    $scope.showInfoWindows = false;
-    $scope.toogleInfoWindowsButtonStyle = {color: 'white'};
-    $scope.toogleInfoWindowsButtonTooltip = '顯示全部標題';
+    // $scope.showInfoWindows = false;
+    // $scope.toogleInfoWindowsButtonStyle = {color: 'white'};
+    // $scope.toogleInfoWindowsButtonTooltip = '顯示全部標題';
+    $scope.tools = {
+        search: {
+            fontIcon: 'search' 
+        },
+        address: {
+            fontIcon: 'my_location'
+        }
+    }
+    $scope.selectTool = function (toolName) {
+        $scope.selectedTool = toolName;
+    }
+    $scope.selectTool('search');
 
     ygInit.promise.then(function () {
         $scope.serverTitle = ygServer.servers[ygUserPref.$storage.selectedServer].title;
@@ -40,15 +52,22 @@ function($scope, $mdSidenav, ygUserPref, ygInit, ygServer, ygFilter){
         $mdSidenav('sidenav-left').open();
     };
 
-    $scope.toggleInfoWindows = function () {
-        $scope.showInfoWindows = !($scope.showInfoWindows);
-        if($scope.showInfoWindows){
-            $scope.toogleInfoWindowsButtonStyle = {color: 'grey'};
-            $scope.toogleInfoWindowsButtonTooltip = '隱藏全部標題';
-        }
-        else{
-            $scope.toogleInfoWindowsButtonStyle = {color: 'white'};
-            $scope.toogleInfoWindowsButtonTooltip = '顯示全部標題';
+    $scope.onEnterAddress = function (address) {
+        // console.log('Navigate to ' + address);
+        if(address.length > 0){
+            ygUserCtrl.userAddress = address;
         }
     };
+
+    // $scope.toggleInfoWindows = function () {
+    //     $scope.showInfoWindows = !($scope.showInfoWindows);
+    //     if($scope.showInfoWindows){
+    //         $scope.toogleInfoWindowsButtonStyle = {color: 'grey'};
+    //         $scope.toogleInfoWindowsButtonTooltip = '隱藏全部標題';
+    //     }
+    //     else{
+    //         $scope.toogleInfoWindowsButtonStyle = {color: 'white'};
+    //         $scope.toogleInfoWindowsButtonTooltip = '顯示全部標題';
+    //     }
+    // };
 }]);
