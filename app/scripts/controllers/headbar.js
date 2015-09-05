@@ -10,6 +10,8 @@
 angular.module('spirit99App')
 .controller('HeadBarController', ['$scope', '$mdSidenav', 'ygUserPref', 'ygUserCtrl', 'ygInit', 'ygServer', 'ygFilter',
 function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygInit, ygServer, ygFilter){
+    var self = this;
+
     $scope.keywords = ygUserPref.$storage.filters.title;
     // $scope.showInfoWindows = false;
     // $scope.toogleInfoWindowsButtonStyle = {color: 'white'};
@@ -20,6 +22,9 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygInit, ygServer, ygFilter)
         },
         address: {
             fontIcon: 'my_location'
+        },
+        markers: {
+            fontIcon: 'place'
         }
     }
     $scope.selectTool = function (toolName) {
@@ -30,6 +35,7 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygInit, ygServer, ygFilter)
     ygInit.promise.then(function () {
         $scope.serverTitle = ygServer.servers[ygUserPref.$storage.selectedServer].title;
         $scope.serverLogo = ygServer.servers[ygUserPref.$storage.selectedServer].logo;
+        $scope.iconSet = ygServer.servers[ygUserPref.$storage.selectedServer].iconSet;
 
         $scope.$watch(
             function(){
@@ -40,13 +46,25 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygInit, ygServer, ygFilter)
                 if(newValue in ygServer.servers){
                     $scope.serverTitle = ygServer.servers[newValue].title;
                     $scope.serverLogo = ygServer.servers[newValue].logo;
+                    $scope.iconSet = ygServer.servers[newValue].iconSet;
+                    ygUserCtrl.iconCtrls = {};
+                    for(var name in $scope.iconSet){
+                        ygUserCtrl.iconCtrls[name] = true;
+                    }
+                    $scope.iconCtrls = ygUserCtrl.iconCtrls;
                 }
                 else{
                     $scope.serverTitle = '請選擇站點';
                     $scope.serverLogo = '';            
                 }
         });
+
     });
+
+    $scope.toggleIcon = function (name) {
+        $scope.iconCtrls[name] = !($scope.iconCtrls[name]);
+        // console.log(ygUserCtrl.iconCtrls);
+    }
 
     $scope.openSidenav = function(){
         $mdSidenav('sidenav-left').open();
