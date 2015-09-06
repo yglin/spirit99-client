@@ -219,23 +219,29 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
         .then(function(response){}, function(response){});
     };
 
-    self.startWatches = function () {
-        $rootScope.$watch(function () {
-            return ygUserPref.$storage.filters;
-        }, function  () {
-            self.filteredPosts.length = 0;
-            for(var id in self.indexedPosts){
-                if(self.filterPost(self.indexedPosts[id])){
-                    // self.filteredPosts.push(self.indexedPosts[id]);
-                    self.filteredPosts.addAsMarker(self.indexedPosts[id]);
-                }
+    $rootScope.$watch(function () {
+        return ygUserPref.$storage.filters;
+    }, function  () {
+        self.filteredPosts.length = 0;
+        for(var id in self.indexedPosts){
+            if(self.filterPost(self.indexedPosts[id])){
+                // self.filteredPosts.push(self.indexedPosts[id]);
+                self.filteredPosts.addAsMarker(self.indexedPosts[id]);
             }
-        }, true);        
-    };
-    // $rootScope.$watch(function () {
-    //     return ygUserPref.$storage.selectedServer;
-    // }, function (newValue, oldValue) {
-    //     self.postResource = self.buildPostResource(ygUserPref.$storage.selectedServer);
-    //     self.reloadPosts();
-    // });
+        }
+    }, true);        
+
+    self.initialPromises = {};
+    self.initialPromises['loadPosts'] = $q.allSettled([ygUserPref.initialPromises['getGeolocation'], ygServer.initialPromises['updateServers']])
+    .then(function () {
+        var deferred = $q.defer();
+        $timeout(function () {
+            self.reloadPosts().then(function () {
+                deferred.resolve();
+            }, function () {
+                deferred.reject();
+            });
+        }, 3000);
+        return deferred.promise;
+    });
 }]);

@@ -16,20 +16,6 @@ function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUtils, ygUse
     self.portalDataDefaults = {
         show: true,
         logo: 'https://www.evansville.edu/residencelife/images/greenLogo.png',
-        soundSet: {
-                focusOnPost: {
-                    file: 'sounds/big_bubble_blown_into_glass_through_drinking_straw_version_1.mp3',
-                    volume: 0.5
-                },
-                scrollListPosts: {
-                    file: 'sounds/bubbles_blown_into_glass_through_drinking_straw_version_2.mp3',
-                    volume: 0.5
-                },
-                closeListPosts: {
-                    file: 'sounds/large_water_drip.mp3',
-                    volume: 0.5
-                }
-            }
     };
     self.servers = ygUserPref.$storage.servers;
 
@@ -148,6 +134,10 @@ function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUtils, ygUse
 
     self.createCommentResource = function (post_id) {
         return $resource(self.currentServer.postUrl + '/:id/comments');
+    };
+
+    self.initialPromises = {
+        'updateServers': self.updateServers()
     };
 
 }]);

@@ -8,62 +8,23 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('MapController', ['$scope', '$timeout', 'uiGmapGoogleMapApi', 'ygInit', 'ygUtils', 'ygError', 'ygUserPref', 'ygUserCtrl', 'ygPost', 'ygAudio',
-function($scope, $timeout, uiGmapGoogleMapApi, ygInit, ygUtils, ygError, ygUserPref, ygUserCtrl, ygPost, ygAudio) {
+.controller('MapController', ['$scope', '$timeout', 'uiGmapGoogleMapApi', 'ygUtils', 'ygError', 'ygUserPref', 'ygUserCtrl', 'ygPost', 'ygAudio',
+function($scope, $timeout, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygUserCtrl, ygPost, ygAudio) {
 
     var self = this;
-// uiGmapGoogleMapApi is a promise.
-// The "then" callback function provides the google.maps object.
-uiGmapGoogleMapApi.then(function(googlemaps) {
+
+    self.googleMapApi = null;
 
     $scope.mapIsReady = false;
 
     $scope.map = ygUserPref.$storage.map;
+    $scope.mapControl = {};
+    $scope.mapEvents = {};
+    $scope.posts = ygPost.filteredPosts;
     $scope.filterCircle = ygUserPref.$storage.filterCircle;
 
     $scope.newPost = null;
-    $scope.mapControl = {};
-    $scope.mapEvents = {};
     $scope.timeoutLoadPosts = null;
-
-    self.geocoder = new googlemaps.Geocoder();
-
-    self.focusOnLocation = function (location, viewport) {
-        $scope.map.center = {
-            latitude: location.lat(),
-            longitude: location.lng()
-        };
-        $scope.map.bounds = {
-            southwest: {
-                latitude: viewport.getSouthWest().lat(),
-                longitude: viewport.getSouthWest().lng()
-            },
-            northeast: {
-                latitude: viewport.getNorthEast().lat(),
-                longitude: viewport.getNorthEast().lng()                                
-            }
-        };
-
-        var markers = $scope.clickedMarker.control.getGMarkers();
-        if(markers.length > 0){
-            markers[0].setPosition(location);
-            markers[0].setVisible(true);
-        }
-        $timeout.cancel($scope.timeoutLoadPosts);
-        $scope.timeoutLoadPosts = $timeout(ygPost.loadPosts, 1000);
-    };
-
-    // console.log($scope.clickedMarker);
-    $scope.posts = ygPost.filteredPosts;
-    $scope.posts.addAsMarker = function (postData) {
-        // console.log('Add post marker ' + postData.id);
-        $scope.addMarkerAnimation(postData, 2500);
-        this.push(postData);
-    };
-
-    // $scope.markersOptions = {
-    //     animation: googlemaps.Animation.BOUNCE
-    // };
 
     $scope.clickedMarker = {
         id: 'spirit99-map-clicked-marker',
@@ -92,6 +53,37 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
         control: {}
     };
 
+    self.focusOnLocation = function (location, viewport) {
+        $scope.map.center = {
+            latitude: location.lat(),
+            longitude: location.lng()
+        };
+        $scope.map.bounds = {
+            southwest: {
+                latitude: viewport.getSouthWest().lat(),
+                longitude: viewport.getSouthWest().lng()
+            },
+            northeast: {
+                latitude: viewport.getNorthEast().lat(),
+                longitude: viewport.getNorthEast().lng()                                
+            }
+        };
+
+        var markers = $scope.clickedMarker.control.getGMarkers();
+        if(markers.length > 0){
+            markers[0].setPosition(location);
+            markers[0].setVisible(true);
+        }
+        $timeout.cancel($scope.timeoutLoadPosts);
+        $scope.timeoutLoadPosts = $timeout(ygPost.loadPosts, 1000);
+    };
+
+    $scope.posts.addAsMarker = function (postData) {
+        // console.log('Add post marker ' + postData.id);
+        $scope.addMarkerAnimation(postData, 2500);
+        this.push(postData);
+    };
+
     $scope.infoWindow = {
         coords: {
             latitude: 23.973875,
@@ -104,19 +96,9 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
             $scope.infoWindow.show = false;
         },
         options: {
-            pixelOffset: new googlemaps.Size(0, -40),
             maxWidth: 250
         }
     };
-
-    // $scope.filterCircleEvents = {
-    //     center_changed: function (circle, eventName, model) {
-    //         $scope.reloadPosts();
-    //     },
-    //     radius_changed: function (circle, eventName, model) {
-    //         $scope.reloadPosts();
-    //     }
-    // };
 
     $scope.onClickPostMarker = function (marker, eventName, model) {
         ygPost.showPostDetail(model.id);
@@ -200,62 +182,41 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
         zoom_changed: $scope.onZoomChangedMap
     };
 
-    $scope.addMarkerAnimation = function (post, interval) {
-        post.options = typeof post.options === 'undefined' ? {} : post.options;
-        post.options.animation = googlemaps.Animation.BOUNCE;
-        $timeout(function () {
-            post.options.animation = null;
-        }, interval);
-    };
-    // $scope.rectangleBounds = new googlemaps.LatLngBounds(
-    //         new googlemaps.LatLng(24.084, 120.551),
-    //         new googlemaps.LatLng(24.085, 120.552)
-    //     );
-
-    ygInit.promise.then(function () {
-
-        // $scope.$watch(function () {
-        //     return ygPost.filteredPosts;
-        // }, function () {
-        //     $scope.posts = ygPost.filteredPosts;
-        // })
-
-        // $scope.$watch(function () {
-        //     return ygPost.filteredPosts.length;
-        // }, function (newValue, oldValue) {
-        //     $scope.posts = ygPost.filteredPosts;
-        //     if(newValue > oldValue){
-        //         for (var i = oldValue; i < newValue; i++) {
-        //             $scope.addMarkerAnimation($scope.posts[i], 2000);
-        //         }
-        //     }
-        //     else{
-        //         for (var i = 0; i < newValue; i++) {
-        //             $scope.addMarkerAnimation($scope.posts[i], 2000);
-        //         }                
-        //     }
-        // });
-
-        $scope.$watch(function () {
-            return ygUserCtrl.focusedPostId;
-        }, function(newValue, oldValue){
-            if(!ygUserCtrl.isMouseOverMap){
-                var post = ygPost.indexedPosts[ygUserCtrl.focusedPostId];
-                if(post){
-                    $scope.infoWindow.coords = {
-                        latitude: post.latitude,
-                        longitude: post.longitude
-                    };
-                    $scope.infoWindow.templateParameter = post;
-                    $scope.infoWindow.show = true;
-                    $scope.map.center = {
-                        latitude: post.latitude,
-                        longitude: post.longitude                    
-                    };
-                }
+    $scope.$watch(function () {
+        return ygUserCtrl.focusedPostId;
+    }, function(newValue, oldValue){
+        if(!ygUserCtrl.isMouseOverMap){
+            var post = ygPost.indexedPosts[newValue];
+            if(post){
+                $scope.infoWindow.coords = {
+                    latitude: post.latitude,
+                    longitude: post.longitude
+                };
+                $scope.infoWindow.templateParameter = post;
+                $scope.infoWindow.show = true;
+                $scope.map.center = {
+                    latitude: post.latitude,
+                    longitude: post.longitude                    
+                };
             }
-        });
+        }
+    });
 
+    // uiGmapGoogleMapApi is a promise.
+    // The "then" callback function provides the google.maps object.
+    uiGmapGoogleMapApi.then(function(googlemaps) {
+
+        $scope.infoWindow.options.pixelOffset = new googlemaps.Size(0, -40);
+
+        $scope.addMarkerAnimation = function (post, interval) {
+            post.options = typeof post.options === 'undefined' ? {} : post.options;
+            post.options.animation = googlemaps.Animation.BOUNCE;
+            $timeout(function () {
+                post.options.animation = null;
+            }, interval);
+        };
+
+        self.geocoder = new googlemaps.Geocoder();
         $scope.$watch(function () {
             return ygUserCtrl.userAddress;
         }, function (newValue) {
@@ -294,10 +255,8 @@ uiGmapGoogleMapApi.then(function(googlemaps) {
                 });
             }
         });
+
+        $scope.mapIsReady = true;
     });
-
-    $scope.mapIsReady = true;
-
-});
 
 }]);

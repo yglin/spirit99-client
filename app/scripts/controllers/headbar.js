@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('HeadBarController', ['$scope', '$mdSidenav', 'ygUserPref', 'ygUserCtrl', 'ygInit', 'ygServer', 'ygFilter',
-function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygInit, ygServer, ygFilter){
+.controller('HeadBarController', ['$scope', '$mdSidenav', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygFilter',
+function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter){
     var self = this;
 
     $scope.keywords = ygUserPref.$storage.filters.title;
@@ -32,7 +32,7 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygInit, ygServer, ygFilter)
     }
     $scope.selectTool('search');
 
-    ygInit.promise.then(function () {
+    ygServer.initialPromises['updateServers'].then(function () {
         $scope.serverTitle = ygServer.servers[ygUserPref.$storage.selectedServer].title;
         $scope.serverLogo = ygServer.servers[ygUserPref.$storage.selectedServer].logo;
 
@@ -52,17 +52,19 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygInit, ygServer, ygFilter)
                 }
         });
 
-        $scope.iconCtrls = ygUserCtrl.iconCtrls;
-        $scope.$watch(function () {
-            return ygUserCtrl.iconCtrls;
-        }, function () {
-            $scope.iconCtrls = ygUserCtrl.iconCtrls;
-        });
+    });
 
+    ygUserCtrl.initialPromises['buildIconModels'].then(function () {
+        $scope.iconModels = ygUserCtrl.iconModels;
+        $scope.$watch(function () {
+            return ygUserCtrl.iconModels;
+        }, function () {
+            $scope.iconModels = ygUserCtrl.iconModels;
+        });        
     });
 
     $scope.toggleIcon = function (name) {
-        $scope.iconCtrls[name].show = !($scope.iconCtrls[name].show);
+        $scope.iconModels[name].show = !($scope.iconModels[name].show);
         // console.log(ygUserCtrl.iconCtrls);
     }
 

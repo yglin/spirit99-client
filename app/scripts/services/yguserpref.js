@@ -8,7 +8,8 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygUserPref', ['$localStorage', function ($localStorage) {
+.service('ygUserPref', ['$q', '$localStorage',
+function ($q, $localStorage) {
 // AngularJS will instantiate a singleton by calling "new" on this function
     var self = this;
 
@@ -62,7 +63,40 @@ angular.module('spirit99App')
             visible: false
         },
         selectedServer: 'localstory',
-        autoGeolocation: true,
+        startAtGeolocation: true,
     });
+
+    self.promiseGetGeolocation = function (map, zoom) {
+        if(!self.$storage.startAtGeolocation){
+            // No need to get geolocation, return imediatedlly resolved promise
+            return $q.resolve();
+        }
+        console.log('Start get geolocation');
+        zoom = typeof zoom !== 'undefined' ? zoom : 15;
+        var deferred = $q.defer();
+        if(navigator.geolocation){
+            navigator.geolocation.getCurrentPosition(
+                function(position){
+                    map.center = {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
+                    };
+                    map.zoom = zoom;
+                    console.log('Finish get geolocation');
+                    deferred.resolve();
+                },
+                function (error) {
+                   deferred.reject(error.message);  
+                 });
+        }
+        else{
+            deferred.reject("Not support Navigator.geolocation");
+        }
+        return deferred.promise;
+    };
+
+    self.initialPromises = {
+        'getGeolocation': self.promiseGetGeolocation(self.$storage.map)
+    };
 
 }]);

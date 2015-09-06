@@ -8,11 +8,11 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('ServerPaneController', ['$scope', '$mdDialog', 'ygInit', 'ygUserPref', 'ygServer',
-function($scope, $mdDialog, ygInit, ygUserPref, ygServer){
+.controller('ServerPaneController', ['$scope', '$mdDialog', 'ygUserPref', 'ygServer',
+function($scope, $mdDialog, ygUserPref, ygServer){
     // ============== Initilize scope model ==================
     // $scope.ygServer = ygServer;
-    ygInit.promise.then(function () {
+    ygServer.initialPromises['updateServers'].then(function () {
         $scope.servers = ygServer.servers;
     });
 

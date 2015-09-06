@@ -8,8 +8,8 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygUserCtrl', ['$rootScope', 'ygUserPref', 'ygServer',
-function ($rootScope, ygUserPref, ygServer) {
+.service('ygUserCtrl', ['$rootScope', '$q', 'ygUserPref', 'ygServer',
+function ($rootScope, $q, ygUserPref, ygServer) {
     var self = this;
     self.openListPosts = false;
     self.focusedPostId = -1;
@@ -20,27 +20,30 @@ function ($rootScope, ygUserPref, ygServer) {
         currentIndex: 0
     }
 
-    self.buildIconCtrls = function (iconSet) {
-        var iconCtrls = null;
+    self.buildIconModels = function (iconSet) {
+        var iconModels = null;
         if(typeof iconSet === 'object' && iconSet != null){
-            iconCtrls = {}
+            iconModels = {}
             for(var name in iconSet){
-                iconCtrls[name] = {
+                iconModels[name] = {
                     url: iconSet[name],
                     show: true
                 }
             }
         }
-        return iconCtrls;        
+        return iconModels;        
     }
 
-    self.initialize = function () {
-        self.iconCtrls = self.buildIconCtrls(ygServer.servers[ygUserPref.$storage.selectedServer].iconSet)
+    self.initialPromises = {};
+    self.initialPromises['buildIconModels'] = ygServer.initialPromises['updateServers']
+    .then(function () {
+        self.iconModels = self.buildIconModels(ygServer.servers[ygUserPref.$storage.selectedServer].iconSet)
         $rootScope.$watch(function () {
             return ygUserPref.$storage.selectedServer;
         }, function (newValue) {
-            self.iconCtrls = self.buildIconCtrls(ygServer.servers[newValue].iconSet)
-        })    
-    };
+            self.iconModels = self.buildIconModels(ygServer.servers[newValue].iconSet)
+        });
+        return $q.resolve();
+    });
 
 }]);
