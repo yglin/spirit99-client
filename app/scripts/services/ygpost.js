@@ -52,8 +52,7 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
         filters = typeof filters === 'undefined' ? ygUserPref.$storage.filters : filters;
 
         // filter by icon
-        if(ygUserCtrl.iconCtrls && 
-            !(post.iconName && post.iconName in ygUserCtrl.iconCtrls && ygUserCtrl.iconCtrls[post.iconName]==true)){
+        if(post.iconName && post.iconName in ygUserCtrl.iconCtrls && !(ygUserCtrl.iconCtrls[post.iconName]==true)){
             return false;
         }
 
