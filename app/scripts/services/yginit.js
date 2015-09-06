@@ -8,8 +8,8 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygInit', ['$q', '$timeout', 'ygUserPref', 'ygServer', 'ygPost', 'ygAudio', 'uiGmapGoogleMapApi', 'uiGmapIsReady',
-function ($q, $timeout, ygUserPref, ygServer, ygPost, ygAudio, uiGmapGoogleMapApi, uiGmapIsReady) {
+.service('ygInit', ['$q', '$timeout', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygPost', 'ygAudio', 'uiGmapGoogleMapApi', 'uiGmapIsReady',
+function ($q, $timeout, ygUserPref, ygUserCtrl, ygServer, ygPost, ygAudio, uiGmapGoogleMapApi, uiGmapIsReady) {
     var self = this;
 
     console.log('Start initialization');
@@ -75,6 +75,7 @@ function ($q, $timeout, ygUserPref, ygServer, ygPost, ygAudio, uiGmapGoogleMapAp
     // Level 3 processes: start $rootscope watches in services
     var level3Processes = level2Processes.then(function () {
         ygPost.startWatches();
+        ygUserCtrl.initialize();
         return $q.resolve();
     });
 

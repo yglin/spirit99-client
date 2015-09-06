@@ -51,6 +51,13 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
         filteredPosts = Array.isArray(filteredPosts) ? filteredPosts : self.filteredPosts;
         filters = typeof filters === 'undefined' ? ygUserPref.$storage.filters : filters;
 
+        // filter by icon
+        if(ygUserCtrl.iconCtrls && 
+            !(post.iconName && post.iconName in ygUserCtrl.iconCtrls && ygUserCtrl.iconCtrls[post.iconName]==true)){
+            return false;
+        }
+
+        // filter by keywords
         var matchAll = true;
         for(var key in filters){
             if(key in post && typeof post[key] === 'string'){
@@ -66,7 +73,7 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
                 matchAll = false;
             }
             if(!matchAll)break;
-        }            
+        }
 
         return matchAll;
     };
