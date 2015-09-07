@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('HeadBarController', ['$scope', '$mdSidenav', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygFilter',
-function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter){
+.controller('HeadBarController', ['$scope', '$mdSidenav', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygFilter', 'ygAudio',
+function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio){
     var self = this;
 
     $scope.keywords = ygUserPref.$storage.filters.title;
@@ -63,6 +63,7 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter){
 
     $scope.toggleIcon = function (name) {
         $scope.iconCtrls[name].show = !($scope.iconCtrls[name].show);
+        ygAudio.toggleIconCtrl.play();
         // console.log(ygUserCtrl.iconCtrls);
     }
 

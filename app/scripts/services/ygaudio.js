@@ -24,6 +24,10 @@ function ($rootScope, ngAudio, ygUserPref, ygServer) {
         closeListPosts: {
             file: 'sounds/large_water_drip.mp3',
             volume: 0.5
+        },
+        toggleIconCtrl: {
+            file: 'sounds/water_drip_009.mp3',
+            volume: 0.5
         }
     };
 
