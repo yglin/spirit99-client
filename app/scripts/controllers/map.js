@@ -105,14 +105,18 @@ function($scope, $timeout, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygU
     };
 
     $scope.onMouseoverPostMarker = function (marker, eventName, model) {
-        ygAudio.focusOnPost.play();
-        $scope.infoWindow.coords = {
-            latitude: model.latitude,
-            longitude: model.longitude
-        };
-        $scope.infoWindow.templateParameter = model;
-        $scope.infoWindow.show = true;
-        ygUserCtrl.focusedPostId = model.id;
+        $timeout.cancel(self.timeoutShowInfoWindow);
+        self.timeoutShowInfoWindow = $timeout(function () {
+            ygAudio.focusOnPost.play();
+            $scope.infoWindow.coords = {
+                latitude: model.latitude,
+                longitude: model.longitude
+            };
+            $scope.infoWindow.templateParameter = model;
+            $scope.infoWindow.show = true;
+            ygUserCtrl.focusedPostId = model.id;
+        }, 500);
+
         $timeout.cancel($scope.timeoutCloseInfoWindow);
         if(!ygUserCtrl.openListPosts){
             $scope.timeoutOpenListPosts = $timeout(function () {
@@ -122,6 +126,7 @@ function($scope, $timeout, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygU
     };
 
     $scope.onMouseoutPostMarker = function (marker, eventName, model) {
+        $timeout.cancel(self.timeoutShowInfoWindow);
         $scope.delayCloseInfoWindow = true;
         $scope.timeoutCloseInfoWindow = $timeout(function () {
             $scope.infoWindow.show = false;
