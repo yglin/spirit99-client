@@ -8,8 +8,8 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygPost', ['$rootScope', '$timeout', '$q', '$resource', '$mdDialog', 'ygUtils', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygProgress', 'ygError',
-function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, ygUserCtrl, ygServer, ygProgress, ygError) {
+.service('ygPost', ['$rootScope', '$timeout', '$q', '$resource', '$mdDialog', 'uiGmapGoogleMapApi', 'ygUtils', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygProgress', 'ygError',
+function ($rootScope, $timeout, $q, $resource, $mdDialog, uiGmapGoogleMapApi, ygUtils, ygUserPref, ygUserCtrl, ygServer, ygProgress, ygError) {
     var self = this;
 
     self.postDataDefaults = {
@@ -232,7 +232,7 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, ygUtils, ygUserPref, y
     }, true);        
 
     self.initialPromises = {};
-    self.initialPromises['loadPosts'] = $q.allSettled([ygUserPref.initialPromises['getGeolocation'], ygServer.initialPromises['updateServers']])
+    self.initialPromises['loadPosts'] = $q.allSettled([ygUserPref.initialPromises['getGeolocation'], ygServer.initialPromises['updateServers'], uiGmapGoogleMapApi])
     .then(function () {
         var deferred = $q.defer();
         $timeout(function () {
