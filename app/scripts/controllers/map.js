@@ -55,7 +55,7 @@ function($scope, $timeout, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygU
 
     $scope.posts.addAsMarker = function (postData) {
         // console.log('Add post marker ' + postData.id);
-        $scope.addMarkerAnimation(postData, 2500);
+        // $scope.addMarkerAnimation(postData, 2500);
         this.push(postData);
     };
 
