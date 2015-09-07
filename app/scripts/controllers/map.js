@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('MapController', ['$scope', '$timeout', 'uiGmapGoogleMapApi', 'nodeValidator', 'ygUtils', 'ygError', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygPost', 'ygAudio',
-function($scope, $timeout, uiGmapGoogleMapApi, nodeValidator, ygUtils, ygError, ygUserPref, ygUserCtrl, ygServer, ygPost, ygAudio) {
+.controller('MapController', ['$scope', '$timeout', 'uiGmapGoogleMapApi', 'ygUtils', 'ygError', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygPost', 'ygAudio',
+function($scope, $timeout, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygUserCtrl, ygServer, ygPost, ygAudio) {
 
     var self = this;
 
@@ -25,8 +25,6 @@ function($scope, $timeout, uiGmapGoogleMapApi, nodeValidator, ygUtils, ygError, 
 
     $scope.newPost = null;
     $scope.timeoutLoadPosts = null;
-
-    self.iconObjects = {};
 
     $scope.clickedMarker = {
         id: 'spirit99-map-clicked-marker',
@@ -57,7 +55,6 @@ function($scope, $timeout, uiGmapGoogleMapApi, nodeValidator, ygUtils, ygError, 
 
     $scope.posts.addAsMarker = function (postData) {
         // console.log('Add post marker ' + postData.id);
-        $scope.assignIconObject(postData);
         $scope.addMarkerAnimation(postData, 2500);
         this.push(postData);
     };
@@ -217,35 +214,6 @@ function($scope, $timeout, uiGmapGoogleMapApi, nodeValidator, ygUtils, ygError, 
             $timeout(function () {
                 post.options.animation = null;
             }, interval);
-        };
-
-        $scope.assignIconObject = function (postData) {
-            if(!nodeValidator.isURL(postData.icon)){
-                var iconSet = ygServer.servers[ygUserPref.$storage.selectedServer].iconSet;
-                if(postData.icon in iconSet){
-                    postData.iconName = postData.icon;
-                    if(!(postData.iconName in self.iconObjects)){
-                        var iconUrl = iconSet[postData.icon];
-                        self.iconObjects[postData.iconName] = {
-                            url: iconUrl,
-                            // size: new googlemaps.Size(48, 48),
-                            scaledSize: new googlemaps.Size(48, 48),
-                            origin: new googlemaps.Point(0, 0),
-                            anchor: new googlemaps.Point(40, 48)
-                        };
-                    }
-                    postData.icon = self.iconObjects[postData.iconName];
-                    // console.log(postData.icon);
-                    // if(typeof postData.options === 'undefined'){
-                    //     postData.options = {};
-                    // }
-                    // postData.options.icon = self.iconObjects[postData.iconName];
-                    // delete postData.icon;
-                }
-                else{
-                    postData.icon = 'images/icon-chat-48.png';
-                }
-            }            
         };
 
         self.geocoder = new googlemaps.Geocoder();

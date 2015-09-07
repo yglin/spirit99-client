@@ -8,8 +8,8 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygPost', ['$rootScope', '$timeout', '$q', '$resource', '$mdDialog', 'uiGmapGoogleMapApi', 'ygUtils', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygProgress', 'ygError',
-function ($rootScope, $timeout, $q, $resource, $mdDialog, uiGmapGoogleMapApi, ygUtils, ygUserPref, ygUserCtrl, ygServer, ygProgress, ygError) {
+.service('ygPost', ['$rootScope', '$timeout', '$q', '$resource', 'nodeValidator', '$mdDialog', 'uiGmapGoogleMapApi', 'ygUtils', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygProgress', 'ygError',
+function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapGoogleMapApi, ygUtils, ygUserPref, ygUserCtrl, ygServer, ygProgress, ygError) {
     var self = this;
 
     self.postDataDefaults = {
@@ -30,6 +30,39 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, uiGmapGoogleMapApi, yg
             }
         }
     };
+
+    self.iconObjects = {};
+    self.assignIconObject = function (postData) {};
+    uiGmapGoogleMapApi.then(function (googlemaps) {
+        self.assignIconObject = function (postData) {
+            if(!nodeValidator.isURL(postData.icon)){
+                var iconSet = ygServer.servers[ygUserPref.$storage.selectedServer].iconSet;
+                if(postData.icon in iconSet){
+                    postData.iconName = postData.icon;
+                    if(!(postData.iconName in self.iconObjects)){
+                        var iconUrl = iconSet[postData.iconName];
+                        self.iconObjects[postData.iconName] = {
+                            url: iconUrl,
+                            // size: new googlemaps.Size(48, 48),
+                            scaledSize: new googlemaps.Size(48, 48),
+                            origin: new googlemaps.Point(0, 0),
+                            anchor: new googlemaps.Point(40, 48)
+                        };
+                    }
+                    postData.icon = self.iconObjects[postData.iconName];
+                    // console.log(postData.icon);
+                    // if(typeof postData.options === 'undefined'){
+                    //     postData.options = {};
+                    // }
+                    // postData.options.icon = self.iconObjects[postData.iconName];
+                    // delete postData.icon;
+                }
+                else{
+                    postData.icon = 'images/icon-chat-48.png';
+                }
+            }            
+        }
+    });
 
     // This function should be override in map.js
     self.filteredPosts.addAsMarker = function (postData) {
@@ -52,7 +85,7 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, uiGmapGoogleMapApi, yg
         filters = typeof filters === 'undefined' ? ygUserPref.$storage.filters : filters;
 
         // filter by icon
-        if(post.iconName && post.iconName in ygUserCtrl.iconCtrls && !(ygUserCtrl.iconCtrls[post.iconName]==true)){
+        if(post.iconName && post.iconName in ygUserCtrl.iconCtrls && !(ygUserCtrl.iconCtrls[post.iconName].show)){
             return false;
         }
 
@@ -123,6 +156,8 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, uiGmapGoogleMapApi, yg
             for (var i = 0; i < responses.length; i++) {
                 if(!(responses[i].id in self.indexedPosts) && self.validatePostData(responses[i])){
                     var newPost = ygUtils.fillDefaults(responses[i], self.postDataDefaults);
+                    self.assignIconObject(newPost);
+                    // console.log(newPost);
                     self.indexedPosts[newPost.id] = newPost;
                     if(self.filterPost(newPost)){
                         // self.filteredPosts.push(newPost);
@@ -230,6 +265,19 @@ function ($rootScope, $timeout, $q, $resource, $mdDialog, uiGmapGoogleMapApi, yg
             }
         }
     }, true);        
+
+    $rootScope.$watch(function () {
+        return ygUserCtrl.iconCtrls;
+    }, function  () {
+        self.filteredPosts.length = 0;
+        for(var id in self.indexedPosts){
+            if(self.filterPost(self.indexedPosts[id])){
+                // self.filteredPosts.push(self.indexedPosts[id]);
+                self.filteredPosts.addAsMarker(self.indexedPosts[id]);
+            }
+        }
+    }, true);        
+
 
     self.initialPromises = {};
     self.initialPromises['loadPosts'] = $q.allSettled([ygUserPref.initialPromises['getGeolocation'], ygServer.initialPromises['updateServers'], uiGmapGoogleMapApi])

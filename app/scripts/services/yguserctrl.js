@@ -18,30 +18,32 @@ function ($rootScope, $q, ygUserPref, ygServer) {
     self.geocode = {
         results: [],
         currentIndex: 0
-    }
+    };
 
-    self.buildIconModels = function (iconSet) {
-        var iconModels = null;
+    self.iconCtrls = {};
+    self.refreshIconCtrls = function (iconSet) {
         if(typeof iconSet === 'object' && iconSet != null){
-            iconModels = {}
-            for(var name in iconSet){
-                iconModels[name] = {
-                    url: iconSet[name],
-                    show: true
+            for(var name in self.iconCtrls){
+                if(!(name in iconSet)){
+                    delete self.iconCtrls[name];
                 }
             }
+            for(var name in iconSet){
+                self.iconCtrls[name] = {
+                    show: true
+                };
+            }
         }
-        return iconModels;        
     }
 
     self.initialPromises = {};
-    self.initialPromises['buildIconModels'] = ygServer.initialPromises['updateServers']
+    self.initialPromises['refreshIconCtrls'] = ygServer.initialPromises['updateServers']
     .then(function () {
-        self.iconModels = self.buildIconModels(ygServer.servers[ygUserPref.$storage.selectedServer].iconSet)
+        self.refreshIconCtrls(ygServer.servers[ygUserPref.$storage.selectedServer].iconSet)
         $rootScope.$watch(function () {
             return ygUserPref.$storage.selectedServer;
         }, function (newValue) {
-            self.iconModels = self.buildIconModels(ygServer.servers[newValue].iconSet)
+            self.refreshIconCtrls(ygServer.servers[newValue].iconSet);
         });
         return $q.resolve();
     });

@@ -32,9 +32,11 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter){
     }
     $scope.selectTool('search');
 
+    $scope.iconSet = {};
     ygServer.initialPromises['updateServers'].then(function () {
         $scope.serverTitle = ygServer.servers[ygUserPref.$storage.selectedServer].title;
         $scope.serverLogo = ygServer.servers[ygUserPref.$storage.selectedServer].logo;
+        $scope.iconSet = ygServer.servers[ygUserPref.$storage.selectedServer].iconSet;
 
         $scope.$watch(
             function(){
@@ -45,6 +47,7 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter){
                 if(newValue in ygServer.servers){
                     $scope.serverTitle = ygServer.servers[newValue].title;
                     $scope.serverLogo = ygServer.servers[newValue].logo;
+                    $scope.iconSet = ygServer.servers[newValue].iconSet;
                 }
                 else{
                     $scope.serverTitle = '請選擇站點';
@@ -54,17 +57,12 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter){
 
     });
 
-    ygUserCtrl.initialPromises['buildIconModels'].then(function () {
-        $scope.iconModels = ygUserCtrl.iconModels;
-        $scope.$watch(function () {
-            return ygUserCtrl.iconModels;
-        }, function () {
-            $scope.iconModels = ygUserCtrl.iconModels;
-        });        
+    ygUserCtrl.initialPromises['refreshIconCtrls'].then(function () {
+        $scope.iconCtrls = ygUserCtrl.iconCtrls;
     });
 
     $scope.toggleIcon = function (name) {
-        $scope.iconModels[name].show = !($scope.iconModels[name].show);
+        $scope.iconCtrls[name].show = !($scope.iconCtrls[name].show);
         // console.log(ygUserCtrl.iconCtrls);
     }
 
