@@ -210,9 +210,11 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
                 var promise = self.newPost.$save()
                 .then(function (result) {
                     if(self.validatePostData(result) && !(result.id in self.indexedPosts)){
-                        self.indexedPosts[result.id] = ygUtils.fillDefaults(result, self.postDataDefaults);
-                        if(self.filterPost(self.indexedPosts[result.id])){
-                            self.filteredPosts.addAsMarker(self.indexedPosts[result.id]);
+                        var newPost = ygUtils.fillDefaults(result, self.postDataDefaults);
+                        self.assignIconObject(newPost);
+                        self.indexedPosts[newPost.id] = newPost;
+                        if(self.filterPost(self.indexedPosts[newPost.id])){
+                            self.filteredPosts.addAsMarker(self.indexedPosts[newPost.id]);
                         }
                         self.newPost = null;
                         console.log('Success, post added!!');
