@@ -17,13 +17,16 @@ function ($scope, $mdDialog, ygUserPref, ygServer, newPost){
         placeholder: '內文...'
     };
 
-    $scope.newPost = newPost;    
+    $scope.newPost = newPost;
 
     var selectedServer = ygServer.servers[ygUserPref.$storage.selectedServer];
-    $scope.iconSet = selectedServer.markerIconSet;
+    $scope.iconSet = selectedServer.iconSet;
+    if(!($scope.newPost.icon in $scope.iconSet)){
+        $scope.newPost.icon = Object.keys($scope.iconSet)[0];
+    }
     
-    $scope.selectMarkerIcon = function (iconUrl) {
-        $scope.newPost.icon = iconUrl;
+    $scope.selectMarkerIcon = function (iconName) {
+        $scope.newPost.icon = iconName;
     }
 
     $scope.triggerToolbar = function(){
