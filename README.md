@@ -3,7 +3,12 @@
 This project is generated with [yo angular generator](https://github.com/yeoman/generator-angular)
 version 0.12.1.
 
-# Portal data from server
+## TODOs
+1. Add "expiryDate" field to post, indicate the date when post expires and won't show on map
+2. User can follow up post, show user with new comments of followed-up post
+3. User can connect posts, with or without any reason
+
+## Portal data from server
 | data key | required | type | description | default value |
 |:---------:|:--------:|:----------------------:|:------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------:|
 | name | * | string | A name used to identify your server, should be as unique as possible | none |
@@ -20,4 +25,3 @@ Run `grunt` for building and `grunt serve` for preview.
 ## Testing
 
 Running `grunt test` will run the unit tests with karma.
-# spirit99-client
