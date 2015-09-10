@@ -4,7 +4,9 @@ This project is generated with [yo angular generator](https://github.com/yeoman/
 version 0.12.1.
 
 ## TODOs
-1. Add "expiryDate" field to post, indicate the date when post expires and won't show on map
+1. IconSet from server include origin, size and anchor options
+2. Wrap custom icon url in icon object
+2. Add "expiryDate" field to post, indicate the date when post expires and won't show on map
 2. User can follow up post, show user with new comments of followed-up post
 3. User can connect posts, with or without any reason
 
@@ -16,7 +18,7 @@ version 0.12.1.
 | logo |  | url | An image url link to the logo of server  | https://www.evansville.edu/residencelife/images/greenLogo.png |
 | postUrl | * | url | A RESTful url used to communicate data with server | none |
 | portalUrl |  | url | If given, client will further update server with this new portal url | none |
-| iconSet | * | object{name: imageURL} | A set of urls link to image icons, user can choose from which to display post markers on the map | none |
+| iconSet | * | object{name: iconObject} | A set of icon objects, user can choose from which to display post markers on the map | none |
 
 ## Build & development
 
