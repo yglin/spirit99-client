@@ -5,7 +5,6 @@ version 0.12.1.
 
 ## TODOs
 1. IconSet from server include origin, scaledSize and anchor options
-2. Wrap custom icon url in icon object
 2. Add "expiryDate" field to post, indicate the date when post expires and won't show on map
 2. User can follow up post, show user with new comments of followed-up post
 3. User can connect posts, with or without any reason
