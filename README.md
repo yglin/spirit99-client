@@ -4,7 +4,7 @@ This project is generated with [yo angular generator](https://github.com/yeoman/
 version 0.12.1.
 
 ## TODOs
-1. IconSet from server include origin, size and anchor options
+1. IconSet from server include origin, scaledSize and anchor options
 2. Wrap custom icon url in icon object
 2. Add "expiryDate" field to post, indicate the date when post expires and won't show on map
 2. User can follow up post, show user with new comments of followed-up post
