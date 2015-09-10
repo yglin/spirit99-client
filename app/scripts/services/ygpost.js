@@ -31,35 +31,49 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
         }
     };
 
-    self.iconObjects = {};
     self.assignIconObject = function (postData) {};
+
     uiGmapGoogleMapApi.then(function (googlemaps) {
+
+        self.iconObjects = {
+            'default': {
+                url: 'images/icon-chat-48.png',
+                scaledSize: new googlemaps.Size(36, 36),
+            }
+        };
+
         self.assignIconObject = function (postData) {
             if(!nodeValidator.isURL(postData.icon)){
                 var iconSet = ygServer.servers[ygUserPref.$storage.selectedServer].iconSet;
                 if(postData.icon in iconSet){
                     postData.iconName = postData.icon;
                     if(!(postData.iconName in self.iconObjects)){
-                        var iconUrl = iconSet[postData.iconName];
-                        self.iconObjects[postData.iconName] = {
-                            url: iconUrl,
-                            // size: new googlemaps.Size(48, 48),
-                            scaledSize: new googlemaps.Size(48, 48),
-                            origin: new googlemaps.Point(0, 0),
-                            anchor: new googlemaps.Point(40, 48)
-                        };
+                        if(nodeValidator.isURL(iconSet[postData.iconName])){
+                            self.iconObjects[postData.iconName] = {
+                                url: iconSet[postData.iconName],
+                                scaledSize: new googlemaps.Size(48, 48),
+                                origin: new googlemaps.Point(0, 0),
+                                anchor: new googlemaps.Point(40, 48)
+                            };
+                        }
+                        else if(typeof iconSet[postData.iconName] === 'object'){
+                            self.iconObjects[postData.iconName] = iconSet[postData.iconName];
+                        }
+                        else{
+                            postData.iconName = 'default';
+                        }
                     }
-                    postData.icon = self.iconObjects[postData.iconName];
-                    // console.log(postData.icon);
-                    // if(typeof postData.options === 'undefined'){
-                    //     postData.options = {};
-                    // }
-                    // postData.options.icon = self.iconObjects[postData.iconName];
-                    // delete postData.icon;
+                    postData.iconObject = self.iconObjects[postData.iconName];
                 }
                 else{
-                    postData.icon = 'images/icon-chat-48.png';
+                    postData.iconObject = self.iconObjects['default'];
                 }
+            }
+            else{
+                postData.iconObject = {
+                    url: postData.icon,
+                    scaledSize: new googlemaps.Size(36, 36),
+                };
             }            
         }
     });
