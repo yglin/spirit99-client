@@ -8,8 +8,8 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygUserCtrl', ['$rootScope', '$q', 'ygUserPref', 'ygServer',
-function ($rootScope, $q, ygUserPref, ygServer) {
+.service('ygUserCtrl', ['$rootScope', '$q', 'nodeValidator', 'ygUserPref', 'ygServer',
+function ($rootScope, $q, nodeValidator, ygUserPref, ygServer) {
     var self = this;
     self.openListPosts = false;
     self.focusedPostId = -1;
@@ -29,9 +29,18 @@ function ($rootScope, $q, ygUserPref, ygServer) {
                 }
             }
             for(var name in iconSet){
-                self.iconCtrls[name] = {
-                    show: true
-                };
+                if(nodeValidator.isURL(iconSet[name])){
+                    self.iconCtrls[name] = {
+                        url: iconSet[name],
+                        show: true
+                    };
+                }
+                else if('url' in iconSet[name]){
+                    self.iconCtrls[name] = {
+                        url: iconSet[name].url,
+                        show: true
+                    }
+                }
             }
         }
     }

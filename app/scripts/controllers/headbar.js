@@ -36,7 +36,7 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
     ygServer.initialPromises['updateServers'].then(function () {
         $scope.serverTitle = ygServer.servers[ygUserPref.$storage.selectedServer].title;
         $scope.serverLogo = ygServer.servers[ygUserPref.$storage.selectedServer].logo;
-        $scope.iconSet = ygServer.servers[ygUserPref.$storage.selectedServer].iconSet;
+        // $scope.iconSet = ygServer.servers[ygUserPref.$storage.selectedServer].iconSet;
 
         $scope.$watch(
             function(){
@@ -47,7 +47,7 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
                 if(newValue in ygServer.servers){
                     $scope.serverTitle = ygServer.servers[newValue].title;
                     $scope.serverLogo = ygServer.servers[newValue].logo;
-                    $scope.iconSet = ygServer.servers[newValue].iconSet;
+                    // $scope.iconSet = ygServer.servers[newValue].iconSet;
                 }
                 else{
                     $scope.serverTitle = '請選擇站點';
@@ -57,6 +57,7 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
 
     });
 
+    $scope.iconCtrls = {};
     ygUserCtrl.initialPromises['refreshIconCtrls'].then(function () {
         $scope.iconCtrls = ygUserCtrl.iconCtrls;
     });
