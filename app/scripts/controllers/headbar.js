@@ -25,12 +25,18 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
         },
         markers: {
             fontIcon: 'place'
+        },
+        period: {
+            fontIcon: 'access_time'
         }
     }
+    $scope.selectedTool = "period";
     $scope.selectTool = function (toolName) {
         $scope.selectedTool = toolName;
     }
-    $scope.selectTool('search');
+
+    // $scope.startDate = Date();
+    // $scope.endDate = Date();
 
     $scope.iconSet = {};
     ygServer.initialPromises['updateServers'].then(function () {
@@ -57,10 +63,7 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
 
     });
 
-    $scope.iconCtrls = {};
-    ygUserCtrl.initialPromises['refreshIconCtrls'].then(function () {
-        $scope.iconCtrls = ygUserCtrl.iconCtrls;
-    });
+    $scope.iconCtrls = ygUserCtrl.iconCtrls;
 
     $scope.toggleIcon = function (name) {
         $scope.iconCtrls[name].show = !($scope.iconCtrls[name].show);
