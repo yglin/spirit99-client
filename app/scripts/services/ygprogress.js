@@ -29,9 +29,11 @@ angular.module('spirit99App')
             options = options.circularProgress;
         }
         var dialog = $mdDialog.show(options);
-        promise.finally(function () {
-            // console.log('ygProcess done!!');
-            $mdDialog.hide();
-        });
+        // console.log(dialog);
+        $mdDialog.hide();
+        // promise.finally(function () {
+        //     console.log('ygProcess done!!');
+        //     dialog.hide();
+        // });
     };
 }]);

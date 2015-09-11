@@ -8,8 +8,8 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygPost', ['$rootScope', '$timeout', '$q', '$resource', 'nodeValidator', '$mdDialog', 'uiGmapGoogleMapApi', 'ygUtils', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygProgress', 'ygError',
-function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapGoogleMapApi, ygUtils, ygUserPref, ygUserCtrl, ygServer, ygProgress, ygError) {
+.service('ygPost', ['$rootScope', '$timeout', '$q', '$resource', 'nodeValidator', '$mdDialog', 'uiGmapGoogleMapApi', 'ygUtils', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygError',
+function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapGoogleMapApi, ygUtils, ygUserPref, ygUserCtrl, ygServer, ygError) {
     var self = this;
 
     self.postDataDefaults = {
@@ -265,7 +265,7 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
                     ygError.errorMessages.push('新增資料至遠端伺服器失敗');
                     return $q.reject(error);
                 });
-                ygProgress.show('新增資料...', promise);
+                // ygProgress.show('新增資料...', promise);
                 return promise;
             }else{
                 console.log('Not connected to post resources');
