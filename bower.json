@@ -31,6 +31,7 @@
   "appPath": "app",
   "moduleName": "spirit99App",
   "resolutions": {
-    "angular-readmore": "1ee2de6b78"
+    "angular-readmore": "1ee2de6b78",
+    "angular": "^1.3.0"
   }
 }
