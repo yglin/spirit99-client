@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('PostEditorController', ['$scope', '$mdDialog', 'ygUserPref', 'ygServer', 'newPost',
-function ($scope, $mdDialog, ygUserPref, ygServer, newPost){    
+.controller('PostEditorController', ['$scope', '$mdDialog', 'ygUserPref', 'ygUserCtrl', 'newPost',
+function ($scope, $mdDialog, ygUserPref, ygUserCtrl, newPost){    
     $scope.froalaOptions = {
         inlineMode: true,
         minHeight: 150,
@@ -19,12 +19,12 @@ function ($scope, $mdDialog, ygUserPref, ygServer, newPost){
 
     $scope.newPost = newPost;
 
-    var selectedServer = ygServer.servers[ygUserPref.$storage.selectedServer];
-    $scope.iconSet = selectedServer.iconSet;
-    if(!($scope.newPost.icon in $scope.iconSet)){
-        $scope.newPost.icon = Object.keys($scope.iconSet)[0];
+    $scope.iconCtrls = ygUserCtrl.iconCtrls;
+
+    if(!($scope.newPost.icon in $scope.iconCtrls)){
+        $scope.newPost.icon = Object.keys($scope.iconCtrls)[0];
     }
-    
+
     $scope.selectMarkerIcon = function (iconName) {
         $scope.newPost.icon = iconName;
     }

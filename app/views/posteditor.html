@@ -36,14 +36,14 @@
                     <md-fab-speed-dial md-direction="left" class="md-fling" ng-hide='angular.isUndefined(iconSet) || iconSet === null'>
                         <md-fab-trigger>
                             <md-button type='button' aria-label="menu" class="md-fab md-raised md-mini">
-                                <img ng-src='{{iconSet[newPost.icon]}}' width='100%' height='100%'/>
+                                <img ng-src='{{iconCtrls[newPost.icon].url}}' width='100%' height='100%'/>
                                 <md-tooltip>選擇地圖標示</md-tooltip>
                             </md-button>
                         </md-fab-trigger>
                         <md-fab-actions>
-                            <md-button type='button' ng-repeat='(iconName, iconUrl) in iconSet' aria-label="Marker Icon" class="md-fab md-raised md-mini" ng-click="selectMarkerIcon(iconName)">
-                                <img ng-src='{{iconUrl}}' width='100%' height='100%'/>
-                                <md-tooltip>{{iconName}}</md-tooltip>
+                            <md-button type='button' ng-repeat='(name, icon) in iconCtrls' aria-label="Marker Icon" class="md-fab md-raised md-mini" ng-click="selectMarkerIcon(name)">
+                                <img ng-src='{{icon.url}}' width='100%' height='100%'/>
+                                <md-tooltip>{{name}}</md-tooltip>
                             </md-button>
                         </md-fab-actions>
                     </md-fab-speed-dial>
