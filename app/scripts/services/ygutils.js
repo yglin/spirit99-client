@@ -30,8 +30,9 @@ angular.module('spirit99App')
 
     self.formatDatetime = function(dateString){
         var date = new Date(dateString);
-        return date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate()
-            + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+        // return date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate()
+            // + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+        return date.toLocaleString();
     };
 
     self.getHateoasLinks = function(responseHeaders){
