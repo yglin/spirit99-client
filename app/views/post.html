@@ -6,12 +6,16 @@
                 <a data-fittext data-fittext-max='36' data-fittext-min='18'>{{ post.title | words: 20 | characters: 50 }}</a>
                 </div>
             </div>
-            <span flex='20'></span>
-            <div flex='30' layout='column'>
-                <div>
+            <span flex></span>
+            <div flex='35' layout='column'>
+                <div layout='row'>
+                    <span flex></span>
                     <div data-fittext data-fittext-max='24' data-fittext-min='14'>{{ post.author }}</div>
                 </div>
-                <div>{{ formatDatetime(post.create_time) }} 發佈</div>
+                <div layout='row'>
+                    <span flex></span>
+                    <div>{{ formatDatetime(post.create_time) }} 發佈</div>
+                </div>
             </div>
         </div>
     </md-toolbar>
