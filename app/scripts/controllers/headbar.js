@@ -12,7 +12,7 @@ angular.module('spirit99App')
 function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio){
     var self = this;
 
-    $scope.keywords = ygUserPref.$storage.filters.title;
+    $scope.keywords = ygUserPref.$storage.filters.title.keywords;
     // $scope.showInfoWindows = false;
     // $scope.toogleInfoWindowsButtonStyle = {color: 'white'};
     // $scope.toogleInfoWindowsButtonTooltip = '顯示全部標題';
@@ -35,8 +35,7 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
         $scope.selectedTool = toolName;
     }
 
-    // $scope.startDate = Date();
-    // $scope.endDate = Date();
+    $scope.create_time = ygUserPref.$storage.filters.create_time;
 
     $scope.iconSet = {};
     ygServer.initialPromises['updateServers'].then(function () {
@@ -98,15 +97,4 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
         ygUserCtrl.geocode.currentIndex = (ygUserCtrl.geocode.currentIndex + 1) % ygUserCtrl.geocode.results.length;
     }
 
-    // $scope.toggleInfoWindows = function () {
-    //     $scope.showInfoWindows = !($scope.showInfoWindows);
-    //     if($scope.showInfoWindows){
-    //         $scope.toogleInfoWindowsButtonStyle = {color: 'grey'};
-    //         $scope.toogleInfoWindowsButtonTooltip = '隱藏全部標題';
-    //     }
-    //     else{
-    //         $scope.toogleInfoWindowsButtonStyle = {color: 'white'};
-    //         $scope.toogleInfoWindowsButtonTooltip = '顯示全部標題';
-    //     }
-    // };
 }]);

@@ -41,7 +41,13 @@ function ($q, $localStorage) {
             zoom: 6,
         },
         filters: {
-            title: []
+            title: {
+                keywords: []
+            },
+            create_time: {
+                startDate: new Date(0),
+                endDate: new Date(2200, 11, 31)
+            }
         },
         filterCircle: {
             center: {

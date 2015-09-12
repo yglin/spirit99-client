@@ -26,7 +26,7 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
             method: 'GET',
             isArray: true,
             params: {
-                fields: ['id', 'title', 'latitude', 'longitude', 'icon']
+                fields: ['id', 'title', 'latitude', 'longitude', 'icon', 'create_time']
             }
         }
     };
@@ -127,16 +127,25 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
             return false;
         }
 
-        // filter by keywords
         var matchAll = true;
         for(var key in filters){
-            if(key in post && typeof post[key] === 'string'){
-                for (var i = 0; i < filters[key].length; i++) {
-                    var keyword = filters[key][i];
-                    if(post[key].indexOf(keyword) == -1){
-                        matchAll = false;
+            if(key in post){
+                if('keywords' in filters[key] && typeof post[key] === 'string'){
+                    for (var i = 0; i < filters[key].keywords.length; i++) {
+                        var keyword = filters[key].keywords[i];
+                        if(post[key].indexOf(keyword) == -1){
+                            matchAll = false;
+                        }
+                        if(!matchAll)break;
                     }
-                    if(!matchAll)break;
+                }
+                else if('startDate' in filters[key] && 'endDate' in filters[key]){
+                    var postDate = new Date(post[key]);
+                    matchAll = postDate > filters[key].startDate && postDate < filters[key].endDate;
+                    // console.log(matchAll + ', ' + postDate + ', ' + filters[key].startDate + ' ~ ' + filters[key].endDate);
+                }
+                else{
+                    matchAll = false;
                 }
             }
             else{
