@@ -13,7 +13,7 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
     var self = this;
 
     self.postDataDefaults = {
-        icon: 'images/icon-chat-48.png',
+        // icon: 'images/icon-chat-48.png',
         // options: {}
         // thumbnail: 'http://at-cdn-s01.audiotool.com/2012/05/28/documents/ei368KjdlP5qy6gILDLtH9cEAf6H/0/cover256x256-b31436c2a9bc4645b1ad67bc09705cd7.jpg'
     };
@@ -334,6 +334,8 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
         var deferred = $q.defer();
         $timeout(function () {
             self.reloadPosts().then(function () {
+                // console.log(self.indexedPosts);
+                // console.log(self.filteredPosts);
                 deferred.resolve();
             }, function () {
                 deferred.reject();

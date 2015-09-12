@@ -24,8 +24,12 @@ angular.module('spirit99App')
     }
 
     self.fillDefaults = function (data, defaults) {
-        self.clearNullAndEmptyStrings(data);
-        return angular.extend({}, defaults, data);  
+        for(var key in defaults){
+            if(!(key in data) || data[key] === null){
+                data[key] = defaults[key];
+            }
+        }
+        return data;
     };
 
     self.formatDatetime = function(dateString){
