@@ -33,7 +33,7 @@
 
             <!-- List user comments -->
             <md-list>
-                <md-list-item class='md-3-line md-whiteframe-z2' ng-repeat='comment in comments'>
+                <md-list-item class='md-3-line md-whiteframe-z2' ng-repeat='comment in comments | orderBy:"create_time"'>
                     <div class='md-list-item-text' layout-margin layout-padding>
                         <h3>{{ comment.author }}</h3>
                         <h5>{{ formatDatetime(comment.create_time) }}</h5>
