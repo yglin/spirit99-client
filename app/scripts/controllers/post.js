@@ -29,7 +29,11 @@ function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, y
     };
 
     $scope.canFollowPost = ygFollowPost.serverSupportFollowPost;
-    $scope.followPost = post.id in ygFollowPost.followedPosts;
+    $scope.followPost = $scope.post.id in ygFollowPost.followedPosts;
+
+    if($scope.followPost){
+        console.log(ygFollowPost.followedPosts[$scope.post.id].lastCheckTime);
+    }
 
     $scope.postLoaded = false;
     ygPost.postResource.get({id:post.id},

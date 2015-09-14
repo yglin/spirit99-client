@@ -26,7 +26,7 @@
         </div>
         <md-content layout='column' layout-margin layout-padding ng-show='postLoaded'>
             <div layout='row' ng-show='canFollowPost' layout-align='end center'>
-                <md-checkbox ng-model='post.followed' ng-click="toggleFollowPost()">追蹤本篇</md-checkbox>
+                <md-checkbox ng-model='followPost' ng-click="toggleFollowPost()">追蹤本篇</md-checkbox>
             </div>
             <!-- Post context -->
             <md-content layout-padding style='min-height:100px;' ng-bind-html='post.context'>

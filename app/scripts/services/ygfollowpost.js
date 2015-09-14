@@ -13,12 +13,16 @@ function ($rootScope, ygServer, ygUserPref) {
     var self = this;
 
     self.serverSupportFollowPost = false;
-    self.followedPosts = {}
+    self.followPostBy = [];
+    self.followedPosts = {};
 
     ygServer.initialPromises['updateServers'].then(function () {
         self.serverSupportFollowPost = !angular.isUndefined(ygServer.servers[ygUserPref.$storage.selectedServer].followPostBy) && ygServer.servers[ygUserPref.$storage.selectedServer].followPostBy != null;
+        if(self.serverSupportFollowPost){
+            self.followPostBy = ygServer.servers[ygUserPref.$storage.selectedServer].followPostBy;            
+        }
         if(self.serverSupportFollowPost
-            && angular.isUndefined(ygUserPref.$storage.followedPosts[ygUserPref.$storage.selectedServer])){
+        && angular.isUndefined(ygUserPref.$storage.followedPosts[ygUserPref.$storage.selectedServer])){
             ygUserPref.$storage.followedPosts[ygUserPref.$storage.selectedServer] = {};
             self.followedPosts = ygUserPref.$storage.followedPosts[ygUserPref.$storage.selectedServer];
         }
@@ -27,8 +31,11 @@ function ($rootScope, ygServer, ygUserPref) {
             return ygUserPref.$storage.selectedServer;
         }, function (newValue) {
             self.serverSupportFollowPost = !angular.isUndefined(ygServer.servers[newValue].followPostBy) && ygServer.servers[newValue].followPostBy != null;        
+            if(self.serverSupportFollowPost){
+                self.followPostBy = ygServer.servers[ygUserPref.$storage.selectedServer].followPostBy;            
+            }
             if(self.serverSupportFollowPost
-                && angular.isUndefined(ygUserPref.$storage.followedPosts[ygUserPref.$storage.selectedServer])){
+            && angular.isUndefined(ygUserPref.$storage.followedPosts[ygUserPref.$storage.selectedServer])){
                 ygUserPref.$storage.followedPosts[ygUserPref.$storage.selectedServer] = {};
                 self.followedPosts = ygUserPref.$storage.followedPosts[ygUserPref.$storage.selectedServer];
             }
@@ -46,4 +53,13 @@ function ($rootScope, ygServer, ygUserPref) {
             delete self.followedPosts[post.id];
         }        
     };
+
+    self.checkPost = function (post) {
+        if(!(post.id in self.followedPosts)){
+            self.followedPosts[post.id] = {};
+        }
+        if(self.followPostBy.indexOf('modify_time') > -1){
+            self.followedPosts[post.id]['lastCheckTime'] = new Date();
+        }
+    }
 }]);
