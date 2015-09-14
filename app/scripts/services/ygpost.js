@@ -292,15 +292,18 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
     };
 
     self.showPostDetail = function (postID) {
+        // console.log(self.indexedPosts[postID]);
         $mdDialog.show({
             templateUrl: 'views/post.html',
             controller: 'PostController',
             clickOutsideToClose: true,
             locals: {
-                postID: postID
+                post: self.indexedPosts[postID]
             }
         })
-        .then(function(response){}, function(response){});
+        .then(function(response){}, function(response){
+            // console.log(self.indexedPosts[postID]);
+        });
     };
 
     $rootScope.$watch(function () {

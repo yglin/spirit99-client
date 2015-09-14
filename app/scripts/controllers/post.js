@@ -8,14 +8,16 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('PostController', ['$scope', '$resource', '$mdDialog', 'ygUtils', 'ygUserPref', 'ygServer', 'ygPost', 'postID',
-function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, postID) {
+.controller('PostController', ['$scope', '$resource', '$mdDialog', 'ygUtils', 'ygUserPref', 'ygServer', 'ygPost', 'post',
+function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, post) {
     $scope.froalaOptions = {
         inlineMode: true,
         minHeight: 50,
         language: 'zh-tw',
         placeholder: '留言...'
     };
+    $scope.post = post;
+
     $scope.formatDatetime = ygUtils.formatDatetime;
 
     $scope.commentsResource = null;
@@ -29,9 +31,13 @@ function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, p
     $scope.canFollowPost = !angular.isUndefined(ygServer.servers[ygUserPref.$storage.selectedServer].followPostBy) && ygServer.servers[ygUserPref.$storage.selectedServer].followPostBy != null;
 
     $scope.postLoaded = false;
-    ygPost.postResource.get({id:postID},
+    ygPost.postResource.get({id:post.id},
     function(result, getResponseHeaders){
-        $scope.post = result;
+        for(var key in result){
+            if(!(key in $scope.post)){
+                $scope.post[key] = result[key];
+            }
+        }
         $scope.postLoaded = true;
 
         // Load comments
