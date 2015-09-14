@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('PostController', ['$scope', '$resource', '$mdDialog', 'ygUtils', 'ygPost', 'postID',
-function ($scope, $resource, $mdDialog, ygUtils, ygPost, postID) {
+.controller('PostController', ['$scope', '$resource', '$mdDialog', 'ygUtils', 'ygUserPref', 'ygServer', 'ygPost', 'postID',
+function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, postID) {
     $scope.froalaOptions = {
         inlineMode: true,
         minHeight: 50,
@@ -25,6 +25,8 @@ function ($scope, $resource, $mdDialog, ygUtils, ygPost, postID) {
         context: '',
         author: ''
     };
+
+    $scope.canFollowPost = !angular.isUndefined(ygServer.servers[ygUserPref.$storage.selectedServer].followPostBy) && ygServer.servers[ygUserPref.$storage.selectedServer].followPostBy != null;
 
     $scope.postLoaded = false;
     ygPost.postResource.get({id:postID},
