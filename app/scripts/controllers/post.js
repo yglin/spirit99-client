@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('PostController', ['$scope', '$resource', '$mdDialog', 'ygUtils', 'ygUserPref', 'ygServer', 'ygPost', 'post',
-function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, post) {
+.controller('PostController', ['$scope', '$resource', '$mdDialog', 'ygUtils', 'ygUserPref', 'ygServer', 'ygPost', 'ygFollowPost', 'post',
+function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, ygFollowPost, post) {
     $scope.froalaOptions = {
         inlineMode: true,
         minHeight: 50,
@@ -28,7 +28,8 @@ function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, p
         author: ''
     };
 
-    $scope.canFollowPost = !angular.isUndefined(ygServer.servers[ygUserPref.$storage.selectedServer].followPostBy) && ygServer.servers[ygUserPref.$storage.selectedServer].followPostBy != null;
+    $scope.canFollowPost = ygFollowPost.serverSupportFollowPost;
+    $scope.followPost = post.id in ygFollowPost.followedPosts;
 
     $scope.postLoaded = false;
     ygPost.postResource.get({id:post.id},
@@ -37,7 +38,7 @@ function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, p
             if(!(key in $scope.post)){
                 $scope.post[key] = result[key];
             }
-        }
+        }        
         $scope.postLoaded = true;
 
         // Load comments
@@ -58,7 +59,16 @@ function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, p
 
     });
 
-
+    $scope.$watch('followPost',
+        function (newValue) {
+            // console.log(newValue);
+            if(newValue){
+                ygFollowPost.followPost($scope.post);
+            }
+            else{
+                ygFollowPost.unfollowPost($scope.post);
+            }
+    });
 
     $scope.addComment = function (comment) {
         if($scope.commentsResource === null){

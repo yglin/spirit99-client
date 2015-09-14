@@ -70,6 +70,7 @@ function ($q, $localStorage) {
         },
         selectedServer: 'localstory',
         startAtGeolocation: true,
+        followedPosts: {}
     });
 
     self.promiseGetGeolocation = function (map, zoom) {
