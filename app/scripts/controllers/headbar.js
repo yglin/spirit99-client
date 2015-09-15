@@ -35,7 +35,11 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
         $scope.selectedTool = toolName;
     }
 
-    $scope.create_time = ygUserPref.$storage.filters.create_time;
+    $scope.create_time = {
+        startDate: new Date(ygUserPref.$storage.filters.create_time.startDate),
+        endDate: new Date(ygUserPref.$storage.filters.create_time.endDate)
+    };
+
 
     $scope.iconSet = {};
     ygServer.initialPromises['updateServers'].then(function () {
@@ -91,6 +95,14 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
         else{
             $scope.isMultipleGeocodeLocations = false;            
         }
+    });
+
+    $scope.$watch('create_time.startDate', function (newValue) {
+        ygUserPref.$storage.filters.create_time.startDate = newValue.toString();
+    });
+
+    $scope.$watch('create_time.endDate', function (newValue) {
+        ygUserPref.$storage.filters.create_time.endDate = newValue.toString();
     });
 
     $scope.nextGeocodeLocation = function () {

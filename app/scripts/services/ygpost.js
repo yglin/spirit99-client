@@ -26,7 +26,7 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
             method: 'GET',
             isArray: true,
             params: {
-                fields: ['id', 'title', 'latitude', 'longitude', 'icon', 'create_time']
+                fields: ['id', 'title', 'latitude', 'longitude', 'icon', 'create_time', 'modify_time']
             }
         }
     };
@@ -141,7 +141,9 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
                 }
                 else if('startDate' in filters[key] && 'endDate' in filters[key]){
                     var postDate = new Date(post[key]);
-                    matchAll = postDate > filters[key].startDate && postDate < filters[key].endDate;
+                    var startDate = new Date(filters[key].startDate);
+                    var endDate = new Date(filters[key].endDate);
+                    matchAll = postDate > startDate && postDate < endDate;
                     // console.log(matchAll + ', ' + postDate + ', ' + filters[key].startDate + ' ~ ' + filters[key].endDate);
                 }
                 else{
@@ -204,7 +206,9 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
                 if(!(responses[i].id in self.indexedPosts) && self.validatePostData(responses[i])){
                     var newPost = ygUtils.fillDefaults(responses[i], self.postDataDefaults);
                     self.assignIconObject(newPost);
-                    // console.log(newPost);
+                    if(ygFollowPost.isFollowingPost(newPost) && ygFollowPost.isSomethingNew(newPost)){
+                        ygFollowPost.addNotification(newPost);
+                    }
                     self.indexedPosts[newPost.id] = newPost;
                     if(self.filterPost(newPost)){
                         // self.filteredPosts.push(newPost);
@@ -302,7 +306,8 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
             }
         })
         .finally(function () {
-            if(postID in ygFollowPost.followedPosts){
+            if(ygFollowPost.isFollowingPost(self.indexedPosts[postID])){
+                ygFollowPost.removeNotification(self.indexedPosts[postID]);
                 ygFollowPost.checkPost(self.indexedPosts[postID]);
             }
         });
