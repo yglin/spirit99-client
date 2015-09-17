@@ -8,5 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('InfoWindowController', ['$scope', function ($scope) {
+.controller('InfoWindowController', ['$scope', 'ygConnect',
+function ($scope, ygConnect) {
+    $scope.canConnectPosts = ygConnect.canConnectPosts;
+    console.log($scope.canConnectPosts);
 }]);

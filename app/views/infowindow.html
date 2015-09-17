@@ -1,6 +1,13 @@
-<div ng-controller="InfoWindowController" layout='row' layout-align="space-around center">
-<div ng-show='parameter.thumbnail'>
-    <img ng-src="{{parameter.thumbnail}}" style='max-width:128px;min-width:48px;'>
+<div ng-controller="InfoWindowController" ng-cloak>
+<div layout='row' layout-align="space-around center">
+    <div ng-show='parameter.thumbnail'>
+        <img ng-src="{{parameter.thumbnail}}" style='max-width:128px;min-width:48px;'>
+    </div>
+    <div layout-margin layout-padding>{{ parameter.title }}</div>
 </div>
-<div layout-margin layout-padding>{{ parameter.title }}</div>
+<div layout='row' layout-align="space-around center">
+    <md-button class='md-icon-button md-primary'>
+        <md-icon class='material-icons'>share</md-icon>
+    </md-button>
+</div>
  </div>
