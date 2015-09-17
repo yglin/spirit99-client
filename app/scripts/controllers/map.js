@@ -101,37 +101,56 @@ function($scope, $timeout, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygU
     };
 
     $scope.onClickPostMarker = function (marker, eventName, model) {
+        $timeout.cancel(self.timeoutShowInfoWindow);
+        $timeout.cancel(self.timeoutCloseInfoWindow);
+        $timeout.cancel(self.timeoutOpenListPosts);
         ygPost.showPostDetail(model.id);
     };
 
     $scope.onMouseoverPostMarker = function (marker, eventName, model) {
+        $timeout.cancel(self.timeoutCloseInfoWindow);
         $timeout.cancel(self.timeoutShowInfoWindow);
-        self.timeoutShowInfoWindow = $timeout(function () {
-            ygAudio.focusOnPost.play();
+
+        ygUserCtrl.focusedPostId = model.id;
+        if($scope.infoWindow.show){
             $scope.infoWindow.coords = {
                 latitude: model.latitude,
                 longitude: model.longitude
             };
             $scope.infoWindow.templateParameter = model;
-            $scope.infoWindow.show = true;
-            ygUserCtrl.focusedPostId = model.id;
-        }, 500);
+        }
+        else{
+            self.timeoutShowInfoWindow = $timeout(function () {
+                if(ygUserCtrl.focusedPostId == model.id){
+                    ygAudio.focusOnPost.play();
+                    $scope.infoWindow.coords = {
+                        latitude: model.latitude,
+                        longitude: model.longitude
+                    };
+                    $scope.infoWindow.templateParameter = model;
+                    $scope.infoWindow.show = true;
+                }
+            }, 500);
+        }
 
-        $timeout.cancel($scope.timeoutCloseInfoWindow);
         if(!ygUserCtrl.openListPosts){
-            $scope.timeoutOpenListPosts = $timeout(function () {
-                ygUserCtrl.openListPosts = true;
-            }, 2000);
+            $timeout.cancel(self.timeoutOpenListPosts);
+            self.timeoutOpenListPosts = $timeout(function () {
+                if(ygUserCtrl.focusedPostId == model.id){
+                    ygUserCtrl.openListPosts = true;
+                }
+            }, 3000);
         }
     };
 
     $scope.onMouseoutPostMarker = function (marker, eventName, model) {
         $timeout.cancel(self.timeoutShowInfoWindow);
-        $scope.delayCloseInfoWindow = true;
-        $scope.timeoutCloseInfoWindow = $timeout(function () {
-            $scope.infoWindow.show = false;
-        }, 1000);
-        $timeout.cancel($scope.timeoutOpenListPosts);
+        if($scope.infoWindow.show){
+            self.timeoutCloseInfoWindow = $timeout(function () {
+                $scope.infoWindow.show = false;
+            }, 2000);
+        }
+        $timeout.cancel(self.timeoutOpenListPosts);
     };
 
     $scope.postMarkerEvents = {
