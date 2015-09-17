@@ -47,9 +47,9 @@ function ($rootScope, $resource, ygUserPref, ygServer) {
             self.newRelation.$save().then(
             function (response) {
                 console.log(response);
+                self.newRelation = null;                
             }, function (error) {
                 alert(error.toString());
-            }, function () {
                 self.newRelation = null;                
             });
         }
