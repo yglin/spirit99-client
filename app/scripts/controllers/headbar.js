@@ -30,7 +30,7 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
             fontIcon: 'access_time'
         }
     }
-    $scope.selectedTool = "period";
+    $scope.selectedTool = "search";
     $scope.selectTool = function (toolName) {
         $scope.selectedTool = toolName;
     }
