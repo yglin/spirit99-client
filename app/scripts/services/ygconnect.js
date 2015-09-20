@@ -12,6 +12,7 @@ angular.module('spirit99App')
 function ($rootScope, $resource, ygUserPref, ygServer) {
     var self = this;
 
+    self.connections = {};
     self.canConnectPosts = false;
     self.relationResource = null;
 
@@ -41,15 +42,18 @@ function ($rootScope, $resource, ygUserPref, ygServer) {
         if(self.newRelation.postIDs.indexOf(post_id) == -1){
             self.newRelation.postIDs.push(post_id);
         }
-        console.log(self.newRelation);
-
+        // console.log(self.newRelation);
+ 
         if(self.newRelation.postIDs.length >= 2){
             self.newRelation.$save().then(
             function (response) {
-                console.log(response);
+                // console.log(response);
+                var index = response.post_id1 + '_' + response.post_id2;
+                self.connections[index] = response;
+                console.log(self.connections);
                 self.newRelation = null;                
             }, function (error) {
-                alert(error.toString());
+                console.log(error);
                 self.newRelation = null;                
             });
         }
