@@ -8,8 +8,8 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygServer', ['$rootScope', '$http', '$resource', '$q', 'portalRules', 'ygError', 'ygUtils', 'ygUserPref',
-function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUtils, ygUserPref) {
+.service('ygServer', ['$rootScope', '$http', '$resource', '$q', 'portalRules', 'ygError', 'ygUtils', 'ygUserPref', 'ygStatusInfo',
+function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUtils, ygUserPref, ygStatusInfo) {
     // AngularJS will instantiate a singleton by calling "new" on self function
     var self = this;
 
@@ -91,6 +91,7 @@ function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUtils, ygUse
 
     self.updateServers = function(){
         console.log('Start update servers');
+        ygStatusInfo.statusProcessing('更新電台資料...');
         var updatePromises = {};
         for (var name in self.servers) {
             updatePromises[name] = $http.get(self.servers[name].portalUrl)
@@ -126,6 +127,7 @@ function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUtils, ygUse
                 self.switchServer(ygUserPref.$storage.selectedServer);
             }
             console.log('Finish update servers');
+            ygStatusInfo.statusIdle();
         });
 
         // ygProgress.show('更新各站點...', promise);

@@ -8,8 +8,8 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygPost', ['$rootScope', '$timeout', '$q', '$resource', 'nodeValidator', '$mdDialog', 'uiGmapGoogleMapApi', 'ygUtils', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygError', 'ygFollowPost',
-function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapGoogleMapApi, ygUtils, ygUserPref, ygUserCtrl, ygServer, ygError, ygFollowPost) {
+.service('ygPost', ['$rootScope', '$timeout', '$q', '$resource', 'nodeValidator', '$mdDialog', 'uiGmapGoogleMapApi', 'ygUtils', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygError', 'ygFollowPost', 'ygStatusInfo',
+function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapGoogleMapApi, ygUtils, ygUserPref, ygUserCtrl, ygServer, ygError, ygFollowPost, ygStatusInfo) {
     var self = this;
 
     self.postDataDefaults = {
@@ -198,8 +198,7 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
         }
         extraParams.bounds = ygUserPref.$storage.map.bounds;
 
-        // console.log(extraParams);
-
+        ygStatusInfo.statusProcessing('下載資料...');
         return self.postResource.getMarkers(extraParams, function(responses){
             console.log('Load ' + responses.length + ' posts');
             for (var i = 0; i < responses.length; i++) {
@@ -217,6 +216,7 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
                 }
             }
             ygUtils.updateMaxBounds(extraParams.bounds);
+            ygStatusInfo.statusIdle();
         }).$promise;
     };
 

@@ -33,7 +33,7 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
     $scope.selectedTool = "search";
     $scope.selectTool = function (toolName) {
         $scope.selectedTool = toolName;
-    }
+    };
 
     $scope.create_time = {
         startDate: new Date(ygUserPref.$storage.filters.create_time.startDate),

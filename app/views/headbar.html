@@ -9,19 +9,12 @@ img.grayscale {
 
 <md-toolbar>
     <div layout='row' layout-align='space-between center'>
-        <div flex='40'>
+        <div flex='5'>
         <md-button class='md-icon-button' aria-label='Open Side Menu' ng-click='openSidenav()'>
             <md-icon class='material-icons' ng-style="{color: 'white'}">keyboard_arrow_right</md-icon>
         </md-button>
         </div>
-        <!-- <span flex></span> -->
-        <div flex='20' layout='row' layout-align='center center'>
-            <div layout-margin>
-                <img alt="{{serverTitle}}" ng-src="{{serverLogo}}" class="md-avatar" ng-style="{'max-width':'48px', 'max-height':'48px'}" ng-hide='serverLogo == ""' />
-            </div>
-            <h1 class='md-headline'>{{serverTitle}}</h1>
-        </div>
-        <div flex layout='row' layout-align='end center'>
+        <div flex='35' layout='row' layout-align='end center'>
              <div style='position:relative;width:48px;height:48px;'>
                 <div style='position:absolute;top:0px;left:0px;'>
                     <md-fab-speed-dial md-direction="down" class="md-fling">
@@ -61,6 +54,15 @@ img.grayscale {
                 <div layout-margin class='md-display-1' style='color:white;'> ~ </div>
                 <input type='date' ng-model="create_time.endDate" />
             </div>
-         </div>
+        </div>
+        <div flex='20' layout='row' layout-align='center center'>
+            <div layout-margin>
+                <img alt="{{serverTitle}}" ng-src="{{serverLogo}}" class="md-avatar" ng-style="{'max-width':'48px', 'max-height':'48px'}" ng-hide='serverLogo == ""' />
+            </div>
+            <h1 class='md-headline'>{{serverTitle}}</h1>
+        </div>
+        <div flex layout='row' layout-padding layout-align='end center'>
+            <ng-include src='"views/statusinfo.html"'></ng-include>
+        </div>
     </div>
 </md-toolbar>
