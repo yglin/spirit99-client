@@ -8,11 +8,17 @@
             </div>
             <span flex></span>
             <div flex='35' layout='column'>
-                <div layout='row'>
+                <div layout='row' layout-align='end center' style='min-height:20px;max-height:32px;'>
                     <span flex></span>
                     <div data-fittext data-fittext-max='24' data-fittext-min='14'>{{ post.author }}</div>
+                    <md-button class='md-icon-button' style='width:24px;min-height:24px;height:24px;line-height:24px;'>
+                        <md-icon class='material-icons' style='color:white;font-size:20px;'>edit</md-icon>
+                    </md-button>
+                    <md-button class='md-icon-button' style='width:24px;min-height:24px;height:24px;line-height:24px;'>
+                        <md-icon class='material-icons' style='color:white;font-size:20px;'>delete</md-icon>
+                    </md-button>
                 </div>
-                <div layout='row'>
+                <div layout='row' style='min-height:20px;max-height:32px;'>
                     <span flex></span>
                     <div>{{ formatDatetime(post.create_time) }} 發佈</div>
                 </div>
