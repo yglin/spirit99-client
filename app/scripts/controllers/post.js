@@ -82,6 +82,9 @@ function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, y
         function (result) {
             $scope.comments.push($scope.newComment);
             $scope.newComment = new $scope.commentsResource();
+            // Automatic follow post if added comment
+            ygFollowPost.followPost($scope.post);
+            $scope.followPost = $scope.post.id in ygFollowPost.followedPosts;
         },
         function (error) {
             console.log(error);

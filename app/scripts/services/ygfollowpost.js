@@ -43,10 +43,16 @@ function ($rootScope, uiGmapGoogleMapApi, ygServer, ygUserPref) {
     });
 
     self.isFollowingPost = function (post) {
+        if(!self.serverSupportFollowPost){
+            return false;
+        }
         return post.id in self.followedPosts;
     };
 
     self.followPost = function (post) {
+        if(!self.serverSupportFollowPost){
+            return false;
+        }
         if(!(post.id in self.followedPosts)){
             console.log(ygUserPref.$storage.followedPosts[ygUserPref.$storage.selectedServer]);
             self.followedPosts[post.id] = {};
@@ -54,12 +60,18 @@ function ($rootScope, uiGmapGoogleMapApi, ygServer, ygUserPref) {
     };
 
     self.unfollowPost = function (post) {
+        if(!self.serverSupportFollowPost){
+            return false;
+        }
         if(post.id in self.followedPosts){
             delete self.followedPosts[post.id];
         }        
     };
 
     self.checkPost = function (post) {
+        if(!self.serverSupportFollowPost){
+            return false;
+        }
         if(!(post.id in self.followedPosts)){
             self.followedPosts[post.id] = {};
         }
@@ -69,6 +81,9 @@ function ($rootScope, uiGmapGoogleMapApi, ygServer, ygUserPref) {
     };
 
     self.isSomethingNew = function (post) {
+        if(!self.serverSupportFollowPost){
+            return false;
+        }
         if(self.followPostBy.indexOf('modify_time') > -1
         && 'modify_time' in post
         && 'lastCheckTime' in self.followedPosts[post.id]){

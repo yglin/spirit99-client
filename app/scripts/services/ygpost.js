@@ -267,6 +267,7 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
                         if(self.filterPost(self.indexedPosts[newPost.id])){
                             self.filteredPosts.addAsMarker(self.indexedPosts[newPost.id]);
                         }
+                        ygFollowPost.followPost(newPost);
                         self.newPost = null;
                         console.log('Success, post added!!');
                         return $q.resolve();                        
