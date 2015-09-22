@@ -18,6 +18,8 @@ function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, y
     };
     $scope.post = post;
 
+    $scope.isMyPost = post.id in ygUserPref.$storage.myPosts;
+
     $scope.formatDatetime = ygUtils.formatDatetime;
 
     $scope.commentsResource = null;
