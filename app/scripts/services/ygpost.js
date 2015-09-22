@@ -160,6 +160,16 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
         return matchAll;
     };
 
+    self.markAsMyPost = function (post) {
+        if(!(post.id in ygUserPref.$storage.myPosts)){
+            ygUserPref.$storage.myPosts[post.id] = {};
+        }
+        if('password' in post){
+            ygUserPref.$storage.myPosts[post.id].password = post.password;                            
+        }
+        // console.log(ygUserPref.$storage.myPosts);
+    };
+
     self.buildPostResource = function (selectedServer) {
         if(!(selectedServer in ygServer.servers)){
             console.log('Can not find server: ' + selectedServer);
@@ -246,10 +256,14 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
 
     self.editPost = function (post) {
         self.postEditor(post).then(function (updatedPost) {
+            console.log(updatedPost);
             for(var key in PostUserFields){
                 if(key in updatedPost){
                     post[key] = updatedPost[key];
                 }
+            }
+            if(post.id in ygUserPref.$storage.myPosts){
+                post.password = ygUserPref.$storage.myPosts[post.id].password;
             }
             self.filteredPosts.splice(self.filteredPosts.indexOf(post), 1);
             post.$save().then(function (response) {
@@ -260,8 +274,17 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
                 // console.log(self.indexedPosts[post.id]);
                 // console.log(post);
             }, function (error) {
-                alert('更新失敗!!');
+                if(error.status == 401){
+                    alert('這可能是別人的文章，你沒有權限更改');
+                }
+                else{
+                    alert('更新失敗!!');
+                }
                 console.log(error);
+                self.assignIconObject(post);
+                if(self.filterPost(post)){
+                    self.filteredPosts.addAsMarker(post);
+                }
             });            
         });  
     };
@@ -303,6 +326,7 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
                         if(self.filterPost(self.indexedPosts[newPost.id])){
                             self.filteredPosts.addAsMarker(self.indexedPosts[newPost.id]);
                         }
+                        self.markAsMyPost(newPost);
                         ygFollowPost.followPost(newPost);
                         self.newPost = null;
                         console.log('Success, post added!!');
