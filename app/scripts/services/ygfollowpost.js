@@ -54,7 +54,7 @@ function ($rootScope, uiGmapGoogleMapApi, ygServer, ygUserPref) {
             return false;
         }
         if(!(post.id in self.followedPosts)){
-            console.log(ygUserPref.$storage.followedPosts[ygUserPref.$storage.selectedServer]);
+            // console.log(ygUserPref.$storage.followedPosts[ygUserPref.$storage.selectedServer]);
             self.followedPosts[post.id] = {};
         }
     };
