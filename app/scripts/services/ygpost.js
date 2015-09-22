@@ -255,21 +255,16 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
     };
 
     self.editPost = function (post) {
-        self.postEditor(post).then(function (updatedPost) {
-            console.log(updatedPost);
-            for(var key in PostUserFields){
-                if(key in updatedPost){
-                    post[key] = updatedPost[key];
-                }
+        self.filteredPosts.splice(self.filteredPosts.indexOf(post), 1);
+        self.postEditor(angular.copy(post)).then(function (updatedPost) {
+            if(updatedPost.id in ygUserPref.$storage.myPosts){
+                updatedPost.password = ygUserPref.$storage.myPosts[updatedPost.id].password;
             }
-            if(post.id in ygUserPref.$storage.myPosts){
-                post.password = ygUserPref.$storage.myPosts[post.id].password;
-            }
-            self.filteredPosts.splice(self.filteredPosts.indexOf(post), 1);
-            post.$save().then(function (response) {
-                self.assignIconObject(post);
-                if(self.filterPost(post)){
-                    self.filteredPosts.addAsMarker(post);
+            updatedPost.$save().then(function (response) {
+                self.indexedPosts[updatedPost.id] = updatedPost;
+                self.assignIconObject(updatedPost);
+                if(self.filterPost(updatedPost)){
+                    self.filteredPosts.addAsMarker(updatedPost);
                 }
                 // console.log(self.indexedPosts[post.id]);
                 // console.log(post);
@@ -280,11 +275,8 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
                 else{
                     alert('更新失敗!!');
                 }
+                self.filteredPosts.addAsMarker(post);
                 console.log(error);
-                self.assignIconObject(post);
-                if(self.filterPost(post)){
-                    self.filteredPosts.addAsMarker(post);
-                }
             });            
         });  
     };
