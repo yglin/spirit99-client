@@ -63,6 +63,10 @@ function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, y
 
     });
 
+    $scope.editPost = function () {
+        ygPost.editPost($scope.post);
+    };
+
     $scope.$watch('followPost',
         function (newValue) {
             // console.log(newValue);

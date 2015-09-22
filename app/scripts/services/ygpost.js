@@ -12,6 +12,8 @@ angular.module('spirit99App')
 function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapGoogleMapApi, ygUtils, ygUserPref, ygUserCtrl, ygServer, ygError, ygFollowPost, ygStatusInfo) {
     var self = this;
 
+    var PostUserFields = ['title', 'context', 'icon', 'author'];
+
     self.postDataDefaults = {
         // icon: 'images/icon-chat-48.png',
         // options: {}
@@ -28,7 +30,7 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
             params: {
                 fields: ['id', 'title', 'latitude', 'longitude', 'icon', 'create_time', 'modify_time']
             }
-        }
+        },
     };
 
     self.assignIconObject = function (postData) {};
@@ -228,6 +230,36 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
             self.postResource = self.buildPostResource(ygUserPref.$storage.selectedServer);
         }
         return self.loadPosts();
+    };
+
+    self.postEditor = function (post) {
+        $mdDialog.cancel();
+        return $mdDialog.show({
+            templateUrl: 'views/posteditor.html',
+            controller: 'PostEditorController',
+            clickOutsideToClose: true,
+            escapeToClose: false,
+            locals: {
+                newPost: post
+            },
+        })        
+    };
+
+    self.editPost = function (post) {
+        self.postEditor(post).then(function (updatedPost) {
+            for(var key in PostUserFields){
+                if(key in updatedPost){
+                    post[key] = updatedPost[key];
+                }
+            }
+            post.$save().then(function (response) {
+                self.assignIconObject(post);
+                console.log(post);
+            }, function (error) {
+                alert('更新失敗!!');
+                console.log(error);
+            });            
+        });  
     };
 
     self.popStoryEditor = function (latitude, longitude) {
