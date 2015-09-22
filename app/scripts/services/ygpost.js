@@ -120,8 +120,7 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
     //     }
     // };
 
-    self.filterPost = function (post, filteredPosts, filters) {
-        filteredPosts = Array.isArray(filteredPosts) ? filteredPosts : self.filteredPosts;
+    self.filterPost = function (post, filters) {
         filters = typeof filters === 'undefined' ? ygUserPref.$storage.filters : filters;
 
         // filter by icon
@@ -252,9 +251,14 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
                     post[key] = updatedPost[key];
                 }
             }
+            self.filteredPosts.splice(self.filteredPosts.indexOf(post), 1);
             post.$save().then(function (response) {
                 self.assignIconObject(post);
-                console.log(post);
+                if(self.filterPost(post)){
+                    self.filteredPosts.addAsMarker(post);
+                }
+                // console.log(self.indexedPosts[post.id]);
+                // console.log(post);
             }, function (error) {
                 alert('更新失敗!!');
                 console.log(error);
