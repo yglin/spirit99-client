@@ -12,7 +12,7 @@ angular.module('spirit99App')
 function($scope, $mdDialog, ygUserPref, ygServer){
     // ============== Initilize scope model ==================
     // $scope.ygServer = ygServer;
-    ygServer.initialPromises['updateServers'].then(function () {
+    ygServer.initialPromises.updateServers.then(function () {
         $scope.servers = ygServer.servers;
     });
 

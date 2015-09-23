@@ -21,7 +21,7 @@ angular.module('spirit99App')
                 self.clearNullAndEmptyStrings(object[key]);
             }
         }        
-    }
+    };
 
     self.fillDefaults = function (data, defaults) {
         for(var key in defaults){
@@ -41,9 +41,9 @@ angular.module('spirit99App')
 
     self.getHateoasLinks = function(responseHeaders){
         var links = {};
-        if('link' in responseHeaders && responseHeaders['link'].length > 0){
+        if('link' in responseHeaders && responseHeaders.link.length > 0){
            // Split parts by comma
-            var parts = responseHeaders['link'].split(',');
+            var parts = responseHeaders.link.split(',');
             // Parse each part into a named link
             for(var i=0; i<parts.length; i++) {
                 var section = parts[i].split(';');

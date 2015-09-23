@@ -16,8 +16,8 @@ function ($rootScope, uiGmapGoogleMapApi, ygServer, ygUserPref) {
     self.followPostBy = [];
     self.followedPosts = {};
 
-    ygServer.initialPromises['updateServers'].then(function () {
-        self.serverSupportFollowPost = !angular.isUndefined(ygServer.servers[ygUserPref.$storage.selectedServer].followPostBy) && ygServer.servers[ygUserPref.$storage.selectedServer].followPostBy != null;
+    ygServer.initialPromises.updateServers.then(function () {
+        self.serverSupportFollowPost = !angular.isUndefined(ygServer.servers[ygUserPref.$storage.selectedServer].followPostBy) && ygServer.servers[ygUserPref.$storage.selectedServer].followPostBy !== null;
         if(self.serverSupportFollowPost){
             self.followPostBy = ygServer.servers[ygUserPref.$storage.selectedServer].followPostBy;            
             if(angular.isUndefined(ygUserPref.$storage.followedPosts[ygUserPref.$storage.selectedServer])){
@@ -30,7 +30,7 @@ function ($rootScope, uiGmapGoogleMapApi, ygServer, ygUserPref) {
         $rootScope.$watch(function () {
             return ygUserPref.$storage.selectedServer;
         }, function (newValue) {
-            self.serverSupportFollowPost = !angular.isUndefined(ygServer.servers[newValue].followPostBy) && ygServer.servers[newValue].followPostBy != null;        
+            self.serverSupportFollowPost = !angular.isUndefined(ygServer.servers[newValue].followPostBy) && ygServer.servers[newValue].followPostBy !== null;        
             if(self.serverSupportFollowPost){
                 self.followPostBy = ygServer.servers[ygUserPref.$storage.selectedServer].followPostBy;            
                 if(angular.isUndefined(ygUserPref.$storage.followedPosts[ygUserPref.$storage.selectedServer])){
@@ -76,7 +76,7 @@ function ($rootScope, uiGmapGoogleMapApi, ygServer, ygUserPref) {
             self.followedPosts[post.id] = {};
         }
         if(self.followPostBy.indexOf('modify_time') > -1){
-            self.followedPosts[post.id]['lastCheckTime'] = new Date();
+            self.followedPosts[post.id].lastCheckTime = new Date();
         }
     };
 
@@ -84,9 +84,9 @@ function ($rootScope, uiGmapGoogleMapApi, ygServer, ygUserPref) {
         if(!self.serverSupportFollowPost){
             return false;
         }
-        if(self.followPostBy.indexOf('modify_time') > -1
-        && 'modify_time' in post
-        && 'lastCheckTime' in self.followedPosts[post.id]){
+        if(self.followPostBy.indexOf('modify_time') > -1 &&
+        'modify_time' in post &&
+        'lastCheckTime' in self.followedPosts[post.id]){
             var modify_time = new Date(post.modify_time);
             var lastCheckTime = new Date(self.followedPosts[post.id].lastCheckTime);
             if(lastCheckTime  < modify_time){

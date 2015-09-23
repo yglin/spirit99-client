@@ -83,43 +83,47 @@ function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUtils, ygUse
         }
     };
 
-    self.updateServer = function (serverName, portalData) {
-        if(self.validatePortal(portalData) && serverName in self.servers){
+    self.updateServer = function (portalData) {
+        var serverName = portalData.name;
+        var server = self.servers[serverName];
+        if(('portalUrl' in portalData) && portalData.portalUrl !== server.portalUrl){
+        // Got new portalUrl, update with new portal
+            return $http.get(portalData.portalUrl)
+            .success(function (newestData) {
+                if(self.validatePortal(newestData)){
+                    self.servers[serverName] = ygUtils.fillDefaults(newestData, self.portalDataDefaults);            
+                    self.servers[serverName].portalUrl = portalData.portalUrl;
+                }        
+            })
+            .error(function (data, status) {
+                console.log('Failed to update server: status = ' + status + ', data = ' + data);
+            });
+        }
+        else if(self.validatePortal(portalData)){
             self.servers[serverName] = ygUtils.fillDefaults(portalData, self.portalDataDefaults);            
-        }        
+            // self.servers[serverName].portalUrl = portalData.portalUrl;
+            return $q.resolve();
+        }
+        else{
+            console.log('Invalid portal data:' + JSON.stringify(portalData));
+            return $q.reject('Invalid portal data:' + JSON.stringify(portalData));
+        }
     };
 
     self.updateServers = function(){
         console.log('Start update servers');
         ygStatusInfo.statusProcessing('更新電台資料...');
         var updatePromises = {};
+
+        function errorGetPortal (data, status){
+            console.log('Failed to update server: status = ' + status + ', data = ' + data);
+        }
+
         for (var name in self.servers) {
+            // console.log(self.servers[name].portalUrl);
             updatePromises[name] = $http.get(self.servers[name].portalUrl)
-            .success(function (data, status, header, config) {
-                var portalUrl = config.url;
-                if(('portalUrl' in data) && data.portalUrl != portalUrl){
-                // Got new portalUrl, update with new portal
-                    return $http.get(data.portalUrl)
-                    .success(function (newData) {
-                        newData.portalUrl = data.portalUrl;
-                        self.updateServer(newData.name, newData);
-                    })
-                    .error(function (data, status) {
-                        console.log('Failed to update server: status = ' + status + ', data = ' + data);
-                    });
-                }
-                else if(self.validatePortal(data)){
-                    data.portalUrl = portalUrl;
-                    self.updateServer(data.name, data);
-                }
-                else{
-                    console.log('Invalid portal data from ' + portalUrl);
-                    console.log(data);
-                }
-            })
-            .error(function (data, status){
-                console.log('Failed to update server: status = ' + status + ', data = ' + data);
-            });
+            .success(self.updateServer)
+            .error(errorGetPortal);
         }
 
         var promise = $q.allSettled(updatePromises).then(function (dataArray) {

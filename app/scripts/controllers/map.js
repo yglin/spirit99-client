@@ -121,7 +121,7 @@ function($scope, $timeout, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygU
         }
         else{
             self.timeoutShowInfoWindow = $timeout(function () {
-                if(ygUserCtrl.focusedPostId == model.id){
+                if(ygUserCtrl.focusedPostId === model.id){
                     ygAudio.focusOnPost.play();
                     $scope.infoWindow.coords = {
                         latitude: model.latitude,
@@ -136,7 +136,7 @@ function($scope, $timeout, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygU
         if(!ygUserCtrl.openListPosts){
             $timeout.cancel(self.timeoutOpenListPosts);
             self.timeoutOpenListPosts = $timeout(function () {
-                if(ygUserCtrl.focusedPostId == model.id){
+                if(ygUserCtrl.focusedPostId === model.id){
                     ygUserCtrl.openListPosts = true;
                 }
             }, 3000);
@@ -251,7 +251,7 @@ function($scope, $timeout, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygU
                 ygUserCtrl.geocode.results = [];
                 ygUserCtrl.geocode.currentIndex = 0;                
                 self.geocoder.geocode({address: newValue}, function (results, status) {
-                    if(status == googlemaps.GeocoderStatus.OK){
+                    if(status === googlemaps.GeocoderStatus.OK){
                         self.focusOnLocation(results[0].geometry.location, results[0].geometry.viewport);
                         if(results.length > 1){
                             ygUserCtrl.geocode.results = results;
@@ -269,7 +269,7 @@ function($scope, $timeout, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygU
                     }
                     else{
                         console.log("Geocode was not successful for the following reason: " + status);
-                        if(status == googlemaps.GeocoderStatus.ZERO_RESULTS){
+                        if(status === googlemaps.GeocoderStatus.ZERO_RESULTS){
                             ygError.errorMessages.push('找不到符合搜尋條件的地點');
                         }
                         else{

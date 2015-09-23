@@ -22,13 +22,13 @@ function ($rootScope, $q, nodeValidator, ygUserPref, ygServer) {
 
     self.iconCtrls = {};
     self.refreshIconCtrls = function (iconSet) {
-        if(typeof iconSet === 'object' && iconSet != null){
+        if(typeof iconSet === 'object' && iconSet !== null){
             for(var name in self.iconCtrls){
                 if(!(name in iconSet)){
                     delete self.iconCtrls[name];
                 }
             }
-            for(var name in iconSet){
+            for(name in iconSet){
                 if(nodeValidator.isURL(iconSet[name])){
                     self.iconCtrls[name] = {
                         url: iconSet[name],
@@ -39,16 +39,16 @@ function ($rootScope, $q, nodeValidator, ygUserPref, ygServer) {
                     self.iconCtrls[name] = {
                         url: iconSet[name].url,
                         show: true
-                    }
+                    };
                 }
             }
         }
-    }
+    };
 
     self.initialPromises = {};
-    self.initialPromises['refreshIconCtrls'] = ygServer.initialPromises['updateServers']
+    self.initialPromises.refreshIconCtrls = ygServer.initialPromises.updateServers
     .then(function () {
-        self.refreshIconCtrls(ygServer.servers[ygUserPref.$storage.selectedServer].iconSet)
+        self.refreshIconCtrls(ygServer.servers[ygUserPref.$storage.selectedServer].iconSet);
         $rootScope.$watch(function () {
             return ygUserPref.$storage.selectedServer;
         }, function (newValue) {

@@ -8,8 +8,8 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygPost', ['$rootScope', '$timeout', '$q', '$resource', 'nodeValidator', '$mdDialog', 'uiGmapGoogleMapApi', 'ygUtils', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygError', 'ygFollowPost', 'ygStatusInfo',
-function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapGoogleMapApi, ygUtils, ygUserPref, ygUserCtrl, ygServer, ygError, ygFollowPost, ygStatusInfo) {
+.service('ygPost', ['$rootScope', '$window', '$timeout', '$q', '$resource', 'nodeValidator', '$mdDialog', 'uiGmapGoogleMapApi', 'ygUtils', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygError', 'ygFollowPost', 'ygStatusInfo',
+function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapGoogleMapApi, ygUtils, ygUserPref, ygUserCtrl, ygServer, ygError, ygFollowPost, ygStatusInfo) {
     var self = this;
 
     var PostUserFields = ['title', 'context', 'icon', 'author'];
@@ -55,22 +55,22 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
                                 self.iconObjects[postData.iconName] = {};
                                 var source = iconSet[postData.iconName];
                                 var transformed = self.iconObjects[postData.iconName];
-                                transformed['url'] = source['url'];
+                                transformed.url = source.url;
 
                                 if('anchor' in source){
-                                    transformed['anchor'] = new googlemaps.Point(source['anchor'][0], source['anchor'][1]);
+                                    transformed.anchor = new googlemaps.Point(source.anchor[0], source.anchor[1]);
                                 }
                                 if('labelOrigin' in source){
-                                    transformed['labelOrigin'] = new googlemaps.Point(source['labelOrigin'][0], source['labelOrigin'][1]);
+                                    transformed.labelOrigin = new googlemaps.Point(source.labelOrigin[0], source.labelOrigin[1]);
                                 }
                                 if('origin' in source){
-                                    transformed['origin'] = new googlemaps.Point(source['origin'][0], source['origin'][1]);
+                                    transformed.origin = new googlemaps.Point(source.origin[0], source.origin[1]);
                                 }
                                 if('scaledSize' in source){
-                                    transformed['scaledSize'] = new googlemaps.Size(source['scaledSize'][0], source['scaledSize'][1]);
+                                    transformed.scaledSize = new googlemaps.Size(source.scaledSize[0], source.scaledSize[1]);
                                 }
                                 if('size' in source){
-                                    transformed['size'] = new googlemaps.Size(source['size'][0], source['size'][1]);
+                                    transformed.size = new googlemaps.Size(source.size[0], source.size[1]);
                                 }
                                 // console.log(transformed);
                             }
@@ -101,7 +101,7 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
                     scaledSize: new googlemaps.Size(36, 36),
                 };
             }            
-        }
+        };
     });
 
     // This function should be override in map.js
@@ -134,10 +134,12 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
                 if('keywords' in filters[key] && typeof post[key] === 'string'){
                     for (var i = 0; i < filters[key].keywords.length; i++) {
                         var keyword = filters[key].keywords[i];
-                        if(post[key].indexOf(keyword) == -1){
+                        if(post[key].indexOf(keyword) === -1){
                             matchAll = false;
                         }
-                        if(!matchAll)break;
+                        if(!matchAll){
+                            break;
+                        }
                     }
                 }
                 else if('startDate' in filters[key] && 'endDate' in filters[key]){
@@ -154,7 +156,9 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
             else{
                 matchAll = false;
             }
-            if(!matchAll)break;
+            if(!matchAll){
+                break;
+            }
         }
 
         return matchAll;
@@ -251,7 +255,7 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
             locals: {
                 newPost: post
             },
-        })        
+        });      
     };
 
     self.editPost = function (post) {
@@ -269,11 +273,11 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
                 // console.log(self.indexedPosts[post.id]);
                 // console.log(post);
             }, function (error) {
-                if(error.status == 401){
-                    alert('這可能是別人的文章，你沒有權限更改');
+                if(error.status === 401){
+                    $window.alert('這可能是別人的文章，你沒有權限更改');
                 }
                 else{
-                    alert('更新失敗!!');
+                    $window.alert('更新失敗!!');
                 }
                 self.filteredPosts.addAsMarker(post);
                 console.log(error);
@@ -296,11 +300,11 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
                     delete self.indexedPosts[post.id];
                 }, function (error) {
                     self.filteredPosts.addAsMarker(post);
-                    if(error.status == 401){
-                        alert('這可能是別人的文章，你沒有權限刪除');
+                    if(error.status === 401){
+                        $window.alert('這可能是別人的文章，你沒有權限刪除');
                     }
                     else{
-                        alert('刪除失敗!!');
+                        $window.alert('刪除失敗!!');
                     }
                     console.log(error);
                 });
@@ -309,9 +313,9 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
             });
         }
         else{
-            alert('這可能是別人的文章，你沒有權限刪除');            
+            $window.alert('這可能是別人的文章，你沒有權限刪除');            
         }
-    }
+    };
 
     self.popStoryEditor = function (latitude, longitude) {
         if(self.newPost === null){
@@ -319,10 +323,10 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
             // self.newPost = ygUtils.fillDefaults(self.newPost, self.postDataDefaults);
         }
         if(latitude){
-            self.newPost['latitude'] = latitude;
+            self.newPost.latitude = latitude;
         }
         if(longitude){
-            self.newPost['longitude'] = longitude;
+            self.newPost.longitude = longitude;
         }
         // // console.log($scope.newPost);
         return $mdDialog.show({
@@ -424,7 +428,7 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
 
 
     self.initialPromises = {};
-    self.initialPromises['loadPosts'] = $q.allSettled([ygUserPref.initialPromises['getGeolocation'], ygServer.initialPromises['updateServers'], uiGmapGoogleMapApi])
+    self.initialPromises.loadPosts = $q.allSettled([ygUserPref.initialPromises.getGeolocation, ygServer.initialPromises.updateServers, uiGmapGoogleMapApi])
     .then(function () {
         var deferred = $q.defer();
         $timeout(function () {

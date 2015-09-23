@@ -29,7 +29,7 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
         period: {
             fontIcon: 'access_time'
         }
-    }
+    };
     $scope.selectedTool = "search";
     $scope.selectTool = function (toolName) {
         $scope.selectedTool = toolName;
@@ -42,7 +42,7 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
 
 
     $scope.iconSet = {};
-    ygServer.initialPromises['updateServers'].then(function () {
+    ygServer.initialPromises.updateServers.then(function () {
         $scope.serverTitle = ygServer.servers[ygUserPref.$storage.selectedServer].title;
         $scope.serverLogo = ygServer.servers[ygUserPref.$storage.selectedServer].logo;
         // $scope.iconSet = ygServer.servers[ygUserPref.$storage.selectedServer].iconSet;
@@ -72,7 +72,7 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
         $scope.iconCtrls[name].show = !($scope.iconCtrls[name].show);
         ygAudio.toggleIconCtrl.play();
         // console.log(ygUserCtrl.iconCtrls);
-    }
+    };
 
     $scope.openSidenav = function(){
         $mdSidenav('sidenav-left').open();
@@ -107,6 +107,6 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
 
     $scope.nextGeocodeLocation = function () {
         ygUserCtrl.geocode.currentIndex = (ygUserCtrl.geocode.currentIndex + 1) % ygUserCtrl.geocode.results.length;
-    }
+    };
 
 }]);

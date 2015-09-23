@@ -27,7 +27,7 @@ function ($scope, $mdDialog, ygUserPref, ygUserCtrl, newPost){
 
     $scope.selectMarkerIcon = function (iconName) {
         $scope.newPost.icon = iconName;
-    }
+    };
 
     $scope.triggerToolbar = function(){
         $scope.froalaOptions.froala('show', null);

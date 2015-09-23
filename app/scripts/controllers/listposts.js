@@ -44,7 +44,7 @@ function ($scope, $interval, $mdSidenav, ygUserCtrl, ygPost, ygAudio) {
             return;
         }
         // console.log($scope.isMouseOverList);
-        if($scope.focusedPostId != ygUserCtrl.focusedPostId && !$scope.isMouseOverList && !$scope.isScrolling){
+        if($scope.focusedPostId !== ygUserCtrl.focusedPostId && !$scope.isMouseOverList && !$scope.isScrolling){
             var container = angular.element(document.getElementById('post-list-container'));
             var target = angular.element(document.getElementById('post-' + ygUserCtrl.focusedPostId));
             if(container.length > 0 && target.length > 0){
@@ -56,7 +56,7 @@ function ($scope, $interval, $mdSidenav, ygUserCtrl, ygPost, ygAudio) {
                     $scope.focusedPostId = ygUserCtrl.focusedPostId;
                     $scope.isScrolling = false;
                     // console.log('Stop scroll!!');
-                })
+                });
             }        
         }
     }, 100);

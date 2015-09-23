@@ -50,7 +50,7 @@ function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, y
         // Load comments
         var links = ygUtils.getHateoasLinks(getResponseHeaders());
         if('comments' in links){
-            $scope.commentsResource = $resource(links['comments'] + '/:id');
+            $scope.commentsResource = $resource(links.comments + '/:id');
             $scope.comments = $scope.commentsResource.query(
             function (results) {
             },
@@ -71,7 +71,7 @@ function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, y
 
     $scope.deletePost = function () {
         ygPost.deletePost($scope.post);
-    }
+    };
 
     $scope.$watch('followPost',
         function (newValue) {

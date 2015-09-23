@@ -47,7 +47,7 @@ function ($rootScope, ngAudio, ygUserPref, ygServer) {
         }
     };
 
-    ygServer.initialPromises['updateServers'].then(function () {
+    ygServer.initialPromises.updateServers.then(function () {
         self.loadSoundSetFromSelectedServer();
         $rootScope.$watch(function () {
             return ygUserPref.$storage.selectedServer;
