@@ -69,6 +69,10 @@ function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, y
         ygPost.editPost($scope.post);
     };
 
+    $scope.deletePost = function () {
+        ygPost.deletePost($scope.post);
+    }
+
     $scope.$watch('followPost',
         function (newValue) {
             // console.log(newValue);

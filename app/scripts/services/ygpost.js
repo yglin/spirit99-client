@@ -30,7 +30,7 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
             params: {
                 fields: ['id', 'title', 'latitude', 'longitude', 'icon', 'create_time', 'modify_time']
             }
-        },
+        }
     };
 
     self.assignIconObject = function (postData) {};
@@ -280,6 +280,38 @@ function ($rootScope, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapG
             });            
         });  
     };
+
+    self.deletePost = function (post) {
+        if(post.id in ygUserPref.$storage.myPosts){
+            var confirm = $mdDialog.confirm()
+            .title('刪除文章')
+            .content('確定要刪除<br><br><p><b>' + post.title + '</b></p><br><br>這篇文章?')
+            .ariaLabel('刪除文章')
+            .ok('確定')
+            .cancel('想想還是算了');
+            $mdDialog.show(confirm).then(function () {
+                self.filteredPosts.splice(self.filteredPosts.indexOf(post), 1);
+                var password = ygUserPref.$storage.myPosts[post.id].password;
+                post.$delete({id:post.id, password: password}).then(function (response) {
+                    delete self.indexedPosts[post.id];
+                }, function (error) {
+                    self.filteredPosts.addAsMarker(post);
+                    if(error.status == 401){
+                        alert('這可能是別人的文章，你沒有權限刪除');
+                    }
+                    else{
+                        alert('刪除失敗!!');
+                    }
+                    console.log(error);
+                });
+            }, function () {
+                console.log('那你再想想吧');
+            });
+        }
+        else{
+            alert('這可能是別人的文章，你沒有權限刪除');            
+        }
+    }
 
     self.popStoryEditor = function (latitude, longitude) {
         if(self.newPost === null){
