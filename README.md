@@ -3,11 +3,9 @@
 This project is generated with [yo angular generator](https://github.com/yeoman/generator-angular)
 version 0.12.1.
 
-## TODOs
-1. IconSet from server include origin, scaledSize and anchor options
-2. Add "expiryDate" field to post, indicate the date when post expires and won't show on map
-2. User can follow up post, show user with new comments of followed-up post
-3. User can connect posts, with or without any reason
+## Principles
+1. Server declares most of its functionalities (What data it presents and what data it can handle) through portal data.
+2. Discoverable UI, some user actions bring out more available actions, and take a look at [this article]{http://scottberkun.com/essays/26-the-myth-of-discoverability/}
 
 ## Portal data from server
 | data key | required | type | description | default value |
