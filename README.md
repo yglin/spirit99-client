@@ -5,7 +5,7 @@ version 0.12.1.
 
 ## Principles
 1. Server declares most of its functionalities (What data it presents and what data it can handle) through portal data.
-2. Discoverable UI, some user actions bring out more available actions, and take a look at [this article]{http://scottberkun.com/essays/26-the-myth-of-discoverability/}
+2. Discoverable UI, some user actions bring out more available actions, and take a look at [this article](http://scottberkun.com/essays/26-the-myth-of-discoverability/)
 
 ## Portal data from server
 | data key | required | type | description | default value |
