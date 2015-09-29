@@ -232,6 +232,10 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
             }
             ygUtils.updateMaxBounds(extraParams.bounds);
             ygStatusInfo.statusIdle();
+        },
+        function (error) {
+            console.log(error);
+            ygStatusInfo.statusIdle();            
         }).$promise;
     };
 
