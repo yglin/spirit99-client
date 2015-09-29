@@ -52,25 +52,36 @@
             <br>
 
             <!-- New comment inputs -->
-            <div layout='row' ng-show='isSupportComment'>
-                <div flex='10' layout-padding>
-                    <img src="images/icon-comment-48.png" />
-                </div>
-                <div flex layout='column'>
-                    <div class='md-whiteframe-z3' layout-padding>
-                        <textarea froala='froalaOptions' ng-model="newComment.context"></textarea>
-                    </div>
-                    <div layout='row' layout-align='space-around center'>
-                        <md-input-container flex>
-                            <label>作者</label>
-                            <input ng-model="newComment.author">
-                        </md-input-container>
-                        <div>
-                            <md-button ng-click='addComment(newComment)' ng-disabled='!newComment.context'>發表</md-button>
+            <form name='commentForm' ng-show='isSupportComment'>
+                    <div layout='row'>
+                        <div flex='10' layout-padding>
+                            <img src="images/icon-comment-48.png" />
+                        </div>
+                        <div flex layout='column'>
+                            <md-input-container>
+                            <div class='md-whiteframe-z3' layout-padding>
+                                <textarea required name='context' froala='froalaOptions' ng-model="newComment.context"></textarea>
+                            </div>
+                            <div ng-messages='commentForm.context.$error'>
+                                <div ng-message='required'>留言必須有內容</div>
+                            </div>
+                            </md-input-container>
+
+                            <div layout='row' layout-align='space-around center'>
+                                <md-input-container flex>
+                                    <label>作者</label>
+                                    <input name='author' required ng-model="newComment.author">
+                                    <ng-messages for='commentForm.author.$error'>
+                                        <ng-message when='required'>留言必須有作者</ng-message>
+                                    </ng-messages>
+                                </md-input-container>
+                                <div>
+                                    <md-button type='button' ng-click='addComment(newComment)' ng-disabled='!newComment.context || !newComment.author'>發表</md-button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
+            </form>
 
         </md-content>
     </md-dialog-content>
