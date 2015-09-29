@@ -61,6 +61,11 @@ angular.module('spirit99App')
     self.historyBoundsUnion = null;
     self.maxBounds = null;
 
+    self.resetMaxBounds = function () {
+        self.historyBoundsUnion = null;
+        self.maxBounds = null;        
+    };
+
     self.updateMaxBounds = function (bounds) {
         return;
     };

@@ -13,8 +13,11 @@ function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, y
     var self = this;
 
     self.commentResource = ygServer.getSupportComment();
-
     $scope.isSupportComment = self.commentResource !== false && self.commentResource !== null;
+    if($scope.isSupportComment){
+        $scope.comments = self.commentResource.query({post_id:post.id});
+        $scope.newComment = new self.commentResource();
+    }        
 
     $scope.froalaOptions = {
         inlineMode: true,
@@ -23,12 +26,12 @@ function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, y
         placeholder: '留言...'
     };
     $scope.post = post;
+    // console.log($scope.post);
 
     $scope.isMyPost = post.id in ygUserPref.$storage.myPosts;
 
     $scope.formatDatetime = ygUtils.formatDatetime;
 
-    $scope.commentsResource = null;
     $scope.comments = [];
 
     $scope.newComment = {
@@ -36,44 +39,8 @@ function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, y
         author: ''
     };
 
-    $scope.canFollowPost = ygFollowPost.serverSupportFollowPost;
+    $scope.canFollowPost = ygFollowPost.supportFollowPost;
     $scope.followPost = $scope.post.id in ygFollowPost.followedPosts;
-
-    if($scope.followPost){
-        console.log(ygFollowPost.followedPosts[$scope.post.id].lastCheckTime);
-    }
-
-    $scope.postLoaded = false;
-    ygPost.postResource.get({id:post.id},
-    function(result, getResponseHeaders){
-        for(var key in result){
-            if(!(key in $scope.post)){
-                $scope.post[key] = result[key];
-            }
-        }        
-        $scope.postLoaded = true;
-
-        // Load comments
-        if(self.commentResource){
-            $scope.comments = self.commentResource.query({post_id:$scope.post.id});
-            $scope.newComment = new self.commentResource();
-        }
-        // var links = ygUtils.getHateoasLinks(getResponseHeaders());
-        // if('comments' in links){
-        //     $scope.commentsResource = $resource(links.comments + '/:id');
-        //     $scope.comments = $scope.commentsResource.query(
-        //     function (results) {
-        //     },
-        //     function (error) {
-        //         // body...
-        //     });
-
-        //     $scope.newComment = new $scope.commentsResource();
-        // }
-    },
-    function(error){
-
-    });
 
     $scope.editPost = function () {
         ygPost.editPost($scope.post);

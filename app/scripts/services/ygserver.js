@@ -143,18 +143,50 @@ function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUtils, ygUse
         return promise;
     };
 
+    self.getSupportPost = function () {
+        if('post' in self.resources){
+            return self.resources.post;
+        }
+        else if('postUrl' in self.selectedServer){
+            self.resources.post = $resource(
+                self.selectedServer.postUrl + '/:id', {},
+                {
+                    'getMarkers': {
+                        method: 'GET',
+                        isArray: true,
+                        params: {
+                            fields: ['id', 'title', 'latitude', 'longitude', 'icon', 'create_time', 'modify_time']
+                        }
+                    }
+                });
+            return  self.resources.post;       
+        }
+        else{
+            return false;
+        }
+    }
+
     self.getSupportComment = function () {
         if('comment' in self.resources){
             return self.resources.comment;            
         }
         else if('commentUrl' in self.selectedServer){
-            self.resources.comment = $resource(self.selectedServer['commentUrl']);
+            self.resources.comment = $resource(self.selectedServer.commentUrl);
             return self.resources.comment;
         }
         else{
             return false;
         }
     };
+
+    self.getSupportFollowPost = function () {
+        if('followPostBy' in self.selectedServer && self.selectedServer.followPostBy !== null){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 
     self.initialPromises = {
         'updateServers': self.updateServers()

@@ -22,6 +22,12 @@ function ($q, $localStorage) {
                 portalUrl: 'http://localhost:3000/portal/localstory',
                 show: true
             },
+            birdhome: {
+                name: 'birdhome',
+                title: '小小鳥兒要回家',
+                portalUrl: 'http://localhost:3000/portal/birdhome',
+                show: true
+            }
         },
         map: {
             center:{

@@ -1,6 +1,6 @@
 <md-dialog aria-label="View Post" flex='60'>
     <md-toolbar>
-        <div class="md-toolbar-tools md-toolbar-tools-bottom" ng-show='postLoaded'>
+        <div class="md-toolbar-tools md-toolbar-tools-bottom">
             <div flex='50'>
                 <div>
                 <a data-fittext data-fittext-max='36' data-fittext-min='18'>{{ post.title | words: 20 | characters: 50 }}</a>
@@ -24,11 +24,7 @@
         </div>
     </md-toolbar>
     <md-dialog-content>
-        <div layout='column' layout-align="center center" style='height:100%;' ng-show='!postLoaded'>
-            <p style="font-size:200%">讀取中...</p>
-            <md-progress-circular md-mode="indeterminate" class='md-accent'></md-progress-circular>
-        </div>
-        <md-content layout='column' layout-margin layout-padding ng-show='postLoaded'>
+        <md-content layout='column' layout-margin layout-padding>
             <div layout='row' ng-show='canFollowPost' layout-align='end center'>
                 <md-checkbox ng-model='followPost' ng-click="toggleFollowPost()">追蹤本篇</md-checkbox>
             </div>
@@ -60,7 +56,7 @@
                         <div flex layout='column'>
                             <md-input-container>
                             <div class='md-whiteframe-z3' layout-padding>
-                                <textarea required name='context' froala='froalaOptions' ng-model="newComment.context"></textarea>
+                                <textarea required name='context' aria-label='comment' froala='froalaOptions' ng-model="newComment.context"></textarea>
                             </div>
                             <div ng-messages='commentForm.context.$error'>
                                 <div ng-message='required'>留言必須有內容</div>

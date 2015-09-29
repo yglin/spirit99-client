@@ -40,8 +40,6 @@ function($scope, $mdDialog, ygUserPref, ygServer){
             });
     };
 
-    $scope.switchServer = function(serverName){
-        ygUserPref.$storage.selectedServer = serverName;
-    };
+    $scope.switchServer = ygServer.switchServer;
 
 }]);

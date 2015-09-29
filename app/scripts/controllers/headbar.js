@@ -43,19 +43,18 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
 
     $scope.iconSet = {};
     ygServer.initialPromises.updateServers.then(function () {
-        $scope.serverTitle = ygServer.servers[ygUserPref.$storage.selectedServer].title;
-        $scope.serverLogo = ygServer.servers[ygUserPref.$storage.selectedServer].logo;
-        // $scope.iconSet = ygServer.servers[ygUserPref.$storage.selectedServer].iconSet;
+        $scope.serverTitle = ygServer.selectedServer.title;
+        $scope.serverLogo = ygServer.selectedServer.logo;
 
         $scope.$watch(
             function(){
-                return ygUserPref.$storage.selectedServer;
+                return ygServer.selectedServer;
             },
             function(newValue, oldValue){
             // console.log('Got you~!! ' + oldValue + ' --> ' + newValue);
-                if(newValue in ygServer.servers){
-                    $scope.serverTitle = ygServer.servers[newValue].title;
-                    $scope.serverLogo = ygServer.servers[newValue].logo;
+                if('title' in ygServer.selectedServer){
+                    $scope.serverTitle = ygServer.selectedServer.title;
+                    $scope.serverLogo = ygServer.selectedServer.logo;
                     // $scope.iconSet = ygServer.servers[newValue].iconSet;
                 }
                 else{

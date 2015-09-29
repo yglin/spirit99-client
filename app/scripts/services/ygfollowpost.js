@@ -12,55 +12,52 @@ angular.module('spirit99App')
 function ($rootScope, uiGmapGoogleMapApi, ygServer, ygUserPref) {
     var self = this;
 
-    self.serverSupportFollowPost = false;
+    self.supportFollowPost = false;
     self.followPostBy = [];
     self.followedPosts = {};
 
+    self.switchServer = function (server) {
+        self.followPostBy = server.followPostBy;
+        if(angular.isUndefined(ygUserPref.$storage.followedPosts[server.name])){
+            ygUserPref.$storage.followedPosts[server.name] = {};
+        }
+        self.followedPosts = ygUserPref.$storage.followedPosts[server.name];
+    };
+
     ygServer.initialPromises.updateServers.then(function () {
-        self.serverSupportFollowPost = !angular.isUndefined(ygServer.servers[ygUserPref.$storage.selectedServer].followPostBy) && ygServer.servers[ygUserPref.$storage.selectedServer].followPostBy !== null;
-        if(self.serverSupportFollowPost){
-            self.followPostBy = ygServer.servers[ygUserPref.$storage.selectedServer].followPostBy;            
-            if(angular.isUndefined(ygUserPref.$storage.followedPosts[ygUserPref.$storage.selectedServer])){
-                ygUserPref.$storage.followedPosts[ygUserPref.$storage.selectedServer] = {};
-            }
-            self.followedPosts = ygUserPref.$storage.followedPosts[ygUserPref.$storage.selectedServer];
-            // console.log(ygUserPref.$storage.followedPosts[ygUserPref.$storage.selectedServer]);
+        self.supportFollowPost = ygServer.getSupportFollowPost();
+        if(self.supportFollowPost){
+            self.switchServer(ygServer.selectedServer);
         }
 
         $rootScope.$watch(function () {
-            return ygUserPref.$storage.selectedServer;
+            return ygServer.selectedServer;
         }, function (newValue) {
-            self.serverSupportFollowPost = !angular.isUndefined(ygServer.servers[newValue].followPostBy) && ygServer.servers[newValue].followPostBy !== null;        
-            if(self.serverSupportFollowPost){
-                self.followPostBy = ygServer.servers[ygUserPref.$storage.selectedServer].followPostBy;            
-                if(angular.isUndefined(ygUserPref.$storage.followedPosts[ygUserPref.$storage.selectedServer])){
-                    ygUserPref.$storage.followedPosts[ygUserPref.$storage.selectedServer] = {};
-                }
-                self.followedPosts = ygUserPref.$storage.followedPosts[ygUserPref.$storage.selectedServer];
-                // console.log(ygUserPref.$storage.followedPosts[ygUserPref.$storage.selectedServer]);
+            self.supportFollowPost = ygServer.getSupportFollowPost();
+            if(self.supportFollowPost){
+                self.switchServer(ygServer.selectedServer);
             }
         });
     });
 
     self.isFollowingPost = function (post) {
-        if(!self.serverSupportFollowPost){
+        if(!self.supportFollowPost){
             return false;
         }
         return post.id in self.followedPosts;
     };
 
     self.followPost = function (post) {
-        if(!self.serverSupportFollowPost){
+        if(!self.supportFollowPost){
             return false;
         }
         if(!(post.id in self.followedPosts)){
-            // console.log(ygUserPref.$storage.followedPosts[ygUserPref.$storage.selectedServer]);
             self.followedPosts[post.id] = {};
         }
     };
 
     self.unfollowPost = function (post) {
-        if(!self.serverSupportFollowPost){
+        if(!self.supportFollowPost){
             return false;
         }
         if(post.id in self.followedPosts){
@@ -69,7 +66,7 @@ function ($rootScope, uiGmapGoogleMapApi, ygServer, ygUserPref) {
     };
 
     self.checkPost = function (post) {
-        if(!self.serverSupportFollowPost){
+        if(!self.supportFollowPost){
             return false;
         }
         if(!(post.id in self.followedPosts)){
@@ -81,7 +78,7 @@ function ($rootScope, uiGmapGoogleMapApi, ygServer, ygUserPref) {
     };
 
     self.isSomethingNew = function (post) {
-        if(!self.serverSupportFollowPost){
+        if(!self.supportFollowPost){
             return false;
         }
         if(self.followPostBy.indexOf('modify_time') > -1 &&

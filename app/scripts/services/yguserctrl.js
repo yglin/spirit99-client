@@ -8,8 +8,8 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygUserCtrl', ['$rootScope', '$q', 'nodeValidator', 'ygUserPref', 'ygServer',
-function ($rootScope, $q, nodeValidator, ygUserPref, ygServer) {
+.service('ygUserCtrl', ['$rootScope', '$q', 'nodeValidator', 'ygServer',
+function ($rootScope, $q, nodeValidator, ygServer) {
     var self = this;
     self.openListPosts = false;
     self.focusedPostId = -1;
@@ -48,11 +48,11 @@ function ($rootScope, $q, nodeValidator, ygUserPref, ygServer) {
     self.initialPromises = {};
     self.initialPromises.refreshIconCtrls = ygServer.initialPromises.updateServers
     .then(function () {
-        self.refreshIconCtrls(ygServer.servers[ygUserPref.$storage.selectedServer].iconSet);
+        self.refreshIconCtrls(ygServer.selectedServer.iconSet);
         $rootScope.$watch(function () {
-            return ygUserPref.$storage.selectedServer;
-        }, function (newValue) {
-            self.refreshIconCtrls(ygServer.servers[newValue].iconSet);
+            return ygServer.selectedServer;
+        }, function () {
+            self.refreshIconCtrls(ygServer.selectedServer.iconSet);
         });
         return $q.resolve();
     });

@@ -41,16 +41,15 @@ function ($rootScope, ngAudio, ygUserPref, ygServer) {
     self.loadSoundSet(self.defaultSoundSet);
 
     self.loadSoundSetFromSelectedServer = function(){
-        var portalData = ygServer.servers[ygUserPref.$storage.selectedServer];
-        if('soundSet' in portalData){
-            self.loadSoundSet(portalData.soundSet);
+        if('soundSet' in ygServer.selectedServer){
+            self.loadSoundSet(ygServer.selectedServer.soundSet);
         }
     };
 
     ygServer.initialPromises.updateServers.then(function () {
         self.loadSoundSetFromSelectedServer();
         $rootScope.$watch(function () {
-            return ygUserPref.$storage.selectedServer;
+            return ygServer.selectedServer;
         }, function  () {
             self.loadSoundSetFromSelectedServer();
         });

@@ -22,16 +22,6 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
     self.filteredPosts = [];
     self.indexedPosts = {};
     self.newPost = null;
-    self.postResource = null;
-    self.postResourceActions = {
-        'getMarkers': {
-            method: 'GET',
-            isArray: true,
-            params: {
-                fields: ['id', 'title', 'latitude', 'longitude', 'icon', 'create_time', 'modify_time']
-            }
-        }
-    };
 
     self.assignIconObject = function (postData) {};
 
@@ -46,7 +36,7 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
 
         self.assignIconObject = function (postData) {
             if(!nodeValidator.isURL(postData.icon)){
-                var iconSet = ygServer.servers[ygUserPref.$storage.selectedServer].iconSet;
+                var iconSet = ygServer.selectedServer.iconSet;
                 if(postData.icon in iconSet){
                     postData.iconName = postData.icon;
                     if(!(postData.iconName in self.iconObjects)){
@@ -174,26 +164,35 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
         // console.log(ygUserPref.$storage.myPosts);
     };
 
-    self.buildPostResource = function (selectedServer) {
-        if(!(selectedServer in ygServer.servers)){
-            console.log('Can not find server: ' + selectedServer);
-            return false;
+    self.readPost = function (post) {
+        var postResource = ygServer.getSupportPost();
+        if(!postResource){
+            console.log('Post resource not supported by server');
+            return $q.reject('Post resource not supported by server');
         }
-        var postUrl = ygServer.servers[selectedServer].postUrl;
-        if(!postUrl){
-            console.log('Not found postUrl in server portal data: ');
-            console.log(ygServer.servers[selectedServer]);
-            return false;
-        }
-        // Create new post resource for current server
-        return $resource(postUrl + '/:id', {}, self.postResourceActions);                
+        ygStatusInfo.statusProcessing('讀取資料...');
+        var promise = postResource.get({id:post.id},
+        function (result) {
+            for(var key in result){
+                if(!(key in post)){
+                    post[key] = result[key];
+                }
+            }        
+        }, function (error) {
+            $window.alert('讀取文章內容失敗');
+            console.log(error);
+        }).$promise;
+        promise.finally(function () {
+            ygStatusInfo.statusIdle();
+        });
+        return promise;
     };
 
     self.loadPosts = function () {
-        // console.log('Load Posts!!');
-        if(typeof self.postResource === 'undefined' || self.postResource === null){
-            console.log('Post resource not created');
-            return $q.reject('Post resource not created');
+        var postResource = ygServer.getSupportPost();
+        if(!postResource){
+            console.log('Post resource not supported by server');
+            return $q.reject('Post resource not supported by server');
         }
 
         if(ygUtils.withinMaxBounds(ygUserPref.$storage.map.bounds)){
@@ -213,8 +212,8 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
         }
         extraParams.bounds = ygUserPref.$storage.map.bounds;
 
-        ygStatusInfo.statusProcessing('下載資料...');
-        return self.postResource.getMarkers(extraParams, function(responses){
+        ygStatusInfo.statusProcessing('讀取資料...');
+        return postResource.getMarkers(extraParams, function(responses){
             console.log('Load ' + responses.length + ' posts');
             for (var i = 0; i < responses.length; i++) {
                 if(!(responses[i].id in self.indexedPosts) && self.validatePostData(responses[i])){
@@ -243,9 +242,7 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
         console.log('Reload posts~ ');
         self.filteredPosts.length = 0;
         self.indexedPosts = {};
-        if(typeof self.postResource === 'undefined' || self.postResource === null){
-            self.postResource = self.buildPostResource(ygUserPref.$storage.selectedServer);
-        }
+        ygUtils.resetMaxBounds();
         return self.loadPosts();
     };
 
@@ -322,8 +319,14 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
     };
 
     self.popStoryEditor = function (latitude, longitude) {
+        var postResource = ygServer.getSupportPost();
+        if(!postResource){
+            console.log('Post resource not supported by server');
+            return $q.reject('Post resource not supported by server');
+        }
+
         if(self.newPost === null){
-            self.newPost = new self.postResource();
+            self.newPost = new postResource();
             // self.newPost = ygUtils.fillDefaults(self.newPost, self.postDataDefaults);
         }
         if(latitude){
@@ -348,35 +351,30 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
                     self.newPost[key] = newPost[key];
                 }
             }
-            if(self.postResource !== null){
-                var promise = self.newPost.$save()
-                .then(function (result) {
-                    if(self.validatePostData(result) && !(result.id in self.indexedPosts)){
-                        var newPost = ygUtils.fillDefaults(result, self.postDataDefaults);
-                        self.assignIconObject(newPost);
-                        self.indexedPosts[newPost.id] = newPost;
-                        if(self.filterPost(self.indexedPosts[newPost.id])){
-                            self.filteredPosts.addAsMarker(self.indexedPosts[newPost.id]);
-                        }
-                        self.markAsMyPost(newPost);
-                        ygFollowPost.followPost(newPost);
-                        self.newPost = null;
-                        console.log('Success, post added!!');
-                        return $q.resolve();                        
+            var promise = self.newPost.$save()
+            .then(function (result) {
+                if(self.validatePostData(result) && !(result.id in self.indexedPosts)){
+                    var newPost = ygUtils.fillDefaults(result, self.postDataDefaults);
+                    self.assignIconObject(newPost);
+                    self.indexedPosts[newPost.id] = newPost;
+                    if(self.filterPost(self.indexedPosts[newPost.id])){
+                        self.filteredPosts.addAsMarker(self.indexedPosts[newPost.id]);
                     }
-                    else{
-                        return $q.reject('Invalid post data: ' + result.toString());
-                    }
-                }, function (error) {
-                    ygError.errorMessages.push('新增資料至遠端伺服器失敗');
-                    return $q.reject(error);
-                });
-                // ygProgress.show('新增資料...', promise);
-                return promise;
-            }else{
-                console.log('Not connected to post resources');
-                return $q.reject('Post resource not created yet');
-            }
+                    self.markAsMyPost(newPost);
+                    ygFollowPost.followPost(newPost);
+                    self.newPost = null;
+                    console.log('Success, post added!!');
+                    return $q.resolve();                        
+                }
+                else{
+                    return $q.reject('Invalid post data: ' + result.toString());
+                }
+            }, function (error) {
+                ygError.errorMessages.push('新增資料至遠端伺服器失敗');
+                return $q.reject(error);
+            });
+            // ygProgress.show('新增資料...', promise);
+            return promise;
         }, function(newPost){
             for(var key in newPost){
                 if(self.newPost[key] !== newPost[key]){
@@ -389,46 +387,25 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
     };
 
     self.showPostDetail = function (postID) {
-        // console.log(self.indexedPosts[postID]);
-        $mdDialog.show({
-            templateUrl: 'views/post.html',
-            controller: 'PostController',
-            clickOutsideToClose: true,
-            locals: {
-                post: self.indexedPosts[postID]
-            }
-        })
-        .finally(function () {
-            if(ygFollowPost.isFollowingPost(self.indexedPosts[postID])){
-                ygFollowPost.removeNotification(self.indexedPosts[postID]);
-                ygFollowPost.checkPost(self.indexedPosts[postID]);
-            }
+        var post = self.indexedPosts[postID];        
+        self.readPost(post)
+        .then(function () {
+            $mdDialog.show({
+                templateUrl: 'views/post.html',
+                controller: 'PostController',
+                clickOutsideToClose: true,
+                locals: {
+                    post: post
+                }
+            })
+            .finally(function () {
+                if(ygFollowPost.isFollowingPost(post)){
+                    ygFollowPost.removeNotification(post);
+                    ygFollowPost.checkPost(post);
+                }
+            });
         });
     };
-
-    $rootScope.$watch(function () {
-        return ygUserPref.$storage.filters;
-    }, function  () {
-        self.filteredPosts.length = 0;
-        for(var id in self.indexedPosts){
-            if(self.filterPost(self.indexedPosts[id])){
-                // self.filteredPosts.push(self.indexedPosts[id]);
-                self.filteredPosts.addAsMarker(self.indexedPosts[id]);
-            }
-        }
-    }, true);        
-
-    $rootScope.$watch(function () {
-        return ygUserCtrl.iconCtrls;
-    }, function  () {
-        self.filteredPosts.length = 0;
-        for(var id in self.indexedPosts){
-            if(self.filterPost(self.indexedPosts[id])){
-                // self.filteredPosts.push(self.indexedPosts[id]);
-                self.filteredPosts.addAsMarker(self.indexedPosts[id]);
-            }
-        }
-    }, true);        
 
 
     self.initialPromises = {};
@@ -444,6 +421,37 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
                 deferred.reject();
             });
         }, 3000);
+
+        $rootScope.$watch(function () {
+            return ygServer.selectedServer;
+        }, function () {
+            self.reloadPosts();
+        });
+
+        $rootScope.$watch(function () {
+            return ygUserPref.$storage.filters;
+        }, function  () {
+            self.filteredPosts.length = 0;
+            for(var id in self.indexedPosts){
+                if(self.filterPost(self.indexedPosts[id])){
+                    // self.filteredPosts.push(self.indexedPosts[id]);
+                    self.filteredPosts.addAsMarker(self.indexedPosts[id]);
+                }
+            }
+        }, true);        
+
+        $rootScope.$watch(function () {
+            return ygUserCtrl.iconCtrls;
+        }, function  () {
+            self.filteredPosts.length = 0;
+            for(var id in self.indexedPosts){
+                if(self.filterPost(self.indexedPosts[id])){
+                    // self.filteredPosts.push(self.indexedPosts[id]);
+                    self.filteredPosts.addAsMarker(self.indexedPosts[id]);
+                }
+            }
+        }, true);        
+
         return deferred.promise;
     });
 }]);
