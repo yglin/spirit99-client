@@ -10,6 +10,12 @@
 angular.module('spirit99App')
 .controller('PostController', ['$scope', '$resource', '$mdDialog', 'ygUtils', 'ygUserPref', 'ygServer', 'ygPost', 'ygFollowPost', 'post',
 function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, ygFollowPost, post) {
+    var self = this;
+
+    self.commentResource = ygServer.getSupportComment();
+
+    $scope.isSupportComment = self.commentResource !== false && self.commentResource !== null;
+
     $scope.froalaOptions = {
         inlineMode: true,
         minHeight: 50,
@@ -48,18 +54,22 @@ function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, y
         $scope.postLoaded = true;
 
         // Load comments
-        var links = ygUtils.getHateoasLinks(getResponseHeaders());
-        if('comments' in links){
-            $scope.commentsResource = $resource(links.comments + '/:id');
-            $scope.comments = $scope.commentsResource.query(
-            function (results) {
-            },
-            function (error) {
-                // body...
-            });
-
-            $scope.newComment = new $scope.commentsResource();
+        if(self.commentResource){
+            $scope.comments = self.commentResource.query({post_id:$scope.post.id});
+            $scope.newComment = new self.commentResource();
         }
+        // var links = ygUtils.getHateoasLinks(getResponseHeaders());
+        // if('comments' in links){
+        //     $scope.commentsResource = $resource(links.comments + '/:id');
+        //     $scope.comments = $scope.commentsResource.query(
+        //     function (results) {
+        //     },
+        //     function (error) {
+        //         // body...
+        //     });
+
+        //     $scope.newComment = new $scope.commentsResource();
+        // }
     },
     function(error){
 
@@ -85,13 +95,13 @@ function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, y
     });
 
     $scope.addComment = function (comment) {
-        if($scope.commentsResource === null){
+        if(!$scope.isSupportComment){
             return;
         }
-        $scope.newComment.$save().then(
+        $scope.newComment.$save({post_id:$scope.post.id}).then(
         function (result) {
             $scope.comments.push($scope.newComment);
-            $scope.newComment = new $scope.commentsResource();
+            $scope.newComment = new self.commentResource();
             // Automatic follow post if added comment
             ygFollowPost.followPost($scope.post);
             $scope.followPost = $scope.post.id in ygFollowPost.followedPosts;

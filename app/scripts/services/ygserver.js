@@ -18,6 +18,8 @@ function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUtils, ygUse
         logo: 'https://www.evansville.edu/residencelife/images/greenLogo.png',
     };
     self.servers = ygUserPref.$storage.servers;
+    self.selectedServer = self.servers[ygUserPref.$storage.selectedServer];
+    self.resources = {};
 
     self.validatePortal = function(portalData){
         for (var i = 0; i < portalRules.requiredFields.length; i++) {
@@ -38,7 +40,10 @@ function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUtils, ygUse
 
     self.switchServer = function(serverName){
         if(serverName in self.servers){
-            self.servers[serverName].show = true;
+            ygUserPref.$storage.selectedServer = serverName;
+            self.selectedServer = self.servers[serverName];
+            self.selectedServer.show = true;
+            self.resources = {};
         }
         else{
             console.log('沒有找到' + serverName + '啊！你是不是忘記load啦？');
@@ -138,8 +143,17 @@ function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUtils, ygUse
         return promise;
     };
 
-    self.createCommentResource = function (post_id) {
-        return $resource(self.currentServer.postUrl + '/:id/comments');
+    self.getSupportComment = function () {
+        if('comment' in self.resources){
+            return self.resources.comment;            
+        }
+        else if('commentUrl' in self.selectedServer){
+            self.resources.comment = $resource(self.selectedServer['commentUrl']);
+            return self.resources.comment;
+        }
+        else{
+            return false;
+        }
     };
 
     self.initialPromises = {
