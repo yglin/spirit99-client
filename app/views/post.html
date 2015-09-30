@@ -31,9 +31,13 @@
             <!-- Post context -->
             <md-content layout-padding style='min-height:100px;' ng-bind-html='post.context'>
             </md-content>
-            
+            <br>
             <md-divider></md-divider>
-
+            <br>
+            <div flex ng-show='isLoadingComments' layout='row' layout-align='center center'>
+                <div style='font-size:200%'>讀取留言...</div>
+                <md-progress-circular class='md-accent' md-mode='indeterminate'></md-progress-circular>
+            </div>
             <!-- List user comments -->
             <md-list>
                 <md-list-item class='md-3-line md-whiteframe-z2' ng-repeat='comment in comments | orderBy:"create_time"'>

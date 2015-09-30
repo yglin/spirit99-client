@@ -14,8 +14,16 @@ function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, y
 
     self.commentResource = ygServer.getSupportComment();
     $scope.isSupportComment = self.commentResource !== false && self.commentResource !== null;
+    $scope.isLoadingComments = false;
     if($scope.isSupportComment){
-        $scope.comments = self.commentResource.query({post_id:post.id});
+        $scope.isLoadingComments = true;
+        self.commentResource.query({post_id:post.id},
+        function(responses, headersGetter){
+            $scope.comments = responses;
+        })
+        .$promise.finally(function () {
+            $scope.isLoadingComments = false;
+        });
         $scope.newComment = new self.commentResource();
     }        
 
