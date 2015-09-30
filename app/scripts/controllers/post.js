@@ -42,11 +42,6 @@ function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, y
 
     $scope.comments = [];
 
-    $scope.newComment = {
-        context: '',
-        author: ''
-    };
-
     $scope.canFollowPost = ygFollowPost.supportFollowPost;
     $scope.followPost = $scope.post.id in ygFollowPost.followedPosts;
 
