@@ -8,13 +8,16 @@ img.grayscale {
 </style>
 
 <md-toolbar>
-    <div layout='row' layout-align='space-between center'>
-        <div flex='5'>
-        <md-button class='md-icon-button' aria-label='Open Side Menu' ng-click='openSidenav()'>
-            <md-icon class='material-icons' ng-style="{color: 'white'}">menu</md-icon>
-        </md-button>
+    <div layout='row' layout-align='start center'>
+        <div flex='10' layout='row'>
+            <md-button class='md-icon-button' aria-label='Open Side Menu' ng-click='openSidenav()'>
+                <md-icon class='material-icons' ng-style="{color: 'white'}">menu</md-icon>
+            </md-button>
+            <md-button class='md-icon-button' aria-label='Open Posts List' ng-click='openListPosts()'>
+                <md-icon class='material-icons' ng-style="styleOfViewListButton">view_list</md-icon>
+            </md-button>
         </div>
-        <div flex='35' layout='row' layout-align='end center'>
+        <div flex='30' layout='row' layout-align='end center'>
              <div style='position:relative;width:48px;height:48px;'>
                 <div style='position:absolute;top:0px;left:0px;'>
                     <md-fab-speed-dial md-direction="down" class="md-fling">
@@ -55,7 +58,7 @@ img.grayscale {
                 <input type='date' ng-model="create_time.endDate" />
             </div>
         </div>
-        <div flex='20' layout='row' layout-align='center center'>
+        <div flex='30' layout='row' layout-align='start center'>
             <div layout-margin>
                 <img alt="{{serverTitle}}" ng-src="{{serverLogo}}" class="md-avatar" ng-style="{'max-width':'48px', 'max-height':'48px'}" ng-hide='serverLogo == ""' />
             </div>

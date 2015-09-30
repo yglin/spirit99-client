@@ -77,6 +77,16 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
         $mdSidenav('sidenav-left').open();
     };
 
+    $scope.openListPosts = function () {
+        ygUserCtrl.openListPosts = !(ygUserCtrl.openListPosts);
+    };
+    $scope.styleOfViewListButton = ygUserCtrl.openListPosts ? {color: 'white'} : {color: 'lightgrey'};
+    $scope.$watch(function () {
+        return ygUserCtrl.openListPosts;
+    }, function () {
+        $scope.styleOfViewListButton = ygUserCtrl.openListPosts ? {color: 'white'} : {color: 'lightgrey'};    
+    });
+
     $scope.onEnterAddress = function (address) {
         // console.log('Navigate to ' + address);
         if(address.length > 0){
