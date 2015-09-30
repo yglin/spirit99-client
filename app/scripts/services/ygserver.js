@@ -156,6 +156,12 @@ function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUtils, ygUse
                         params: {
                             fields: ['id', 'title', 'latitude', 'longitude', 'icon', 'create_time', 'modify_time']
                         }
+                    },
+                    'getDetails': {
+                        method: 'GET',
+                        params: {
+                            fields: ['author', 'context']
+                        }
                     }
                 });
             return  self.resources.post;       

@@ -171,8 +171,9 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
             return $q.reject('Post resource not supported by server');
         }
         ygStatusInfo.statusProcessing('讀取資料...');
-        var promise = postResource.get({id:post.id},
+        var promise = postResource.getDetails({id:post.id},
         function (result) {
+            console.log(result);
             for(var key in result){
                 if(!(key in post)){
                     post[key] = result[key];
