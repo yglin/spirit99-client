@@ -58,7 +58,7 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
                     // $scope.iconSet = ygServer.servers[newValue].iconSet;
                 }
                 else{
-                    $scope.serverTitle = '請選擇站點';
+                    $scope.serverTitle = '請選擇電台';
                     $scope.serverLogo = '';            
                 }
         });

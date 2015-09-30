@@ -139,7 +139,6 @@ function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUtils, ygUse
             ygStatusInfo.statusIdle();
         });
 
-        // ygProgress.show('更新各站點...', promise);
         return promise;
     };
 

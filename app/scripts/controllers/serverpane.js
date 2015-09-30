@@ -24,11 +24,11 @@ function($scope, $mdDialog, ygUserPref, ygServer){
     $scope.removeServer = function(serverName){
         var confirm = $mdDialog.confirm()
             .parent(angular.element(document.body))
-            .title('移除站點')
-            .content('確定要移除站點：' + ygServer.servers[serverName].title + '?')
+            .title('移除電台')
+            .content('確定要移除電台：' + ygServer.servers[serverName].title + '?')
             .ariaLabel('Remove Server')
             .ok('確定')
-            .cancel('我按錯了');
+            .cancel('對不起我按錯了');
 
         $mdDialog.show(confirm).then(
             function() {
