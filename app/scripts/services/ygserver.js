@@ -8,8 +8,8 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygServer', ['$rootScope', '$http', '$resource', '$q', 'portalRules', 'ygError', 'ygUtils', 'ygUserPref', 'ygStatusInfo',
-function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUtils, ygUserPref, ygStatusInfo) {
+.service('ygServer', ['$rootScope', '$http', '$resource', '$q', 'uiGmapGoogleMapApi', 'nodeValidator', 'portalRules', 'ygError', 'ygUtils', 'ygUserPref', 'ygStatusInfo',
+function ($rootScope, $http, $resource, $q, uiGmapGoogleMapApi, nodeValidator, portalRules, ygError, ygUtils, ygUserPref, ygStatusInfo) {
     // AngularJS will instantiate a singleton by calling "new" on self function
     var self = this;
 
@@ -205,7 +205,46 @@ function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUtils, ygUse
         else{
             return false;
         }
-    }
+    };
+
+    self.getSupportIconSet = function () {
+        return false;
+    };
+    uiGmapGoogleMapApi.then(function (googlemapsApi) {
+        self.getSupportIconSet = function () {
+            if(!self.isSelectedServer()){
+                return false;
+            }
+            if('iconSet' in self.resources){
+                return self.resources.iconSet;
+            }
+            else if('iconSet' in self.selectedServer && self.selectedServer.iconSet !== null){
+                // Build icon objects
+                self.resources.iconSet = {
+                    default: {
+                        url: 'images/icon-chat-48.png',
+                        scaledSize: new googlemapsApi.Size(36, 36)
+                    }
+                };
+                for(var iconName in self.selectedServer.iconSet){
+                    var iconData  = self.selectedServer.iconSet[iconName];
+                    if(nodeValidator.isURL(iconData)){
+                        self.resources.iconSet[iconName] = {
+                            url: iconData,
+                            scaledSize: new googlemapsApi.Size(36, 36)
+                        };
+                    }
+                    else if(typeof iconData === 'object' && 'url' in iconData){
+                        self.resources.iconSet[iconName] = iconData;
+                    }
+                }
+                return self.resources.iconSet;
+            }
+            else{
+                return false;
+            }
+        }
+    });
 
     self.initialPromises = {
         'updateServers': self.updateServers()

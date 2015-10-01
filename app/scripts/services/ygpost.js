@@ -27,70 +27,21 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
 
     uiGmapGoogleMapApi.then(function (googlemaps) {
 
-        self.iconObjects = {
-            'default': {
-                url: 'images/icon-chat-48.png',
-                scaledSize: new googlemaps.Size(36, 36),
-            }
-        };
-
         self.assignIconObject = function (postData) {
-            if(!nodeValidator.isURL(postData.icon)){
-                var iconSet = ygServer.selectedServer.iconSet;
+            var iconSet = ygServer.getSupportIconSet();
+            if(nodeValidator.isURL(postData.icon)){
+                postData.iconObject = postData.icon;
+            }
+            else if(iconSet){
                 if(postData.icon in iconSet){
                     postData.iconName = postData.icon;
-                    if(!(postData.iconName in self.iconObjects)){
-                        if(typeof iconSet[postData.iconName] === 'object'){
-                            if('url' in iconSet[postData.iconName]){
-                                self.iconObjects[postData.iconName] = {};
-                                var source = iconSet[postData.iconName];
-                                var transformed = self.iconObjects[postData.iconName];
-                                transformed.url = source.url;
-
-                                if('anchor' in source){
-                                    transformed.anchor = new googlemaps.Point(source.anchor[0], source.anchor[1]);
-                                }
-                                if('labelOrigin' in source){
-                                    transformed.labelOrigin = new googlemaps.Point(source.labelOrigin[0], source.labelOrigin[1]);
-                                }
-                                if('origin' in source){
-                                    transformed.origin = new googlemaps.Point(source.origin[0], source.origin[1]);
-                                }
-                                if('scaledSize' in source){
-                                    transformed.scaledSize = new googlemaps.Size(source.scaledSize[0], source.scaledSize[1]);
-                                }
-                                if('size' in source){
-                                    transformed.size = new googlemaps.Size(source.size[0], source.size[1]);
-                                }
-                                // console.log(transformed);
-                            }
-                            else{
-                                // No url, invalid icon object
-                                postData.iconName = 'default';
-                            }
-                        }
-                        else if(nodeValidator.isURL(iconSet[postData.iconName])){
-                            self.iconObjects[postData.iconName] = {
-                                url: iconSet[postData.iconName],
-                                scaledSize: new googlemaps.Size(36, 36),
-                            };
-                        }
-                        else{
-                            postData.iconName = 'default';
-                        }
-                    }
-                    postData.iconObject = self.iconObjects[postData.iconName];
+                    postData.iconObject = iconSet[postData.iconName];
                 }
                 else{
-                    postData.iconObject = self.iconObjects['default'];
+                    postData.iconName = 'default';
+                    postData.iconObject = iconSet.default;
                 }
             }
-            else{
-                postData.iconObject = {
-                    url: postData.icon,
-                    scaledSize: new googlemaps.Size(36, 36),
-                };
-            }            
         };
     });
 
