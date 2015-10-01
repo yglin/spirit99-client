@@ -21,23 +21,24 @@ function ($rootScope, $q, nodeValidator, ygServer) {
     };
 
     self.iconCtrls = {};
-    self.refreshIconCtrls = function (iconSet) {
-        if(typeof iconSet === 'object' && iconSet !== null){
+    self.refreshIconCtrls = function (server) {
+        if(server !== null && 'iconSet' in server
+        && typeof server.iconSet === 'object' && server.iconSet !== null){
             for(var name in self.iconCtrls){
-                if(!(name in iconSet)){
+                if(!(name in server.iconSet)){
                     delete self.iconCtrls[name];
                 }
             }
-            for(name in iconSet){
-                if(nodeValidator.isURL(iconSet[name])){
+            for(name in server.iconSet){
+                if(nodeValidator.isURL(server.iconSet[name])){
                     self.iconCtrls[name] = {
-                        url: iconSet[name],
+                        url: server.iconSet[name],
                         show: true
                     };
                 }
-                else if('url' in iconSet[name]){
+                else if('url' in server.iconSet[name]){
                     self.iconCtrls[name] = {
-                        url: iconSet[name].url,
+                        url: server.iconSet[name].url,
                         show: true
                     };
                 }
@@ -48,11 +49,11 @@ function ($rootScope, $q, nodeValidator, ygServer) {
     self.initialPromises = {};
     self.initialPromises.refreshIconCtrls = ygServer.initialPromises.updateServers
     .then(function () {
-        self.refreshIconCtrls(ygServer.selectedServer.iconSet);
+        self.refreshIconCtrls(ygServer.selectedServer);
         $rootScope.$watch(function () {
             return ygServer.selectedServer;
         }, function () {
-            self.refreshIconCtrls(ygServer.selectedServer.iconSet);
+            self.refreshIconCtrls(ygServer.selectedServer);
         });
         return $q.resolve();
     });

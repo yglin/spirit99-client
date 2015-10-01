@@ -41,26 +41,36 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
     };
 
 
+    self.switchServer = function (server) {
+        if(angular.isUndefined(server) || server === null){
+            $scope.serverTitle = '請選擇電台';
+            $scope.serverLogo = '';            
+        }
+        else{
+            $scope.serverTitle = ygServer.selectedServer.title;
+            $scope.serverLogo = ygServer.selectedServer.logo;            
+        }
+    };
+
     $scope.iconSet = {};
     ygServer.initialPromises.updateServers.then(function () {
-        $scope.serverTitle = ygServer.selectedServer.title;
-        $scope.serverLogo = ygServer.selectedServer.logo;
-
+        self.switchServer(null);
         $scope.$watch(
             function(){
                 return ygServer.selectedServer;
             },
-            function(newValue, oldValue){
-            // console.log('Got you~!! ' + oldValue + ' --> ' + newValue);
-                if('title' in ygServer.selectedServer){
-                    $scope.serverTitle = ygServer.selectedServer.title;
-                    $scope.serverLogo = ygServer.selectedServer.logo;
-                    // $scope.iconSet = ygServer.servers[newValue].iconSet;
-                }
-                else{
-                    $scope.serverTitle = '請選擇電台';
-                    $scope.serverLogo = '';            
-                }
+            function(){
+                self.switchServer(ygServer.selectedServer);
+            // // console.log('Got you~!! ' + oldValue + ' --> ' + newValue);
+            //     if(ygServer.selectedServer !== null && 'title' in ygServer.selectedServer){
+            //         $scope.serverTitle = ygServer.selectedServer.title;
+            //         $scope.serverLogo = ygServer.selectedServer.logo;
+            //         // $scope.iconSet = ygServer.servers[newValue].iconSet;
+            //     }
+            //     else{
+            //         $scope.serverTitle = '請選擇電台';
+            //         $scope.serverLogo = '';            
+            //     }
         });
 
     });

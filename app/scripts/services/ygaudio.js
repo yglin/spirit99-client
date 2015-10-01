@@ -41,7 +41,7 @@ function ($rootScope, ngAudio, ygUserPref, ygServer) {
     self.loadSoundSet(self.defaultSoundSet);
 
     self.loadSoundSetFromSelectedServer = function(){
-        if('soundSet' in ygServer.selectedServer){
+        if(ygServer.selectedServer !== null && 'soundSet' in ygServer.selectedServer){
             self.loadSoundSet(ygServer.selectedServer.soundSet);
         }
     };

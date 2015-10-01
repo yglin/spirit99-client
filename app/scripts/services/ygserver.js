@@ -18,8 +18,12 @@ function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUtils, ygUse
         logo: 'https://www.evansville.edu/residencelife/images/greenLogo.png',
     };
     self.servers = ygUserPref.$storage.servers;
-    self.selectedServer = self.servers[ygUserPref.$storage.selectedServer];
+    self.selectedServer = null;
     self.resources = {};
+
+    self.isSelectedServer = function () {
+        return !angular.isUndefined(self.selectedServer) && self.selectedServer !== null;
+    };
 
     self.validatePortal = function(portalData){
         for (var i = 0; i < portalRules.requiredFields.length; i++) {
@@ -57,15 +61,14 @@ function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUtils, ygUse
             if(self.validatePortal(response)){
                 if(response.name in self.servers){
                     // Server already exists, update it
-                    for(var key in response){
-                        self.servers[response.name][key] = response[key];
-                    }
+                    self.updateServer(response);
                 }
                 else{
                     // Add brand new server
                     // self.fillDefaultOptions(response);
                     self.servers[response.name] = ygUtils.fillDefaults(response, self.portalDataDefaults);
                 }
+                self.switchServer(response.name);
             }
             else{
                 var errorMessage = "載入失敗，請檢查傳送門網址是否正確：" + portalUrl;
@@ -82,10 +85,15 @@ function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUtils, ygUse
     };
 
     self.removeServer = function(serverName){
-        self.servers[serverName].show = false;
-        if(self.currentServerName === serverName){
-            self.currentServerName = '';
+        if(self.selectedServer.name === serverName){
+            self.selectedServer = null;
         }
+        delete self.servers[serverName];
+    };
+
+    self.errorGetPortal = function (response, status, headersGetter, request){
+        // console.log(request);
+        console.log('Failed to update server, portal url = ' + request.url + ', status = ' + status + ', response data = ' + response);
     };
 
     self.updateServer = function (portalData) {
@@ -100,9 +108,7 @@ function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUtils, ygUse
                     self.servers[serverName].portalUrl = portalData.portalUrl;
                 }        
             })
-            .error(function (data, status) {
-                console.log('Failed to update server: status = ' + status + ', data = ' + data);
-            });
+            .error(self.errorGetPortal);
         }
         else if(self.validatePortal(portalData)){
             self.servers[serverName] = ygUtils.fillDefaults(portalData, self.portalDataDefaults);            
@@ -120,15 +126,11 @@ function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUtils, ygUse
         ygStatusInfo.statusProcessing('更新電台資料...');
         var updatePromises = {};
 
-        function errorGetPortal (data, status){
-            console.log('Failed to update server: status = ' + status + ', data = ' + data);
-        }
-
         for (var name in self.servers) {
             // console.log(self.servers[name].portalUrl);
             updatePromises[name] = $http.get(self.servers[name].portalUrl)
             .success(self.updateServer)
-            .error(errorGetPortal);
+            .error(self.errorGetPortal);
         }
 
         var promise = $q.allSettled(updatePromises).then(function (dataArray) {
@@ -143,6 +145,10 @@ function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUtils, ygUse
     };
 
     self.getSupportPost = function () {
+        if(!self.isSelectedServer()){
+            return false;
+        }
+
         if('post' in self.resources){
             return self.resources.post;
         }
@@ -172,6 +178,10 @@ function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUtils, ygUse
     }
 
     self.getSupportComment = function () {
+        if(!self.isSelectedServer()){
+            return false;
+        }
+
         if('comment' in self.resources){
             return self.resources.comment;            
         }
@@ -185,6 +195,10 @@ function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUtils, ygUse
     };
 
     self.getSupportFollowPost = function () {
+        if(!self.isSelectedServer()){
+            return false;
+        }
+
         if('followPostBy' in self.selectedServer && self.selectedServer.followPostBy !== null){
             return true;
         }

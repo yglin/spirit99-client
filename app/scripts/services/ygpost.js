@@ -194,6 +194,11 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
     };
 
     self.loadPosts = function () {
+        if(!ygServer.isSelectedServer()){
+            console.log('No selected server');
+            return $q.reject('No selected server');
+        }
+
         var postResource = ygServer.getSupportPost();
         if(!postResource){
             console.log('Post resource not supported by server');
