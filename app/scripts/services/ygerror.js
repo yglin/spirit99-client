@@ -18,7 +18,7 @@ angular.module('spirit99App')
         var alert = $mdDialog.alert()
             .title('靠妖那Ａ安內')
             .content(errorMessage)
-            .ok('喔。');
+            .ok('喔。好');
         $mdDialog
             .show( alert );
     };

@@ -76,7 +76,7 @@ function ($rootScope, $http, $resource, $q, portalRules, ygError, ygUtils, ygUse
         .error(function(response, status){
             // error
             var errorMessage = "載入失敗，請檢查傳送門網址是否正確：" + portalUrl;
-            self.errorMessages.push(errorMessage);
+            ygError.errorMessages.push(errorMessage);
             console.log(errorMessage + " response:\n" + status + "\n" + response);
         });
     };
