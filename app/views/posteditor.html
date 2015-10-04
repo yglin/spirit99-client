@@ -1,3 +1,12 @@
+<style type="text/css">
+img.grayscale {
+    filter: url("data:image/svg+xml;utf8,&lt;svg xmlns=\'http://www.w3.org/2000/svg\'&gt;&lt;filter id=\'grayscale\'&gt;&lt;feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/&gt;&lt;/filter&gt;&lt;/svg&gt;#grayscale"); /* Firefox 10+, Firefox on Android */
+    filter: gray; /* IE6-9 */
+    -webkit-filter: grayscale(100%); /* Chrome 19+, Safari 6+, Safari 6+ iOS */
+}
+
+</style>
+
 <md-dialog aria-label="Tell your story" flex='60'>
 <md-toolbar>
     <div class="md-toolbar-tools">
@@ -9,6 +18,12 @@
     </div>
 </md-toolbar>
 <md-dialog-content>
+    <div layout='row'>
+        <md-button type='button' class='md-icon-button' ng-repeat='(name, icon) in iconCtrls' aria-label="Marker Icon" ng-click="selectMarkerIcon(name)">
+            <img ng-src='{{icon.url}}' width='100%' height='100%' ng-class='{grayscale: name != newPost.icon}' />
+            <md-tooltip>{{name}}</md-tooltip>
+        </md-button>
+    </div>
     <form name='postForm'>
         <md-input-container>
             <label>標題</label>
@@ -33,20 +48,6 @@
                         <md-tooltip>上傳圖片</md-tooltip>
                     </md-button>
                     <span flex></span>
-                    <md-fab-speed-dial md-direction="left" class="md-fling" ng-hide='angular.isUndefined(iconSet) || iconSet === null'>
-                        <md-fab-trigger>
-                            <md-button type='button' aria-label="menu" class="md-fab md-raised md-mini">
-                                <img ng-src='{{iconCtrls[newPost.icon].url}}' width='100%' height='100%'/>
-                                <md-tooltip>選擇地圖標示</md-tooltip>
-                            </md-button>
-                        </md-fab-trigger>
-                        <md-fab-actions>
-                            <md-button type='button' ng-repeat='(name, icon) in iconCtrls' aria-label="Marker Icon" class="md-fab md-raised md-mini" ng-click="selectMarkerIcon(name)">
-                                <img ng-src='{{icon.url}}' width='100%' height='100%'/>
-                                <md-tooltip>{{name}}</md-tooltip>
-                            </md-button>
-                        </md-fab-actions>
-                    </md-fab-speed-dial>
                 </div>
             </md-toolbar>
             <!-- </div> -->
