@@ -75,6 +75,7 @@ function ($q, $localStorage) {
     });
 
     self.promiseGetGeolocation = function (map, zoom) {
+        // console.log(self.$storage.startAtGeolocation);
         if(!self.$storage.startAtGeolocation){
             // No need to get geolocation, return imediatedlly resolved promise
             return $q.resolve();
