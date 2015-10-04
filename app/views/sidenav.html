@@ -4,6 +4,9 @@
             <md-button class='md-icon-button' aria-label='Server List' ng-click='switchPane("server-list")'>
                 <md-icon class='material-icons' ng-style="{color: 'white'}">radio</md-icon>
             </md-button>
+            <md-button class='md-icon-button' aria-label='User Settings' ng-click='switchPane("settings")'>
+                <md-icon class='material-icons' ng-style="{color: 'white'}">settings</md-icon>
+            </md-button>
 <!--             <md-button class='md-icon-button' aria-label='Search' ng-click='switchPane("search")'>
                 <md-icon class='material-icons' ng-style="{color: 'white'}">search</md-icon>
             </md-button>
@@ -28,6 +31,8 @@
                     </md-button>
                 </md-list-item>
             </md-list>
+        </div>
+        <div ng-show='selectedPane == "settings"' ng-include='"views/user-settings.html"' ng-controller='UserSettingsController'>
         </div>
 <!--         <div ng-show='selectedPane == "search"' ng-controller="SearchPaneController">
             <md-subheader class="md-accent">搜尋</md-subheader>
