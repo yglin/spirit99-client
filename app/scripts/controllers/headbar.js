@@ -30,7 +30,7 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
             fontIcon: 'access_time'
         }
     };
-    $scope.selectedTool = "search";
+    $scope.selectedTool = "markers";
     $scope.selectTool = function (toolName) {
         $scope.selectedTool = toolName;
     };
@@ -76,12 +76,22 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
     });
 
     $scope.iconCtrls = ygUserCtrl.iconCtrls;
+    $scope.iconCount = ygUserCtrl.iconCount;
+    $scope.$watch(function () {
+        return ygUserCtrl.iconCount;
+    }, function () {
+        $scope.iconCount = ygUserCtrl.iconCount;
+    })
 
     $scope.toggleIcon = function (name) {
         $scope.iconCtrls[name].show = !($scope.iconCtrls[name].show);
         ygAudio.toggleIconCtrl.play();
         // console.log(ygUserCtrl.iconCtrls);
     };
+
+    $scope.openIconMenu = function ($mdOpenMenu, event) {
+        $mdOpenMenu(event);
+    }
 
     $scope.openSidenav = function(){
         $mdSidenav('sidenav-left').open();

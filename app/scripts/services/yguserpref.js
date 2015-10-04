@@ -16,16 +16,10 @@ function ($q, $localStorage) {
     // $localStorage.$reset();
     self.$storage = $localStorage.$default({
         servers: {
-            localstory: {
-                name: ' localstory',
-                title: '在地的故事',
-                portalUrl: 'http://localhost:3000/portal/localstory',
-                show: true
-            },
-            birdhome: {
-                name: 'birdhome',
-                title: '小小鳥兒要回家',
-                portalUrl: 'http://localhost:3000/portal/birdhome',
+            'nuclear-waste': {
+                name: 'nuclear-waste',
+                title: '核廢料掩埋場',
+                portalUrl: 'http://nuclear-waste-dev.elasticbeanstalk.com/portal',
                 show: true
             }
         },
@@ -74,7 +68,7 @@ function ($q, $localStorage) {
             editable: true,
             visible: false
         },
-        selectedServer: 'localstory',
+        selectedServer: 'nuclear-waste',
         startAtGeolocation: true,
         followedPosts: {},
         myPosts: {}

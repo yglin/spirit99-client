@@ -21,6 +21,7 @@ function ($rootScope, $q, nodeValidator, ygServer) {
     };
 
     self.iconCtrls = {};
+    self.iconCount = 0;
     self.refreshIconCtrls = function (server) {
         if(server !== null && 'iconSet' in server
         && typeof server.iconSet === 'object' && server.iconSet !== null){
@@ -43,6 +44,7 @@ function ($rootScope, $q, nodeValidator, ygServer) {
                     };
                 }
             }
+            self.iconCount = Object.keys(self.iconCtrls).length;
         }
     };
 
