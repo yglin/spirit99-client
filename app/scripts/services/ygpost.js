@@ -370,7 +370,7 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
 
 
     self.initialPromises = {};
-    self.initialPromises.loadPosts = $q.allSettled([ygUserPref.initialPromises.getGeolocation, ygServer.initialPromises.updateServers, uiGmapGoogleMapApi])
+    self.initialPromises.loadPosts = $q.allSettled([ygUserPref.initialPromises.startUpAtMap, ygServer.initialPromises.updateServers, uiGmapGoogleMapApi])
     .then(function () {
         var deferred = $q.defer();
         $timeout(function () {

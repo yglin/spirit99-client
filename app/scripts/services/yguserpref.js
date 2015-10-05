@@ -40,6 +40,13 @@ function ($q, $localStorage) {
             },
             zoom: 6,
         },
+        mapHome: {
+            center:{
+                latitude: 23.973875,
+                longitude: 120.982024
+            },
+            zoom: 16
+        },
         filters: {
             title: {
                 keywords: []
@@ -69,17 +76,40 @@ function ($q, $localStorage) {
             visible: false
         },
         selectedServer: 'nuclear-waste',
+        startUpAtMap: 'geolocation',
         startAtGeolocation: true,
         followedPosts: {},
         myPosts: {}
     });
 
-    self.promiseGetGeolocation = function (map, zoom) {
-        // console.log(self.$storage.startAtGeolocation);
-        if(!self.$storage.startAtGeolocation){
-            // No need to get geolocation, return imediatedlly resolved promise
+    self.setMapHome = function () {
+        self.$storage.mapHome = angular.copy(self.$storage.map);
+    };
+
+    self.promiseStartUpAtMap = function () {
+        if(self.$storage.startUpAtMap === 'geolocation'){
+            return self.promiseGetGeolocation(self.$storage.map);
+        }
+        else if(self.$storage.startUpAtMap === 'useMapHome'){
+            for(var key in self.$storage.mapHome){
+                if(key in self.$storage.map){
+                    self.$storage.map[key] = self.$storage.mapHome[key];
+                }
+            }
             return $q.resolve();
         }
+        else{
+            return $q.resolve();
+        }
+    };
+
+    self.promiseGetGeolocation = function (map, zoom) {
+        // console.log(self.$storage.startUpAtMap);
+        // console.log(self.$storage.startAtGeolocation);
+        // if(!self.$storage.startAtGeolocation){
+        //     // No need to get geolocation, return imediatedlly resolved promise
+        //     return $q.resolve();
+        // }
         console.log('Start get geolocation');
         zoom = typeof zoom !== 'undefined' ? zoom : 15;
         var deferred = $q.defer();
@@ -105,7 +135,8 @@ function ($q, $localStorage) {
     };
 
     self.initialPromises = {
-        'getGeolocation': self.promiseGetGeolocation(self.$storage.map)
+        'startUpAtMap': self.promiseStartUpAtMap()
+        // 'getGeolocation': self.promiseGetGeolocation(self.$storage.map)
     };
 
 }]);

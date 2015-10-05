@@ -1,4 +1,12 @@
 <div>
-    <md-checkbox ng-model='settings.startAtGeolocation'>開啟網站時自動定位我的位置</md-checkbox>
+    <!-- <md-checkbox ng-model='settings.startAtGeolocation'>開啟網站時自動定位我的位置</md-checkbox> -->
+    <div layout-padding>
+        <p>開啟網站時，顯示的地區範圍：</p>
+        <md-radio-group ng-model='settings.startUpAtMap'>
+            <md-radio-button value='geolocation'>自動定位我所在的地區</md-radio-button>
+            <md-radio-button value='lastTime'>上ㄧ次瀏覽的地區</md-radio-button>
+            <md-radio-button value='useMapHome' ng-click='setMapHome()'>使用目前顯示的地區當首頁</md-radio-button>
+        </md-radio-group>
+    </div>
     <md-button class='md-primary' ng-click='unfollowAllPosts()'>停止追蹤所有文章</md-button>
 </div>
