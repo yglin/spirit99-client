@@ -8,12 +8,22 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('UserSettingsController', ['$scope', 'ygUserPref', function ($scope, ygUserPref) {
+.controller('UserSettingsController', ['$scope', '$mdDialog', 'ygUserPref', 'ygFollowPost',
+function ($scope, $mdDialog, ygUserPref, ygFollowPost) {
     $scope.settings = ygUserPref.$storage;
-    // $scope.$watch(function () {
-    //     return $scope.startAtGeolocation;
-    // }, function () {
-    //     console.log('startAtGeolocation = ', $scope.startAtGeolocation);
-    //     ygUserPref.$storage.startAtGeolocation = $scope.startAtGeolocation;
-    // });
+    $scope.unfollowAllPosts = function () {
+        $mdDialog.show(
+            $mdDialog.confirm()
+            .title('停止追蹤文章')
+            .content('確定要停止追蹤目前追蹤中的所有文章？')
+            .ok('確定')
+            .cancel('我按錯了')
+        ).then(function () {
+            // console.log('followedPosts go die~!!');
+            for(var post_id in ygFollowPost.followedPosts){
+                delete ygFollowPost.followedPosts[post_id];
+            }
+            // console.log(ygFollowPost.followedPosts);
+        });
+    };
 }]);
