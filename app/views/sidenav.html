@@ -7,39 +7,12 @@
             <md-button class='md-icon-button' aria-label='User Settings' ng-click='switchPane("settings")'>
                 <md-icon class='material-icons' ng-style="{color: 'white'}">settings</md-icon>
             </md-button>
-<!--             <md-button class='md-icon-button' aria-label='Search' ng-click='switchPane("search")'>
-                <md-icon class='material-icons' ng-style="{color: 'white'}">search</md-icon>
-            </md-button>
- -->        </div>
+        </div>
     </md-toolbar>
-        <div ng-show='selectedPane == "server-list"' ng-controller="ServerPaneController">
-            <md-list>
-                <md-list-item ng-repeat='(name, server) in servers' ng-show='server.show' ng-click="switchServer(name)">
-                    <img alt="{{ server.title }}" ng-src="{{ server.logo }}" class="md-avatar" />
-                    <p flex>{{ server.title}}</p>
-                    <md-button class='md-icon-button' aria-label='Remove' ng-click='removeServer(name); $event.stopPropagation()'>
-                        <md-icon class='material-icons'>clear</md-icon>
-                    </md-button>
-                </md-list-item>
-                <md-list-item>
-                    <md-input-container flex>
-                        <label>新增電台傳送門網址</label>
-                        <input ng-model='newServerPortalUrl'>
-                    </md-input-container>
-                    <md-button class='md-icon-button' aria-label='Add' ng-click='addServer(newServerPortalUrl)'>
-                        <md-icon class='material-icons'>add</md-icon>
-                    </md-button>
-                </md-list-item>
-            </md-list>
+    <md-content>
+        <div ng-show='selectedPane == "server-list"' ng-include='"views/server-list.html"' ng-controller="ServerListController">
         </div>
         <div ng-show='selectedPane == "settings"' ng-include='"views/user-settings.html"' ng-controller='UserSettingsController'>
         </div>
-<!--         <div ng-show='selectedPane == "search"' ng-controller="SearchPaneController">
-            <md-subheader class="md-accent">搜尋</md-subheader>
-            <md-content layout-padding>
-                <md-chips ng-model="keywords" placeholder='增加關鍵字' secondary-placeholder="輸入關鍵字">
-                </md-chips>
-            </md-content>
-        </div>
- -->    </md-tabs>
+    </md-content>
 </md-sidenav>

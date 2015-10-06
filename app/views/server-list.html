@@ -1,0 +1,18 @@
+<md-list>
+    <md-list-item ng-repeat='(name, server) in servers' ng-show='server.show' ng-click="switchServer(name)">
+        <img alt="{{ server.title }}" ng-src="{{ server.logo }}" class="md-avatar" />
+        <p flex>{{ server.title}}</p>
+        <md-button class='md-icon-button' aria-label='Remove' ng-click='removeServer(name); $event.stopPropagation()'>
+            <md-icon class='material-icons'>clear</md-icon>
+        </md-button>
+    </md-list-item>
+    <md-list-item>
+        <md-input-container flex>
+            <label>新增電台傳送門網址</label>
+            <input ng-model='newServerPortalUrl'>
+        </md-input-container>
+        <md-button class='md-icon-button' aria-label='Add' ng-click='addServer(newServerPortalUrl)'>
+            <md-icon class='material-icons'>add</md-icon>
+        </md-button>
+    </md-list-item>
+</md-list>
