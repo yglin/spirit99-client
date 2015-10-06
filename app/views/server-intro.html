@@ -1,0 +1,14 @@
+<md-dialog aria-label="Server Intro" flex='60'>
+    <md-toolbar>
+        <div flex layout='row' layout-align='center center'>
+            <div layout-margin>
+                <img alt="{{server.title}}" ng-src="{{server.logo}}" class="md-avatar" ng-style="{'max-width':'48px', 'max-height':'48px'}" ng-hide='server.logo == ""' />
+            </div>
+            <h1 class='md-headline'>{{server.title}}</h1>
+        </div>
+    </md-toolbar>
+    <md-dialog-content>
+        <iframe width='100%' ng-if='introUrl' ng-src='{{introUrl}}'></iframe>
+        <div ng-bind-html="introContent"></div>
+    </md-dialog-content>
+</md-dialog>

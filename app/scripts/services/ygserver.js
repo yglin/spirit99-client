@@ -8,8 +8,8 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygServer', ['$rootScope', '$http', '$resource', '$q', 'uiGmapGoogleMapApi', 'nodeValidator', 'portalRules', 'ygError', 'ygUtils', 'ygUserPref', 'ygStatusInfo',
-function ($rootScope, $http, $resource, $q, uiGmapGoogleMapApi, nodeValidator, portalRules, ygError, ygUtils, ygUserPref, ygStatusInfo) {
+.service('ygServer', ['$rootScope', '$http', '$resource', '$q', '$mdDialog', 'uiGmapGoogleMapApi', 'nodeValidator', 'portalRules', 'ygError', 'ygUtils', 'ygUserPref', 'ygStatusInfo',
+function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeValidator, portalRules, ygError, ygUtils, ygUserPref, ygStatusInfo) {
     // AngularJS will instantiate a singleton by calling "new" on self function
     var self = this;
 
@@ -51,6 +51,23 @@ function ($rootScope, $http, $resource, $q, uiGmapGoogleMapApi, nodeValidator, p
         }
         else{
             console.log('沒有找到' + serverName + '啊！你是不是忘記load啦？');
+        }
+    };
+
+    self.showServerIntro = function (serverName) {
+        if(serverName in self.servers){
+            $mdDialog.show({
+                templateUrl: 'views/server-intro.html',
+                controller: 'ServerIntroController',
+                clickOutsideToClose: true,
+                locals: {
+                    server: self.servers[serverName]
+                },
+                preserveScope: true
+            });
+        }
+        else{
+            ygError.errorMessages.push('找不到電台資料：' + serverName);
         }
     };
 

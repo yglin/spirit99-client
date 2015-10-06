@@ -1,5 +1,5 @@
 <md-list>
-    <md-list-item ng-repeat='(name, server) in servers' ng-show='server.show' ng-click="switchServer(name)">
+    <md-list-item ng-repeat='(name, server) in servers' ng-show='server.show' ng-click="showServerIntro(name)">
         <img alt="{{ server.title }}" ng-src="{{ server.logo }}" class="md-avatar" />
         <p flex>{{ server.title}}</p>
         <md-button class='md-icon-button' aria-label='Remove' ng-click='removeServer(name); $event.stopPropagation()'>

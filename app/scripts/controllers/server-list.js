@@ -40,6 +40,6 @@ function($scope, $mdDialog, ygUserPref, ygServer){
             });
     };
 
-    $scope.switchServer = ygServer.switchServer;
+    $scope.showServerIntro = ygServer.showServerIntro;
 
 }]);
