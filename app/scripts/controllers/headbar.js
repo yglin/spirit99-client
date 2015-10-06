@@ -85,7 +85,7 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
 
     $scope.toggleIcon = function (name) {
         $scope.iconCtrls[name].show = !($scope.iconCtrls[name].show);
-        ygAudio.toggleIconCtrl.play();
+        ygAudio.play('toggleIconCtrl');
         // console.log(ygUserCtrl.iconCtrls);
     };
 

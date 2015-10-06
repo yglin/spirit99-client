@@ -31,6 +31,15 @@ function ($rootScope, ngAudio, ygUserPref, ygServer) {
         }
     };
 
+    self.play = function (soundName) {
+        // console.log(ygUserPref.$storage.soundFX);
+        if(ygUserPref.$storage.soundFX && soundName in self){
+            // console.log('Play ' + soundName);
+            self[soundName].progress = 0;
+            self[soundName].play();
+        }
+    };
+
     self.loadSoundSet = function (soundSet) {
         for(var key in soundSet){
             self[key] = ngAudio.load(soundSet[key].file);
@@ -46,12 +55,15 @@ function ($rootScope, ngAudio, ygUserPref, ygServer) {
         }
     };
 
+    // ngAudio.mute();
+
     ygServer.initialPromises.updateServers.then(function () {
         self.loadSoundSetFromSelectedServer();
         $rootScope.$watch(function () {
             return ygServer.selectedServer;
-        }, function  () {
+        }, function () {
             self.loadSoundSetFromSelectedServer();
+            // ngAudio.mute();
         });
     });
 

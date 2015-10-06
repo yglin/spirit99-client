@@ -112,6 +112,7 @@ function($scope, $timeout, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygU
         $timeout.cancel(self.timeoutShowInfoWindow);
 
         ygUserCtrl.focusedPostId = model.id;
+        ygAudio.play('focusOnPost');
         if($scope.infoWindow.show){
             $scope.infoWindow.coords = {
                 latitude: model.latitude,
@@ -122,7 +123,6 @@ function($scope, $timeout, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygU
         else{
             self.timeoutShowInfoWindow = $timeout(function () {
                 if(ygUserCtrl.focusedPostId === model.id){
-                    ygAudio.focusOnPost.play();
                     $scope.infoWindow.coords = {
                         latitude: model.latitude,
                         longitude: model.longitude

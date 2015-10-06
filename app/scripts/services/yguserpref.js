@@ -77,7 +77,8 @@ function ($q, $localStorage) {
         },
         selectedServer: 'nuclear-waste',
         startUpAtMap: 'geolocation',
-        startAtGeolocation: true,
+        soundFX: true,
+        // startAtGeolocation: true,
         followedPosts: {},
         myPosts: {}
     });
