@@ -30,11 +30,12 @@ function ($scope, $mdDialog, ygUserPref, ygFollowPost) {
     $scope.setMapHome = function () {
         $mdDialog.show(
             $mdDialog.confirm()
-            .title('設定地圖首頁')
+            .title('設定地區首頁')
             .content('將目前所瀏覽的地區範圍，設定為每次開啟網站時，地圖固定會顯示的範圍？')
             .ok('確定')
             .cancel('我按錯了')
         ).then(function () {
+            $scope.settings.startUpAtMap = 'useMapHome';
             ygUserPref.setMapHome();
             // console.log(ygUserPref.$storage.mapHome);
         });
