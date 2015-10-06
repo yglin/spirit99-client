@@ -2,10 +2,10 @@
     <md-toolbar>
         <div class='md-toolbar-tools'>
             <md-button class='md-icon-button' aria-label='Server List' ng-click='switchPane("server-list")'>
-                <md-icon class='material-icons' ng-style="{color: 'white'}">radio</md-icon>
+                <md-icon class='material-icons' ng-style='selectedPane == "server-list" && {color: "white"} || {color: "lightgrey"}'>radio</md-icon>
             </md-button>
             <md-button class='md-icon-button' aria-label='User Settings' ng-click='switchPane("settings")'>
-                <md-icon class='material-icons' ng-style="{color: 'white'}">settings</md-icon>
+                <md-icon class='material-icons' ng-style='selectedPane == "settings" && {color: "white"} || {color: "lightgrey"}'>settings</md-icon>
             </md-button>
         </div>
     </md-toolbar>
