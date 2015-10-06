@@ -133,7 +133,7 @@ function($scope, $timeout, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygU
             }, 500);
         }
 
-        if(!ygUserCtrl.openListPosts){
+        if(!ygUserCtrl.openListPosts && ygUserPref.$storage.autoOpenListPosts){
             $timeout.cancel(self.timeoutOpenListPosts);
             self.timeoutOpenListPosts = $timeout(function () {
                 if(ygUserCtrl.focusedPostId === model.id){
