@@ -8,25 +8,34 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('ListPostsController', ['$scope', '$interval', '$mdSidenav', 'ygUserCtrl', 'ygPost', 'ygAudio',
-function ($scope, $interval, $mdSidenav, ygUserCtrl, ygPost, ygAudio) {
+.controller('ListPostsController', ['$scope', '$q', '$interval', '$mdSidenav', 'ygUserCtrl', 'ygPost', 'ygAudio',
+function ($scope, $q, $interval, $mdSidenav, ygUserCtrl, ygPost, ygAudio) {
     $scope.mdComponentID = 'sidenav-listposts';
     $scope.lockedOpen = false;
     $scope.focusedPostId = -1;
     $scope.isMouseOverList = false;
     $scope.isScrolling = false;   
-    $scope.posts = ygPost.filteredPosts;
     
-    $scope.$watch(function () {
-        return ygUserCtrl.openListPosts;
-    }, function (newValue) {
-        $scope.lockedOpen = newValue;
-        if(newValue){
-            ygAudio.play('openListPosts');
-        }
-        else{
-            ygAudio.play('closeListPosts');
-        }
+    ygPost.initialPromises.loadPosts
+    .then(function () {
+        $scope.posts = ygPost.filteredPosts;
+        $scope.$watch(function () {
+            return ygUserCtrl.openListPosts;
+        }, function (newValue, oldValue) {
+            $scope.lockedOpen = newValue;
+    
+            // XXX: I have to check both newValue and oldValue,
+            // because somehow $watch() fires initially even when oldValue and newValue are both false.
+            // Damn it~!!!
+            // console.log(oldValue + '-->' + newValue);
+            // console.log(typeof oldValue + '-->' + typeof newValue);
+            if(newValue && !oldValue){
+                ygAudio.play('openListPosts');
+            }
+            else if(!newValue && oldValue){
+                ygAudio.play('closeListPosts');
+            }
+        });
     });
 
     $scope.onMouseOverList = function () {
