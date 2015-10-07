@@ -70,12 +70,13 @@ img.grayscale {
                 <input type='date' ng-model="create_time.endDate" />
             </div>
         </div>
-        <div flex='30' layout='row' layout-align='start center'>
+        <div flex layout='row' layout-align='start center' ng-click='showServerIntro(server.name)' style='cursor:pointer;'>
             <div layout-margin>
-                <img alt="{{serverTitle}}" ng-src="{{serverLogo}}" class="md-avatar" ng-style="{'max-width':'48px', 'max-height':'48px'}" ng-hide='serverLogo == ""' />
+                <img alt="{{server.title}}" ng-src="{{server.logo}}" class="md-avatar" ng-style="{'max-width':'48px', 'max-height':'48px'}" ng-hide='server.logo == ""' />
             </div>
-            <h1 class='md-headline'>{{serverTitle}}</h1>
+            <h1 class='md-headline'>{{server.title}}</h1>
         </div>
+        <div flex></div>
         <div flex layout='row' layout-padding layout-align='end center'>
             <ng-include src='"views/statusinfo.html"'></ng-include>
         </div>

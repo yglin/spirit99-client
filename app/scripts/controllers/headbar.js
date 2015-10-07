@@ -41,39 +41,23 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
     };
 
 
-    self.switchServer = function (server) {
-        if(angular.isUndefined(server) || server === null){
-            $scope.serverTitle = '請選擇電台';
-            $scope.serverLogo = '';            
-        }
-        else{
-            $scope.serverTitle = ygServer.selectedServer.title;
-            $scope.serverLogo = ygServer.selectedServer.logo;            
-        }
-    };
-
     $scope.iconSet = {};
     ygServer.initialPromises.updateServers.then(function () {
-        self.switchServer(null);
         $scope.$watch(
-            function(){
-                return ygServer.selectedServer;
-            },
-            function(){
-                self.switchServer(ygServer.selectedServer);
-            // // console.log('Got you~!! ' + oldValue + ' --> ' + newValue);
-            //     if(ygServer.selectedServer !== null && 'title' in ygServer.selectedServer){
-            //         $scope.serverTitle = ygServer.selectedServer.title;
-            //         $scope.serverLogo = ygServer.selectedServer.logo;
-            //         // $scope.iconSet = ygServer.servers[newValue].iconSet;
-            //     }
-            //     else{
-            //         $scope.serverTitle = '請選擇電台';
-            //         $scope.serverLogo = '';            
-            //     }
+        function(){
+            return ygServer.selectedServer;
+        },
+        function(){
+            if(angular.isUndefined(ygServer.selectedServer) || ygServer.selectedServer === null){
+                $scope.server = {title: '請選擇電台'};
+            }
+            else{
+                $scope.server = ygServer.selectedServer;
+            }
         });
-
     });
+
+    $scope.showServerIntro = ygServer.showServerIntro;
 
     $scope.iconCtrls = ygUserCtrl.iconCtrls;
     $scope.iconCount = ygUserCtrl.iconCount;
