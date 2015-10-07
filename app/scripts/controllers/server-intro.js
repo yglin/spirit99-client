@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('ServerIntroController', ['$scope', '$sce', 'nodeValidator', 'server',
-function ($scope, $sce, nodeValidator, server) {
+.controller('ServerIntroController', ['$scope', '$sce', 'nodeValidator', 'ygServer', 'server',
+function ($scope, $sce, nodeValidator, ygServer, server) {
     // console.log(server);
     $scope.server = server;
     $scope.introUrl = null;
@@ -24,4 +24,6 @@ function ($scope, $sce, nodeValidator, server) {
             $scope.introContent = $scope.server.intro;
         }
     }
+    $scope.isAlreadySelected = $scope.server.name === ygServer.selectedServer.name;
+    $scope.switchServer = ygServer.switchServer;
 }]);

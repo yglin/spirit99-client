@@ -10,5 +10,10 @@
     <md-dialog-content>
         <iframe width='100%' ng-if='introUrl' ng-src='{{introUrl}}'></iframe>
         <div ng-bind-html="introContent"></div>
+        <div layout='row' layout-align='center center'>
+            <md-button class='md-raised md-primary' style='width:100%;' ng-click='switchServer(server.name)' ng-disabled="isAlreadySelected">
+                <span class='md-headline'>切換電台</span>
+            </md-button>
+        </div>
     </md-dialog-content>
 </md-dialog>
