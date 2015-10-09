@@ -312,6 +312,12 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
                     self.newPost[key] = newPost[key];
                 }
             }
+            var statisticResource = ygServer.getSupportStatistic();
+            if('newStatistics' in self.newPost){
+                var newStatistics = self.newPost.newStatistics;
+                delete self.newPost.newStatistics;
+                console.log(newStatistics);
+            }
             var promise = self.newPost.$save()
             .then(function (result) {
                 if(self.validatePostData(result) && !(result.id in self.indexedPosts)){
@@ -325,6 +331,9 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
                     ygFollowPost.followPost(newPost);
                     self.newPost = null;
                     console.log('Success, post added!!');
+                    if(statisticResource && !angular.isUndefined(newStatistics) && newStatistics !== null){
+                        self.addStatistics(result.id, newStatistics);
+                    }
                     return $q.resolve();                        
                 }
                 else{
@@ -415,4 +424,14 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
 
         return deferred.promise;
     });
+
+    self.addStatistics = function (post_id, statistics) {
+        var statisticResource = ygServer.getSupportStatistic();
+        if(!statisticResource){
+            return;
+        }
+        for(var key in statistics){
+            statistics[key].$save({post_id: post_id});
+        }
+    };
 }]);

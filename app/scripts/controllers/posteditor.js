@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('PostEditorController', ['$scope', '$mdDialog', 'ygUserPref', 'ygUserCtrl', 'newPost',
-function ($scope, $mdDialog, ygUserPref, ygUserCtrl, newPost){    
+.controller('PostEditorController', ['$scope', '$mdDialog', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'newPost',
+function ($scope, $mdDialog, ygUserPref, ygUserCtrl, ygServer, newPost){    
     $scope.froalaOptions = {
         inlineMode: true,
         minHeight: 150,
@@ -47,4 +47,27 @@ function ($scope, $mdDialog, ygUserPref, ygUserCtrl, newPost){
     $scope.post = function(){
         $mdDialog.hide($scope.newPost);
     };
+
+    $scope.statisticResource = ygServer.getSupportStatistic();
+    if($scope.statisticResource){
+        $scope.newStatistic = new $scope.statisticResource({
+            expression: '言贊',
+            count: 0
+        });
+        $scope.newStatisticCount = 0;
+        $scope.addNewStatistic = function () {
+            if(!('newStatistics' in $scope.newPost)){
+                $scope.newPost.newStatistics = {};
+            }
+            $scope.newStatisticCount += 1;
+            $scope.newPost.newStatistics[$scope.newStatisticCount] = $scope.newStatistic;
+            $scope.newStatistic = new $scope.statisticResource({
+                expression: '言贊',
+                count: 0
+            });
+        };
+        $scope.removeNewStatistic = function (key) {
+            delete $scope.newPost.newStatistics[key];
+        };        
+    }
 }]);

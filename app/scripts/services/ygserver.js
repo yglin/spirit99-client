@@ -263,6 +263,24 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
         }
     });
 
+    self.getSupportStatistic = function () {
+        if('statistic' in self.resources){
+            return self.resources.statistic;
+        }
+        else if('statisticUrl' in self.selectedServer && self.selectedServer.statisticUrl !== null){
+            self.resources.statistic = $resource(self.selectedServer.statisticUrl + '/:id', {},
+            {
+                'plusOne': {
+                    method: 'PUT'
+                }
+            });
+            return self.resources.statistic;
+        }
+        else{
+            return false;
+        }
+    };
+
     self.initialPromises = {
         'updateServers': self.updateServers()
     };
