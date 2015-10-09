@@ -33,7 +33,7 @@
                     <div ng-if='statisticResource'>
                     <div ng-repeat="statistic in post.statistics" layout='row'>
                         <md-button type='button' class='md-accent md-raised' ng-click="statisticPlusOne(statistic)" ng-disabled="::statistic.disabled">{{statistic.expression}}</md-button>
-                        <span>有 {{statistic.count}} 個人說：</span><div class='md-headline'>{{statistic.expression}}</div>
+                        <span>有 <b>{{statistic.count | number}}</b> 個人說：</span><div class='md-headline'>{{statistic.expression}}</div>
                     </div>
                     </div>
                 </div>

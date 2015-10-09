@@ -64,7 +64,7 @@ function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, y
                         $scope.post.statistics[results[i].id]  = results[i];
                     };
                 }
-                console.log($scope.post.statistics);
+                // console.log($scope.post.statistics);
             });
         }
 
