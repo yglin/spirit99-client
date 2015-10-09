@@ -268,7 +268,8 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
             return self.resources.statistic;
         }
         else if('statisticUrl' in self.selectedServer && self.selectedServer.statisticUrl !== null){
-            self.resources.statistic = $resource(self.selectedServer.statisticUrl + '/:id', {},
+            self.resources.statistic = $resource(self.selectedServer.statisticUrl + '/:id',
+            {post_id: '@post_id', id: '@id'},
             {
                 'plusOne': {
                     method: 'PUT'

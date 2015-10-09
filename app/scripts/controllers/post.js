@@ -53,6 +53,24 @@ function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, y
         ygPost.deletePost($scope.post);
     };
 
+    $scope.statisticResource = ygServer.getSupportStatistic();
+    if($scope.statisticResource){
+        if(!('statistics' in $scope.post)){
+            $scope.post.statistics = $scope.statisticResource.query({post_id: $scope.post.id});
+        }
+        console.log($scope.post.statistics);
+
+        $scope.statisticPlusOne = function (statistic) {
+            $scope.statisticResource.plusOne({post_id: $scope.post.id, id: statistic.id},
+            function (result) {
+                if('count' in result){
+                    statistic.count = result.count;
+                }
+                statistic.disabled = true;
+            });
+        };
+    }
+
     $scope.$watch('followPost',
         function (newValue) {
             // console.log(newValue);
