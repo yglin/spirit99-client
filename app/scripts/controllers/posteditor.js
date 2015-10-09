@@ -68,6 +68,27 @@ function ($scope, $mdDialog, ygUserPref, ygUserCtrl, ygServer, newPost){
         };
         $scope.removeNewStatistic = function (key) {
             delete $scope.newPost.newStatistics[key];
-        };        
+        };
+
+        $scope.removeStatistic = function (stat_id, event) {
+            var statistic = $scope.newPost.statistics[stat_id];
+
+            var this_dialog = angular.element('#post-editor-dialog');
+            // console.log(this_dialog);
+
+            // var noPasswordAlert = $mdDialog.alert().title('密碼錯誤')
+            // .content().targetEvent(event)
+            // .ariaLabel('密碼錯誤')
+            // .ok('喔 好');
+
+            if(!('password' in $scope.newPost)){
+                alert('無法刪除，找不到密碼或密碼錯誤，這可能不是你的文章喔');
+            }
+            else{
+                if(confirm('刪除 ' + statistic.expression + ' 按鈕及資料: 有' + statistic.count + '人說 ' + statistic.expression)){
+                    $scope.newPost.statistics[stat_id].tobeDeleted = true;
+                }
+            }
+        }
     }
 }]);

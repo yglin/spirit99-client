@@ -7,7 +7,7 @@ img.grayscale {
 
 </style>
 
-<md-dialog aria-label="Tell your story" flex='60'>
+<md-dialog id='post-editor-dialog' aria-label="Tell your story" flex='60'>
 <md-toolbar>
     <div class="md-toolbar-tools">
         <h2>分享在地的故事</h2>
@@ -63,6 +63,13 @@ img.grayscale {
             </div>
         </md-input-container>
         <div ng-if='statisticResource !== false'>
+            <div ng-repeat="(id, statistic) in newPost.statistics" ng-show='statistic.tobeDeleted !== true' layout='row'>
+                <md-button type='button' class='md-icon-button' ng-click='removeStatistic(id, $event)'>
+                    <md-icon class='material-icons'>clear</md-icon>
+                </md-button>
+                <md-button type='button' class='md-accent md-raised'>{{statistic.expression}}</md-button>
+                <span>有 {{statistic.count}} 個人說：</span><div class='md-headline'>{{statistic.expression}}</div>
+            </div>
             <div ng-repeat="(key, statistic) in newPost.newStatistics" layout='row'>
                 <md-button type='button' class='md-icon-button' ng-click='removeNewStatistic(key)'>
                     <md-icon class='material-icons'>clear</md-icon>

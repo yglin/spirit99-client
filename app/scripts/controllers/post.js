@@ -56,9 +56,17 @@ function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, y
     $scope.statisticResource = ygServer.getSupportStatistic();
     if($scope.statisticResource){
         if(!('statistics' in $scope.post)){
-            $scope.post.statistics = $scope.statisticResource.query({post_id: $scope.post.id});
+            $scope.statisticResource.query({post_id: $scope.post.id},
+            function (results) {
+                if(results.length > 0){
+                    $scope.post.statistics = {};
+                    for (var i = 0; i < results.length; i++) {
+                        $scope.post.statistics[results[i].id]  = results[i];
+                    };
+                }
+                console.log($scope.post.statistics);
+            });
         }
-        console.log($scope.post.statistics);
 
         $scope.statisticPlusOne = function (statistic) {
             $scope.statisticResource.plusOne({post_id: $scope.post.id, id: statistic.id},

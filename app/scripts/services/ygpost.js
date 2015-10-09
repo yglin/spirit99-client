@@ -222,13 +222,40 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
 
     self.editPost = function (post) {
         self.filteredPosts.splice(self.filteredPosts.indexOf(post), 1);
-        self.postEditor(angular.copy(post)).then(function (updatedPost) {
-            if(updatedPost.id in ygUserPref.$storage.myPosts){
-                updatedPost.password = ygUserPref.$storage.myPosts[updatedPost.id].password;
-            }
-            return updatedPost.$save().then(function (response) {
-                self.indexedPosts[post.id] = updatedPost;
-                self.assignIconObject(updatedPost);
+        var tempPost = angular.copy(post);
+        var password = '';
+        if(post.id in ygUserPref.$storage.myPosts){
+            password = ygUserPref.$storage.myPosts[post.id].password;
+        }
+        tempPost.password = password;
+        // console.log(tempPost.statistics);
+        self.postEditor(tempPost).then(function (tempPost) {
+            // console.log(tempPost.statistics);
+            var statistics = tempPost.statistics;
+            var newStatistics = tempPost.newStatistics;
+            return tempPost.$save().then(function (response) {
+                self.indexedPosts[post.id] = response;
+                self.assignIconObject(response);
+
+                // console.log(tempPost.statistics);
+                var statisticResource = ygServer.getSupportStatistic();
+                if(statisticResource){
+                    // Delete statistics
+                    // console.log(statistics);
+                    for(var id in statistics){
+                        if(statistics[id].tobeDeleted === true){
+                            statisticResource.delete({post_id: post.id, id: id, password: password},
+                            function (result) {
+                            }, function (error) {
+                                console.log(error);
+                            });
+                        }
+                    }
+                    // Add new statistics
+                    if(!angular.isUndefined(newStatistics) && newStatistics !== null){
+                        self.addStatistics(post.id, newStatistics);
+                    }                    
+                }
             }, function (error) {
                 if(error.status === 401){
                     $window.alert('這可能是別人的文章，你沒有權限更改');
@@ -425,11 +452,10 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
 
     self.addStatistics = function (post_id, statistics) {
         var statisticResource = ygServer.getSupportStatistic();
-        if(!statisticResource){
-            return;
-        }
-        for(var key in statistics){
-            statistics[key].$save({post_id: post_id});
+        if(statisticResource){
+            for(var key in statistics){
+                statistics[key].$save({post_id: post_id});
+            }
         }
     };
 }]);
