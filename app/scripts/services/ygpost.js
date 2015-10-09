@@ -226,14 +226,9 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
             if(updatedPost.id in ygUserPref.$storage.myPosts){
                 updatedPost.password = ygUserPref.$storage.myPosts[updatedPost.id].password;
             }
-            updatedPost.$save().then(function (response) {
-                self.indexedPosts[updatedPost.id] = updatedPost;
+            return updatedPost.$save().then(function (response) {
+                self.indexedPosts[post.id] = updatedPost;
                 self.assignIconObject(updatedPost);
-                if(self.filterPost(updatedPost)){
-                    self.filteredPosts.addAsMarker(updatedPost);
-                }
-                // console.log(self.indexedPosts[post.id]);
-                // console.log(post);
             }, function (error) {
                 if(error.status === 401){
                     $window.alert('這可能是別人的文章，你沒有權限更改');
@@ -241,9 +236,12 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
                 else{
                     $window.alert('更新失敗!!');
                 }
-                self.filteredPosts.addAsMarker(post);
                 console.log(error);
             });            
+        }).finally(function () {
+            if(self.filterPost(self.indexedPosts[post.id])){
+                self.filteredPosts.addAsMarker(self.indexedPosts[post.id]);
+            }            
         });  
     };
 
