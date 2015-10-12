@@ -112,36 +112,6 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
         if('password' in post){
             ygUserPref.$storage.myPosts[post.id].password = post.password;                            
         }
-        // console.log(ygUserPref.$storage.myPosts);
-    };
-
-    self.readPost = function (post) {
-        if('author' in post && 'context' in post){
-            console.log('Already got author and context, no need to read post');
-            return $q.resolve('Already got author and context, no need to read post');
-        }
-        var postResource = ygServer.getSupportPost();
-        if(!postResource){
-            console.log('Post resource not supported by server');
-            return $q.reject('Post resource not supported by server');
-        }
-        ygStatusInfo.statusProcessing('讀取資料...');
-        var promise = postResource.getDetails({id:post.id},
-        function (result) {
-            console.log(result);
-            for(var key in result){
-                if(!(key in post)){
-                    post[key] = result[key];
-                }
-            }        
-        }, function (error) {
-            $window.alert('讀取文章內容失敗');
-            console.log(error);
-        }).$promise;
-        promise.finally(function () {
-            ygStatusInfo.statusIdle();
-        });
-        return promise;
     };
 
     self.loadPosts = function () {
@@ -220,7 +190,7 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
         });      
     };
 
-    self.addPost = function (latitude, longitude){
+    self.createPost = function (latitude, longitude){
         var postResource = ygServer.getSupportPost();
         if(!postResource){
             console.log('Post resource not supported by server');
@@ -283,7 +253,36 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
         });
     };
 
-    self.editPost = function (post) {
+    self.readPost = function (post) {
+        if('author' in post && 'context' in post){
+            console.log('Already got author and context, no need to read post');
+            return $q.resolve('Already got author and context, no need to read post');
+        }
+        var postResource = ygServer.getSupportPost();
+        if(!postResource){
+            console.log('Post resource not supported by server');
+            return $q.reject('Post resource not supported by server');
+        }
+        ygStatusInfo.statusProcessing('讀取資料...');
+        var promise = postResource.getDetails({id:post.id},
+        function (result) {
+            console.log(result);
+            for(var key in result){
+                if(!(key in post)){
+                    post[key] = result[key];
+                }
+            }        
+        }, function (error) {
+            $window.alert('讀取文章內容失敗');
+            console.log(error);
+        }).$promise;
+        promise.finally(function () {
+            ygStatusInfo.statusIdle();
+        });
+        return promise;
+    };
+
+    self.updatePost = function (post) {
         self.filteredPosts.splice(self.filteredPosts.indexOf(post), 1);
         var tempPost = angular.copy(post);
         var password = '';
@@ -367,82 +366,82 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
         }
     };
 
-    self.popStoryEditor = function (latitude, longitude) {
-        var postResource = ygServer.getSupportPost();
-        if(!postResource){
-            console.log('Post resource not supported by server');
-            return $q.reject('Post resource not supported by server');
-        }
+    // self.popStoryEditor = function (latitude, longitude) {
+    //     var postResource = ygServer.getSupportPost();
+    //     if(!postResource){
+    //         console.log('Post resource not supported by server');
+    //         return $q.reject('Post resource not supported by server');
+    //     }
 
-        if(self.newPost === null){
-            self.newPost = new postResource();
-            // self.newPost = ygUtils.fillDefaults(self.newPost, self.postDataDefaults);
-        }
-        if(latitude){
-            self.newPost.latitude = latitude;
-        }
-        if(longitude){
-            self.newPost.longitude = longitude;
-        }
-        // // console.log($scope.newPost);
-        return $mdDialog.show({
-            templateUrl: 'views/posteditor.html',
-            controller: 'PostEditorController',
-            clickOutsideToClose: true,
-            escapeToClose: false,
-            locals: {
-                newPost: self.newPost
-            },
-        })
-        .then(function(newPost){
-            for(var key in newPost){
-                if(self.newPost[key] !== newPost[key]){
-                    self.newPost[key] = newPost[key];
-                }
-            }
-            var statisticResource = ygServer.getSupportStatistic();
-            if('newStatistics' in self.newPost){
-                var newStatistics = self.newPost.newStatistics;
-                delete self.newPost.newStatistics;
-                console.log(newStatistics);
-            }
-            var promise = self.newPost.$save()
-            .then(function (result) {
-                if(self.validatePostData(result) && !(result.id in self.indexedPosts)){
-                    var newPost = ygUtils.fillDefaults(result, self.postDataDefaults);
-                    self.assignIconObject(newPost);
-                    self.indexedPosts[newPost.id] = newPost;
-                    if(self.filterPost(self.indexedPosts[newPost.id])){
-                        self.filteredPosts.addAsMarker(self.indexedPosts[newPost.id]);
-                    }
-                    self.markAsMyPost(newPost);
-                    ygFollowPost.followPost(newPost);
-                    self.newPost = null;
-                    console.log('Success, post added!!');
-                    if(statisticResource && !angular.isUndefined(newStatistics) && newStatistics !== null){
-                        self.addStatistics(result.id, newStatistics);
-                    }
-                    return $q.resolve();                        
-                }
-                else{
-                    return $q.reject('Invalid post data: ' + result.toString());
-                }
-            }, function (error) {
-                ygError.errorMessages.push('新增資料至遠端伺服器失敗');
-                return $q.reject(error);
-            });
-            // ygProgress.show('新增資料...', promise);
-            return promise;
-        }, function(newPost){
-            for(var key in newPost){
-                if(self.newPost[key] !== newPost[key]){
-                    self.newPost[key] = newPost[key];
-                }
-            }
-            console.log('你又按錯啦你');
-            return $q.reject();
-        });
-    };
+    //     if(self.newPost === null){
+    //         self.newPost = new postResource();
+    //         // self.newPost = ygUtils.fillDefaults(self.newPost, self.postDataDefaults);
+    //     }
+    //     if(latitude){
+    //         self.newPost.latitude = latitude;
+    //     }
+    //     if(longitude){
+    //         self.newPost.longitude = longitude;
+    //     }
+    //     // // console.log($scope.newPost);
+    //     return $mdDialog.show({
+    //         templateUrl: 'views/posteditor.html',
+    //         controller: 'PostEditorController',
+    //         clickOutsideToClose: true,
+    //         escapeToClose: false,
+    //         locals: {
+    //             newPost: self.newPost
+    //         },
+    //     })
+    //     .then(function(newPost){
+    //         for(var key in newPost){
+    //             if(self.newPost[key] !== newPost[key]){
+    //                 self.newPost[key] = newPost[key];
+    //             }
+    //         }
+    //         var statisticResource = ygServer.getSupportStatistic();
+    //         if('newStatistics' in self.newPost){
+    //             var newStatistics = self.newPost.newStatistics;
+    //             delete self.newPost.newStatistics;
+    //             console.log(newStatistics);
+    //         }
+    //         var promise = self.newPost.$save()
+    //         .then(function (result) {
+    //             if(self.validatePostData(result) && !(result.id in self.indexedPosts)){
+    //                 var newPost = ygUtils.fillDefaults(result, self.postDataDefaults);
+    //                 self.assignIconObject(newPost);
+    //                 self.indexedPosts[newPost.id] = newPost;
+    //                 if(self.filterPost(self.indexedPosts[newPost.id])){
+    //                     self.filteredPosts.addAsMarker(self.indexedPosts[newPost.id]);
+    //                 }
+    //                 self.markAsMyPost(newPost);
+    //                 ygFollowPost.followPost(newPost);
+    //                 self.newPost = null;
+    //                 console.log('Success, post added!!');
+    //                 if(statisticResource && !angular.isUndefined(newStatistics) && newStatistics !== null){
+    //                     self.addStatistics(result.id, newStatistics);
+    //                 }
+    //                 return $q.resolve();                        
+    //             }
+    //             else{
+    //                 return $q.reject('Invalid post data: ' + result.toString());
+    //             }
+    //         }, function (error) {
+    //             ygError.errorMessages.push('新增資料至遠端伺服器失敗');
+    //             return $q.reject(error);
+    //         });
+    //         // ygProgress.show('新增資料...', promise);
+    //         return promise;
+    //     }, function(newPost){
+    //         for(var key in newPost){
+    //             if(self.newPost[key] !== newPost[key]){
+    //                 self.newPost[key] = newPost[key];
+    //             }
+    //         }
+    //         console.log('你又按錯啦你');
+    //         return $q.reject();
+    //     });
+    // };
 
     self.showPostDetail = function (postID) {
         var post = self.indexedPosts[postID];        

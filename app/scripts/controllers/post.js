@@ -45,13 +45,9 @@ function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, y
     $scope.canFollowPost = ygFollowPost.supportFollowPost;
     $scope.followPost = $scope.post.id in ygFollowPost.followedPosts;
 
-    $scope.editPost = function () {
-        ygPost.editPost($scope.post);
-    };
+    $scope.updatePost = ygPost.updatePost;
 
-    $scope.deletePost = function () {
-        ygPost.deletePost($scope.post);
-    };
+    $scope.deletePost = ygPost.deletePost;
 
     $scope.statisticResource = ygServer.getSupportStatistic();
     if($scope.statisticResource){
