@@ -220,6 +220,69 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
         });      
     };
 
+    self.addPost = function (latitude, longitude){
+        var postResource = ygServer.getSupportPost();
+        if(!postResource){
+            console.log('Post resource not supported by server');
+            return $q.reject('Post resource not supported by server');
+        }
+
+        if(self.newPost === null){
+            self.newPost = new postResource();
+            // self.newPost = ygUtils.fillDefaults(self.newPost, self.postDataDefaults);
+        }
+        latitude = typeof latitude === 'undefined' ? ygUserPref.$storage.map.center.latitude : latitude;
+        self.newPost.latitude = latitude;
+        longitude = typeof longitude === 'undefined' ? ygUserPref.$storage.map.center.longitude : longitude;
+        self.newPost.longitude = longitude;
+
+        // // console.log($scope.newPost);
+        return $mdDialog.show({
+            templateUrl: 'views/posteditor.html',
+            controller: 'PostEditorController',
+            clickOutsideToClose: true,
+            escapeToClose: false,
+            locals: {
+                newPost: self.newPost
+            },
+        })
+        .then(function(){
+            return postResource.create(self.newPost,
+            function (result) {
+                if(self.validatePostData(result) && !(result.id in self.indexedPosts)){
+                    var newPost = ygUtils.fillDefaults(result, self.postDataDefaults);
+                    self.assignIconObject(newPost);
+                    self.indexedPosts[newPost.id] = newPost;
+                    if(self.filterPost(self.indexedPosts[newPost.id])){
+                        self.filteredPosts.addAsMarker(self.indexedPosts[newPost.id]);
+                    }
+                    self.markAsMyPost(newPost);
+                    ygFollowPost.followPost(newPost);
+
+                    // Add new statistics
+                    var statisticResource = ygServer.getSupportStatistic();
+                    var newStatistics = self.newPost.newStatistics;
+                    if(statisticResource && !angular.isUndefined(newStatistics) && newStatistics !== null){
+                        self.addStatistics(result.id, newStatistics);
+                    }
+
+                    self.newPost = null;
+                    console.log('Success, post added!!');
+                    return $q.resolve();                        
+                }
+                else{
+                    return $q.reject('Invalid post data: ' + result.toString());
+                }
+            }, function (error) {
+                ygError.errorMessages.push('新增資料至遠端伺服器失敗');
+                return $q.reject(error);
+            }).$promise;
+        }, function(){
+            console.log('你又按錯啦你');
+            return $q.reject();
+        });
+    };
+
     self.editPost = function (post) {
         self.filteredPosts.splice(self.filteredPosts.indexOf(post), 1);
         var tempPost = angular.copy(post);

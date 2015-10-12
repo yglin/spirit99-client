@@ -170,6 +170,7 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
             return self.resources.post;
         }
         else if('postUrl' in self.selectedServer){
+            // Get fields names of post
             self.resources.post = $resource(
                 self.selectedServer.postUrl + '/:id', {},
                 {
@@ -184,6 +185,27 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
                         method: 'GET',
                         params: {
                             fields: ['author', 'context']
+                        }
+                    },
+                    'create': {
+                        method: 'POST',
+                        // headers: {'origin': 'localhost'},
+                        transformRequest: function (data, headersGetter) {
+                            var postFields = ['id', 'title', 'context', 'author', 'icon', 'latitude', 'longitude'];
+                            var outData = {};
+                            for (var i = 0; i < postFields.length; i++) {
+                                if(postFields[i] in data){
+                                    outData[postFields[i]] = data[postFields[i]];
+                                }
+                            }
+                            console.log('Data POST to server:');
+                            console.log(outData);
+                            console.log('Headers:');
+                            console.log(headersGetter());
+                            if(typeof outData === 'object'){
+                                outData = angular.toJson(outData);
+                            }
+                            return outData;
                         }
                     }
                 });

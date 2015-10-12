@@ -170,7 +170,7 @@ function($scope, $timeout, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygU
         }
 
         $scope.clickedMarker.options.visible = true;
-        ygPost.popStoryEditor(args[0].latLng.lat(), args[0].latLng.lng())
+        ygPost.addPost(args[0].latLng.lat(), args[0].latLng.lng())
         .then(function (result) {
             if(markers.length >=1){
                 markers[0].setVisible(false);
