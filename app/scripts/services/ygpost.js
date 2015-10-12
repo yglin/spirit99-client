@@ -335,6 +335,11 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
     };
 
     self.deletePost = function (post) {
+        var postResource = ygServer.getSupportPost();
+        if(!postResource){
+            console.log('Post resource not supported by server');
+            return $q.reject('Post resource not supported by server');
+        }
         if(post.id in ygUserPref.$storage.myPosts){
             var confirm = $mdDialog.confirm()
             .title('刪除文章')
@@ -342,11 +347,14 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
             .ariaLabel('刪除文章')
             .ok('確定')
             .cancel('想想還是算了');
-            $mdDialog.show(confirm).then(function () {
+            return $mdDialog.show(confirm).then(function () {
                 self.filteredPosts.splice(self.filteredPosts.indexOf(post), 1);
                 var password = ygUserPref.$storage.myPosts[post.id].password;
-                post.$delete({id:post.id, password: password}).then(function (response) {
+                
+                return postResource.delete({id:post.id, password: password},
+                function (response) {
                     delete self.indexedPosts[post.id];
+                    return $q.resolve();
                 }, function (error) {
                     self.filteredPosts.addAsMarker(post);
                     if(error.status === 401){
@@ -356,13 +364,16 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
                         $window.alert('刪除失敗!!');
                     }
                     console.log(error);
-                });
+                    return $q.reject();
+                }).$promise;
             }, function () {
                 console.log('那你再想想吧');
+                return $q.resolve();
             });
         }
         else{
-            $window.alert('這可能是別人的文章，你沒有權限刪除');            
+            $window.alert('這可能是別人的文章，你沒有權限刪除');
+            return $q.reject();            
         }
     };
 

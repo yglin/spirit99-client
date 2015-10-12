@@ -207,6 +207,32 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
                             }
                             return outData;
                         }
+                    },
+                    'delete': {
+                        method: 'DELETE',
+                        headers: {
+                            password: function (request) {
+                                var password = '';
+                                if('password' in request.params){
+                                    password = request.params.password;
+                                    delete request.params.password;
+                                }
+                                return password;
+                            }
+                        },
+                        // transformRequest: function (data, headersGetter) {
+                        //     console.log(data);
+                        //     var outData = data;
+                        //     if('password' in outData){
+                        //         var headers = headersGetter();
+                        //         headers.password = outData.password;
+                        //         delete outData.password;
+                        //     }
+                        //     if(typeof outData === 'object'){
+                        //         outData = angular.toJson(outData);
+                        //     }
+                        //     return outData;                            
+                        // }
                     }
                 });
             return  self.resources.post;       
