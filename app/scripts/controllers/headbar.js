@@ -18,7 +18,7 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
     // $scope.toogleInfoWindowsButtonTooltip = '顯示全部標題';
     $scope.tools = {
         search: {
-            fontIcon: 'search' 
+            fontIcon: 'search'
         },
         address: {
             fontIcon: 'my_location'
@@ -49,7 +49,7 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
         },
         function(){
             if(angular.isUndefined(ygServer.selectedServer) || ygServer.selectedServer === null){
-                $scope.server = {title: '請選擇電台'};
+                $scope.server = {title: '請選擇電台', logo: 'https://cdn0.iconfinder.com/data/icons/octicons/1024/radio-tower-128.png'};
             }
             else{
                 $scope.server = ygServer.selectedServer;
@@ -65,7 +65,7 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
         return ygUserCtrl.iconCount;
     }, function () {
         $scope.iconCount = ygUserCtrl.iconCount;
-    })
+    });
 
     $scope.toggleIcon = function (name) {
         $scope.iconCtrls[name].show = !($scope.iconCtrls[name].show);
@@ -75,7 +75,7 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
 
     $scope.openIconMenu = function ($mdOpenMenu, event) {
         $mdOpenMenu(event);
-    }
+    };
 
     $scope.openSidenav = function(){
         $mdSidenav('sidenav-left').open();

@@ -81,11 +81,10 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
                     self.updateServer(response);
                 }
                 else{
-                    // Add brand new server
-                    // self.fillDefaultOptions(response);
                     self.servers[response.name] = ygUtils.fillDefaults(response, self.portalDataDefaults);
+                    self.servers[response.name].isReady = true;
                 }
-                self.switchServer(response.name);
+                self.showServerIntro(response.name);
             }
             else{
                 var errorMessage = "載入失敗，請檢查傳送門網址是否正確：" + portalUrl;
@@ -102,7 +101,7 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
     };
 
     self.removeServer = function(serverName){
-        if(self.selectedServer.name === serverName){
+        if(self.selectedServer !== null && self.selectedServer.name === serverName){
             self.selectedServer = null;
         }
         delete self.servers[serverName];
@@ -123,13 +122,14 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
                 if(self.validatePortal(newestData)){
                     self.servers[serverName] = ygUtils.fillDefaults(newestData, self.portalDataDefaults);            
                     self.servers[serverName].portalUrl = portalData.portalUrl;
+                    self.servers[serverName].isReady = true;
                 }        
             })
             .error(self.errorGetPortal);
         }
         else if(self.validatePortal(portalData)){
             self.servers[serverName] = ygUtils.fillDefaults(portalData, self.portalDataDefaults);            
-            // self.servers[serverName].portalUrl = portalData.portalUrl;
+            self.servers[serverName].isReady = true;
             return $q.resolve();
         }
         else{
@@ -144,7 +144,7 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
         var updatePromises = {};
 
         for (var name in self.servers) {
-            // console.log(self.servers[name].portalUrl);
+            self.servers[name].isReady = false;
             updatePromises[name] = $http.get(self.servers[name].portalUrl)
             .success(self.updateServer)
             .error(self.errorGetPortal);
@@ -189,7 +189,6 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
                     },
                     'create': {
                         method: 'POST',
-                        // headers: {'origin': 'localhost'},
                         transformRequest: function (data, headersGetter) {
                             var postFields = ['id', 'title', 'context', 'author', 'icon', 'latitude', 'longitude'];
                             var outData = {};
@@ -198,10 +197,6 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
                                     outData[postFields[i]] = data[postFields[i]];
                                 }
                             }
-                            console.log('Data POST to server:');
-                            console.log(outData);
-                            console.log('Headers:');
-                            console.log(headersGetter());
                             if(typeof outData === 'object'){
                                 outData = angular.toJson(outData);
                             }
@@ -220,19 +215,6 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
                                 return password;
                             }
                         },
-                        // transformRequest: function (data, headersGetter) {
-                        //     console.log(data);
-                        //     var outData = data;
-                        //     if('password' in outData){
-                        //         var headers = headersGetter();
-                        //         headers.password = outData.password;
-                        //         delete outData.password;
-                        //     }
-                        //     if(typeof outData === 'object'){
-                        //         outData = angular.toJson(outData);
-                        //     }
-                        //     return outData;                            
-                        // }
                     }
                 });
             return  self.resources.post;       
@@ -240,7 +222,7 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
         else{
             return false;
         }
-    }
+    };
 
     self.getSupportComment = function () {
         if(!self.isSelectedServer()){
@@ -308,7 +290,7 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
             else{
                 return false;
             }
-        }
+        };
     });
 
     self.getSupportStatistic = function () {

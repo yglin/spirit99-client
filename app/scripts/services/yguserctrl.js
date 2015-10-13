@@ -23,8 +23,8 @@ function ($rootScope, $q, nodeValidator, ygServer) {
     self.iconCtrls = {};
     self.iconCount = 0;
     self.refreshIconCtrls = function (server) {
-        if(server !== null && 'iconSet' in server
-        && typeof server.iconSet === 'object' && server.iconSet !== null){
+        if(server !== null && 'iconSet' in server &&
+        typeof server.iconSet === 'object' && server.iconSet !== null){
             for(var name in self.iconCtrls){
                 if(!(name in server.iconSet)){
                     delete self.iconCtrls[name];
@@ -45,6 +45,12 @@ function ($rootScope, $q, nodeValidator, ygServer) {
                 }
             }
             self.iconCount = Object.keys(self.iconCtrls).length;
+        }
+        else{
+            for(var name in self.iconCtrls){
+                delete self.iconCtrls[name];
+            }
+            self.iconCount = 0;
         }
     };
 

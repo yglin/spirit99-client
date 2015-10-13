@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('PostEditorController', ['$scope', '$mdDialog', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'newPost',
-function ($scope, $mdDialog, ygUserPref, ygUserCtrl, ygServer, newPost){    
+.controller('PostEditorController', ['$scope', '$mdDialog', '$window', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'newPost',
+function ($scope, $mdDialog, $window, ygUserPref, ygUserCtrl, ygServer, newPost){    
     $scope.froalaOptions = {
         inlineMode: true,
         minHeight: 150,
@@ -74,21 +74,15 @@ function ($scope, $mdDialog, ygUserPref, ygUserCtrl, ygServer, newPost){
             var statistic = $scope.newPost.statistics[stat_id];
 
             var this_dialog = angular.element('#post-editor-dialog');
-            // console.log(this_dialog);
-
-            // var noPasswordAlert = $mdDialog.alert().title('密碼錯誤')
-            // .content().targetEvent(event)
-            // .ariaLabel('密碼錯誤')
-            // .ok('喔 好');
 
             if(!('password' in $scope.newPost)){
-                alert('無法刪除，找不到密碼或密碼錯誤，這可能不是你的文章喔');
+                $window.alert('無法刪除，找不到密碼或密碼錯誤，這可能不是你的文章喔');
             }
             else{
-                if(confirm('刪除 ' + statistic.expression + ' 按鈕及資料: 有' + statistic.count + '人說 ' + statistic.expression)){
+                if($window.confirm('刪除 ' + statistic.expression + ' 按鈕及資料: 有' + statistic.count + '人說 ' + statistic.expression)){
                     $scope.newPost.statistics[stat_id].tobeDeleted = true;
                 }
             }
-        }
+        };
     }
 }]);

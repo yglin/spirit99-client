@@ -14,7 +14,7 @@ function ($scope, $sce, $mdDialog, nodeValidator, ygServer, server) {
     $scope.server = server;
     $scope.introUrl = null;
     $scope.introContent = '這電台沒提供簡介...';
-    if('intro' in $scope.server){
+    if($scope.server !== null && 'intro' in $scope.server){
         if(nodeValidator.isURL($scope.server.intro)){
             $scope.introUrl = $sce.trustAsResourceUrl($scope.server.intro);
             $scope.introContent = '';
@@ -24,7 +24,7 @@ function ($scope, $sce, $mdDialog, nodeValidator, ygServer, server) {
             $scope.introContent = $scope.server.intro;
         }
     }
-    $scope.isAlreadySelected = $scope.server.name === ygServer.selectedServer.name;
+    $scope.isAlreadySelected = ($scope.server !== null && ygServer.selectedServer !== null && $scope.server.name === ygServer.selectedServer.name);
     $scope.switchServer = function (serverName) {
         ygServer.switchServer(serverName);
         $mdDialog.hide();

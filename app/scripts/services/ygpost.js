@@ -120,8 +120,8 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
             return $q.reject('No selected server');
         }
 
-        var postResource = ygServer.getSupportPost();
-        if(!postResource){
+        var PostResource = ygServer.getSupportPost();
+        if(!PostResource){
             console.log('Post resource not supported by server');
             return $q.reject('Post resource not supported by server');
         }
@@ -144,7 +144,7 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
         extraParams.bounds = ygUserPref.$storage.map.bounds;
 
         ygStatusInfo.statusProcessing('讀取資料...');
-        return postResource.getMarkers(extraParams, function(responses){
+        return PostResource.getMarkers(extraParams, function(responses){
             console.log('Load ' + responses.length + ' posts');
             for (var i = 0; i < responses.length; i++) {
                 if(!(responses[i].id in self.indexedPosts) && self.validatePostData(responses[i])){
@@ -191,14 +191,14 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
     };
 
     self.createPost = function (latitude, longitude){
-        var postResource = ygServer.getSupportPost();
-        if(!postResource){
+        var PostResource = ygServer.getSupportPost();
+        if(!PostResource){
             console.log('Post resource not supported by server');
             return $q.reject('Post resource not supported by server');
         }
 
         if(self.newPost === null){
-            self.newPost = new postResource();
+            self.newPost = new PostResource();
             // self.newPost = ygUtils.fillDefaults(self.newPost, self.postDataDefaults);
         }
         latitude = typeof latitude === 'undefined' ? ygUserPref.$storage.map.center.latitude : latitude;
@@ -217,7 +217,7 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
             },
         })
         .then(function(){
-            return postResource.create(self.newPost,
+            return PostResource.create(self.newPost,
             function (result) {
                 if(self.validatePostData(result) && !(result.id in self.indexedPosts)){
                     var newPost = ygUtils.fillDefaults(result, self.postDataDefaults);
@@ -258,13 +258,13 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
             console.log('Already got author and context, no need to read post');
             return $q.resolve('Already got author and context, no need to read post');
         }
-        var postResource = ygServer.getSupportPost();
-        if(!postResource){
+        var PostResource = ygServer.getSupportPost();
+        if(!PostResource){
             console.log('Post resource not supported by server');
             return $q.reject('Post resource not supported by server');
         }
         ygStatusInfo.statusProcessing('讀取資料...');
-        var promise = postResource.getDetails({id:post.id},
+        var promise = PostResource.getDetails({id:post.id},
         function (result) {
             console.log(result);
             for(var key in result){
@@ -306,11 +306,7 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
                     // console.log(statistics);
                     for(var id in statistics){
                         if(statistics[id].tobeDeleted === true){
-                            statisticResource.delete({post_id: post.id, id: id, password: password},
-                            function (result) {
-                            }, function (error) {
-                                console.log(error);
-                            });
+                            statisticResource.delete({post_id: post.id, id: id, password: password});
                         }
                     }
                     // Add new statistics
@@ -335,8 +331,8 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
     };
 
     self.deletePost = function (post) {
-        var postResource = ygServer.getSupportPost();
-        if(!postResource){
+        var PostResource = ygServer.getSupportPost();
+        if(!PostResource){
             console.log('Post resource not supported by server');
             return $q.reject('Post resource not supported by server');
         }
@@ -351,7 +347,7 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
                 self.filteredPosts.splice(self.filteredPosts.indexOf(post), 1);
                 var password = ygUserPref.$storage.myPosts[post.id].password;
                 
-                return postResource.delete({id:post.id, password: password},
+                return PostResource.delete({id:post.id, password: password},
                 function (response) {
                     delete self.indexedPosts[post.id];
                     return $q.resolve();
@@ -378,14 +374,14 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
     };
 
     // self.popStoryEditor = function (latitude, longitude) {
-    //     var postResource = ygServer.getSupportPost();
-    //     if(!postResource){
+    //     var PostResource = ygServer.getSupportPost();
+    //     if(!PostResource){
     //         console.log('Post resource not supported by server');
     //         return $q.reject('Post resource not supported by server');
     //     }
 
     //     if(self.newPost === null){
-    //         self.newPost = new postResource();
+    //         self.newPost = new PostResource();
     //         // self.newPost = ygUtils.fillDefaults(self.newPost, self.postDataDefaults);
     //     }
     //     if(latitude){
