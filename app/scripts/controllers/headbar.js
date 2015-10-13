@@ -12,6 +12,8 @@ angular.module('spirit99App')
 function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio){
     var self = this;
 
+    $scope.userPref = ygUserPref.$storage;
+    $scope.myPostsOptions = ygUserPref.myPostsOptions;
     $scope.keywords = ygUserPref.$storage.filters.title.keywords;
     // $scope.showInfoWindows = false;
     // $scope.toogleInfoWindowsButtonStyle = {color: 'white'};
@@ -28,6 +30,9 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
         },
         period: {
             fontIcon: 'access_time'
+        },
+        'my-posts': {
+            fontIcon: 'person'
         }
     };
     $scope.selectedTool = "markers";
@@ -121,5 +126,9 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
     $scope.nextGeocodeLocation = function () {
         ygUserCtrl.geocode.currentIndex = (ygUserCtrl.geocode.currentIndex + 1) % ygUserCtrl.geocode.results.length;
     };
+
+    $scope.unselectMyPostsOptions = function () {
+        $scope.userPref.filters.myPosts = undefined;
+    }
 
 }]);

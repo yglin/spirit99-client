@@ -64,6 +64,34 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
     self.filterPost = function (post, filters) {
         filters = typeof filters === 'undefined' ? ygUserPref.$storage.filters : filters;
 
+        // filter my posts
+        if(!angular.isUndefined(filters.myPosts) && filters.myPosts !== null){
+            if(filters.myPosts === 'myPosts'){
+                if(post.id in ygUserPref.$storage.myPosts){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+            else if(filters.myPosts === 'commentedPosts'){
+                if(post.id in ygUserPref.$storage.commentedPosts[ygServer.selectedServer.name]){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+            else if(filters.myPosts === 'followedPosts'){
+                if(post.id in ygUserPref.$storage.followedPosts[ygServer.selectedServer.name]){
+                    return true;
+                }
+                else{
+                    return false;
+                }                
+            }
+        }
+
         // filter by icon
         if(post.iconName && post.iconName in ygUserCtrl.iconCtrls && !(ygUserCtrl.iconCtrls[post.iconName].show)){
             return false;
@@ -71,6 +99,9 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
 
         var matchAll = true;
         for(var key in filters){
+            if(key === 'myPosts'){
+                continue;
+            }
             if(key in post){
                 if('keywords' in filters[key] && typeof post[key] === 'string'){
                     for (var i = 0; i < filters[key].keywords.length; i++) {

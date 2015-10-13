@@ -19,9 +19,16 @@ function ($q, $localStorage) {
             'nuclear-waste': {
                 name: 'nuclear-waste',
                 title: '核廢料掩埋場',
-                portalUrl: 'http://nuclear-waste-dev.elasticbeanstalk.com/portal',
+                portalUrl: 'http://spirit99-server-dev.elasticbeanstalk.com/nuclear-waste/portal',
+                show: true
+            },
+            'localooxx': {
+                name: 'localooxx',
+                title: '地方的ＯＯ需要ＸＸ',
+                portalUrl: 'http://spirit99-server-dev.elasticbeanstalk.com/localooxx/portal',
                 show: true
             }
+
         },
         map: {
             center:{
@@ -48,6 +55,7 @@ function ($q, $localStorage) {
             zoom: 16
         },
         filters: {
+            myPosts: '',
             title: {
                 keywords: []
             },
@@ -80,9 +88,16 @@ function ($q, $localStorage) {
         autoOpenListPosts: true,
         soundFX: true,
         // startAtGeolocation: true,
+        myPosts: {},
+        commentedPosts: {},
         followedPosts: {},
-        myPosts: {}
     });
+
+    self.myPostsOptions = {
+        'myPosts': '我的文章',
+        'commentedPosts': '我留言過的文章',
+        'followedPosts': '我追蹤的文章'
+    };
 
     self.setMapHome = function () {
         self.$storage.mapHome = angular.copy(self.$storage.map);

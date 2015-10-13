@@ -93,10 +93,27 @@ function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, y
         $scope.newComment.$save({post_id:$scope.post.id}).then(
         function (result) {
             $scope.comments.push($scope.newComment);
-            $scope.newComment = new self.commentResource();
+            // Record commented post
+            var commentedPosts;
+            if(angular.isUndefined(ygUserPref.$storage.commentedPosts)){
+                ygUserPref.$storage.commentedPosts = {};
+            }
+            commentedPosts = ygUserPref.$storage.commentedPosts;
+            if(angular.isUndefined(commentedPosts[ygServer.selectedServer.name])){
+                commentedPosts[ygServer.selectedServer.name] = {};
+            }
+            if(angular.isUndefined(commentedPosts[ygServer.selectedServer.name][$scope.post.id])){
+                commentedPosts[ygServer.selectedServer.name][$scope.post.id] = 1;
+            }
+            else{
+                commentedPosts[ygServer.selectedServer.name][$scope.post.id] += 1;                
+            }
+            console.log(ygUserPref.$storage.commentedPosts);
             // Automatic follow post if added comment
             ygFollowPost.followPost($scope.post);
             $scope.followPost = $scope.post.id in ygFollowPost.followedPosts;
+            // Reset new comment resource;
+            $scope.newComment = new self.commentResource();
         },
         function (error) {
             console.log(error);

@@ -69,6 +69,16 @@ img.grayscale {
                 <div layout-margin class='md-display-1' style='color:white;'> ~ </div>
                 <input type='date' ng-model="create_time.endDate" />
             </div>
+            <div flex layout='row' layout-align='center center' layout-padding ng-show='selectedTool == "my-posts"'>
+                <md-select flex style='margin:0;' placeholder='我的...' ng-model='userPref.filters.myPosts'>
+                    <md-option ng-repeat='(name, title) in myPostsOptions' value='{{name}}'>
+                        {{title}}
+                    </md-option>
+                </md-select>
+                <md-button class='md-icon-button' ng-click="unselectMyPostsOptions()">
+                        <md-icon class='material-icons' ng-style="{color: 'white'}">clear</md-icon>
+                </md-button>
+            </div>
         </div>
         <div flex layout='row' layout-align='start center' ng-click='showServerIntro(server.name)' style='cursor:pointer;'>
             <div layout-margin>
