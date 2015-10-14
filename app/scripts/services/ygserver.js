@@ -304,6 +304,19 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
             {
                 'plusOne': {
                     method: 'PUT'
+                },
+                'delete': {
+                    method: 'DELETE',
+                    headers: {
+                        password: function (request) {
+                            var password = '';
+                            if('password' in request.params){
+                                password = request.params.password;
+                                delete request.params.password;
+                            }
+                            return password;
+                        }
+                    }
                 }
             });
             // console.log(self.resources.statistic);

@@ -129,6 +129,6 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
 
     $scope.unselectMyPostsOptions = function () {
         $scope.userPref.filters.myPosts = undefined;
-    }
+    };
 
 }]);

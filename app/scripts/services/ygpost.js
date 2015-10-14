@@ -340,7 +340,6 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
                 var statisticResource = ygServer.getSupportStatistic();
                 if(statisticResource){
                     // Delete statistics
-                    // console.log(statistics);
                     for(var id in statistics){
                         if(statistics[id].tobeDeleted === true){
                             statisticResource.delete({post_id: post.id, id: id, password: password});
