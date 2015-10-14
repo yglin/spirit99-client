@@ -67,7 +67,7 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
         // filter my posts
         if(!angular.isUndefined(filters.myPosts) && filters.myPosts !== null){
             if(filters.myPosts === 'myPosts'){
-                if(post.id in ygUserPref.$storage.myPosts){
+                if(post.id in ygUserPref.$storage.myPosts[ygServer.selectedServer.name]){
                     return true;
                 }
                 else{
@@ -137,11 +137,17 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
     };
 
     self.markAsMyPost = function (post) {
-        if(!(post.id in ygUserPref.$storage.myPosts)){
-            ygUserPref.$storage.myPosts[post.id] = {};
+        if(angular.isUndefined(ygUserPref.$storage.myPosts)){
+            ygUserPref.$storage.myPosts = {};
+        }
+        if(angular.isUndefined(ygUserPref.$storage.myPosts[ygServer.selectedServer.name])){
+            ygUserPref.$storage.myPosts[ygServer.selectedServer.name] = {};
+        }
+        if(!(post.id in ygUserPref.$storage.myPosts[ygServer.selectedServer.name])){
+            ygUserPref.$storage.myPosts[ygServer.selectedServer.name][post.id] = {};
         }
         if('password' in post){
-            ygUserPref.$storage.myPosts[post.id].password = post.password;                            
+            ygUserPref.$storage.myPosts[ygServer.selectedServer.name][post.id].password = post.password;                            
         }
     };
 
@@ -317,8 +323,8 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
         self.filteredPosts.splice(self.filteredPosts.indexOf(post), 1);
         var tempPost = angular.copy(post);
         var password = '';
-        if(post.id in ygUserPref.$storage.myPosts){
-            password = ygUserPref.$storage.myPosts[post.id].password;
+        if(post.id in ygUserPref.$storage.myPosts[ygServer.selectedServer.name]){
+            password = ygUserPref.$storage.myPosts[ygServer.selectedServer.name][post.id].password;
         }
         tempPost.password = password;
         // console.log(tempPost.statistics);
@@ -376,7 +382,7 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
             .cancel('想想還是算了');
             return $mdDialog.show(confirm).then(function () {
                 self.filteredPosts.splice(self.filteredPosts.indexOf(post), 1);
-                var password = ygUserPref.$storage.myPosts[post.id].password;
+                var password = ygUserPref.$storage.myPosts[ygServer.selectedServer.name][post.id].password;
                 
                 return PostResource.delete({id:post.id, password: password},
                 function (response) {

@@ -172,7 +172,7 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
         else if('postUrl' in self.selectedServer){
             // Get fields names of post
             self.resources.post = $resource(
-                self.selectedServer.postUrl + '/:id', {},
+                self.selectedServer.postUrl.replace(/\/+$/, '') + '/:id', {},
                 {
                     'getMarkers': {
                         method: 'GET',
@@ -298,13 +298,15 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
             return self.resources.statistic;
         }
         else if('statisticUrl' in self.selectedServer && self.selectedServer.statisticUrl !== null){
-            self.resources.statistic = $resource(self.selectedServer.statisticUrl + '/:id',
+            // console.log(self.selectedServer.statisticUrl);
+            self.resources.statistic = $resource(self.selectedServer.statisticUrl.replace(/\/+$/, '') + '/:id',
             {post_id: '@post_id', id: '@id'},
             {
                 'plusOne': {
                     method: 'PUT'
                 }
             });
+            // console.log(self.resources.statistic);
             return self.resources.statistic;
         }
         else{
