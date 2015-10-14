@@ -36,7 +36,7 @@ function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, y
     $scope.post = post;
     // console.log($scope.post);
 
-    $scope.isMyPost = post.id in ygUserPref.$storage.myPosts;
+    $scope.isMyPost = post.id in ygUserPref.$storage.myPosts[ygServer.selectedServer.name];
 
     $scope.formatDatetime = ygUtils.formatDatetime;
 
