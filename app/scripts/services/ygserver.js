@@ -327,6 +327,24 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
         }
     };
 
+    self.getSupportUpload = function () {
+        if('upload' in self.resources){
+            return self.resources.upload;
+        }
+        else if('uploadUrl' in self.selectedServer && nodeValidator.isURL(self.selectedServer.uploadUrl)){
+            self.resources.upload = {
+                url: self.selectedServer.uploadUrl
+            }
+            if('uploadParamName' in self.selectedServer){
+                self.resources.upload.paramName = self.selectedServer.uploadParamName;
+            }
+            return self.resources.upload;
+        }
+        else{
+            return false;
+        }
+    };
+
     self.initialPromises = {
         'updateServers': self.updateServers()
     };

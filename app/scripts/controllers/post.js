@@ -33,6 +33,14 @@ function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, y
         language: 'zh-tw',
         placeholder: '留言...'
     };
+    var upload = ygServer.getSupportUpload();
+    if(upload){
+        $scope.froalaOptions.imageUploadURL = upload.url;
+        if('paramName' in upload){
+            $scope.froalaOptions.imageUploadParam = upload.paramName;
+        }
+    }
+
     $scope.post = post;
     // console.log($scope.post);
 

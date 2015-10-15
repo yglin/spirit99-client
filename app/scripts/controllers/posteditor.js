@@ -16,6 +16,13 @@ function ($scope, $mdDialog, $window, ygUserPref, ygUserCtrl, ygServer, newPost)
         language: 'zh-tw',
         placeholder: '內文...'
     };
+    var upload = ygServer.getSupportUpload();
+    if(upload){
+        $scope.froalaOptions.imageUploadURL = upload.url;
+        if('paramName' in upload){
+            $scope.froalaOptions.imageUploadParam = upload.paramName;
+        }
+    }
 
     $scope.newPost = newPost;
 
