@@ -372,7 +372,7 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
             console.log('Post resource not supported by server');
             return $q.reject('Post resource not supported by server');
         }
-        if(post.id in ygUserPref.$storage.myPosts){
+        if(post.id in ygUserPref.$storage.myPosts[ygServer.selectedServer.name]){
             var confirm = $mdDialog.confirm()
             .title('刪除文章')
             .content('確定要刪除<br><br><p><b>' + post.title + '</b></p><br><br>這篇文章?')
