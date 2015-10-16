@@ -347,7 +347,7 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
         else if('uploadUrl' in self.selectedServer && nodeValidator.isURL(self.selectedServer.uploadUrl)){
             self.resources.upload = {
                 url: self.selectedServer.uploadUrl
-            }
+            };
             if('uploadParamName' in self.selectedServer){
                 self.resources.upload.paramName = self.selectedServer.uploadParamName;
             }
