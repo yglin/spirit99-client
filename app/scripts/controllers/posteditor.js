@@ -13,6 +13,7 @@ function ($scope, $mdDialog, $window, ygUserPref, ygUserCtrl, ygServer, ygFroala
 
     ygFroala.getFroalaOptions().then(function(options){
         $scope.froalaOptions = options;
+        $scope.froalaOptions.minHeight = 150;
     });
     
     $scope.newPost = newPost;
