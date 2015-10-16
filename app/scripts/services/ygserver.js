@@ -331,6 +331,19 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
         if('upload' in self.resources){
             return self.resources.upload;
         }
+        else if('uploadToS3ConfigUrl' in self.selectedServer){
+            self.resources.upload = {
+                s3Config: {},
+                promiseS3Config: $http.get(self.selectedServer.uploadToS3ConfigUrl)
+                .then(function (response) {
+                    self.resources.upload.s3Config = response.data;
+                    return $q.resolve();
+                }, function (error) {
+                    return $q.reject(error);
+                })
+            };
+            return self.resources.upload;
+        }
         else if('uploadUrl' in self.selectedServer && nodeValidator.isURL(self.selectedServer.uploadUrl)){
             self.resources.upload = {
                 url: self.selectedServer.uploadUrl

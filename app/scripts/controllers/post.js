@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('PostController', ['$scope', '$resource', '$mdDialog', 'ygUtils', 'ygUserPref', 'ygServer', 'ygPost', 'ygFollowPost', 'post',
-function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, ygFollowPost, post) {
+.controller('PostController', ['$scope', '$resource', '$mdDialog', 'ygUtils', 'ygUserPref', 'ygServer', 'ygFroala', 'ygPost', 'ygFollowPost', 'post',
+function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygFroala, ygPost, ygFollowPost, post) {
     var self = this;
 
     self.commentResource = ygServer.getSupportComment();
@@ -27,20 +27,11 @@ function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygPost, y
         $scope.newComment = new self.commentResource();
     }        
 
-    $scope.froalaOptions = {
-        inlineMode: true,
-        minHeight: 50,
-        language: 'zh-tw',
-        placeholder: '留言...'
-    };
-    var upload = ygServer.getSupportUpload();
-    if(upload){
-        $scope.froalaOptions.imageUploadURL = upload.url;
-        if('paramName' in upload){
-            $scope.froalaOptions.imageUploadParam = upload.paramName;
-        }
-    }
-
+    ygFroala.getFroalaOptions().then(function(options){
+        $scope.froalaOptions = options;
+        $scope.froalaOptions.minHeight = 50;
+    });
+    
     $scope.post = post;
     // console.log($scope.post);
 

@@ -8,23 +8,18 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('PostEditorController', ['$scope', '$mdDialog', '$window', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'newPost',
-function ($scope, $mdDialog, $window, ygUserPref, ygUserCtrl, ygServer, newPost){    
-    $scope.froalaOptions = {
-        inlineMode: true,
-        minHeight: 150,
-        language: 'zh-tw',
-        placeholder: '內文...'
-    };
-    var upload = ygServer.getSupportUpload();
-    if(upload){
-        $scope.froalaOptions.imageUploadURL = upload.url;
-        if('paramName' in upload){
-            $scope.froalaOptions.imageUploadParam = upload.paramName;
-        }
-    }
+.controller('PostEditorController', ['$scope', '$mdDialog', '$window', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygFroala', 'newPost',
+function ($scope, $mdDialog, $window, ygUserPref, ygUserCtrl, ygServer, ygFroala, newPost){    
 
+    ygFroala.getFroalaOptions().then(function(options){
+        $scope.froalaOptions = options;
+    });
+    
     $scope.newPost = newPost;
+
+    if(angular.isUndefined($scope.newPost.context)){
+        $scope.newPost.context = '';
+    }
 
     $scope.iconCtrls = ygUserCtrl.iconCtrls;
 
@@ -32,19 +27,17 @@ function ($scope, $mdDialog, $window, ygUserPref, ygUserCtrl, ygServer, newPost)
         $scope.newPost.icon = Object.keys($scope.iconCtrls)[0];
     }
 
-    $scope.selectMarkerIcon = function (iconName) {
-        $scope.newPost.icon = iconName;
-    };
-
     $scope.triggerToolbar = function(){
         $scope.froalaOptions.froala('show', null);
-        // $scope.froalaOptions.inlineMode = !($scope.froalaOptions.inlineMode);
     };
 
     $scope.insertImage = function(){
-        // console.log('Show Insert Image!!');
         $scope.froalaOptions.froala('show', null);
         $scope.froalaOptions.froala('showInsertImage');
+    };
+
+    $scope.selectMarkerIcon = function (iconName) {
+        $scope.newPost.icon = iconName;
     };
 
     $scope.cancel = function() {
