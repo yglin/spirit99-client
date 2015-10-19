@@ -178,10 +178,10 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
         if('post' in self.resources){
             return self.resources.post;
         }
-        else if('postUrl' in self.selectedServer){
+        else if('postUrl' in self.selectedServer.urls){
             // Get fields names of post
             self.resources.post = $resource(
-                self.selectedServer.postUrl.replace(/\/+$/, '') + '/:id', {},
+                self.selectedServer.urls.postUrl.replace(/\/+$/, '') + '/:id', {},
                 {
                     'getMarkers': {
                         method: 'GET',
@@ -212,6 +212,32 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
                             return outData;
                         }
                     },
+                    'update': {
+                        method: 'PUT',
+                        headers: {
+                            password: function (request) {
+                                var password = '';
+                                if('password' in request.params){
+                                    password = request.params.password;
+                                    delete request.params.password;
+                                }
+                                return password;
+                            }
+                        },
+                        transformRequest: function (data, headersGetter) {
+                            var postFields = ['title', 'context', 'author', 'icon', 'latitude', 'longitude'];
+                            var outData = {};
+                            for (var i = 0; i < postFields.length; i++) {
+                                if(postFields[i] in data){
+                                    outData[postFields[i]] = data[postFields[i]];
+                                }
+                            }
+                            if(typeof outData === 'object'){
+                                outData = angular.toJson(outData);
+                            }
+                            return outData;
+                        }                        
+                    },
                     'delete': {
                         method: 'DELETE',
                         headers: {
@@ -241,8 +267,8 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
         if('comment' in self.resources){
             return self.resources.comment;            
         }
-        else if('commentUrl' in self.selectedServer){
-            self.resources.comment = $resource(self.selectedServer.commentUrl);
+        else if('commentUrl' in self.selectedServer.urls){
+            self.resources.comment = $resource(self.selectedServer.urls.commentUrl);
             return self.resources.comment;
         }
         else{
