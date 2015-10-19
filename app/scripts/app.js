@@ -31,7 +31,7 @@ angular
 ])
 .value('portalRules', {
     requiredFields: [
-        'name', 'title', 'postUrl'
+        'name', 'title'
     ]
 })
 .config(function ($routeProvider) {

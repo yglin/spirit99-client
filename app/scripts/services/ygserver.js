@@ -82,8 +82,9 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
                 }
                 else{
                     self.servers[response.name] = ygUtils.fillDefaults(response, self.portalDataDefaults);
-                    self.servers[response.name].isReady = true;
                 }
+                self.servers[response.name].portalUrl = portalUrl;
+                self.servers[response.name].isReady = true;
                 self.showServerIntro(response.name);
             }
             else{
@@ -115,20 +116,27 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
     self.updateServer = function (portalData) {
         var serverName = portalData.name;
         var server = self.servers[serverName];
-        if(('portalUrl' in portalData) && portalData.portalUrl !== server.portalUrl){
+        var portalUrl = server.portalUrl;
+        if(portalData.urls && portalData.urls.portalUrl){
+            portalUrl = portalData.urls.portalUrl;
+        }
+        if(portalUrl !== server.portalUrl && nodeValidator.isURL(portalUrl)){
         // Got new portalUrl, update with new portal
-            return $http.get(portalData.portalUrl)
+            console.log('Got new portal url , update from it: ' + portalUrl);
+            return $http.get(portalUrl)
             .success(function (newestData) {
                 if(self.validatePortal(newestData)){
                     self.servers[serverName] = ygUtils.fillDefaults(newestData, self.portalDataDefaults);            
-                    self.servers[serverName].portalUrl = portalData.portalUrl;
+                    self.servers[serverName].portalUrl = portalUrl;
                     self.servers[serverName].isReady = true;
                 }        
             })
             .error(self.errorGetPortal);
         }
         else if(self.validatePortal(portalData)){
-            self.servers[serverName] = ygUtils.fillDefaults(portalData, self.portalDataDefaults);            
+            // console.log(portalData)
+            self.servers[serverName] = ygUtils.fillDefaults(portalData, self.portalDataDefaults);
+            self.servers[serverName].portalUrl = portalUrl;
             self.servers[serverName].isReady = true;
             return $q.resolve();
         }
@@ -145,6 +153,7 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
 
         for (var name in self.servers) {
             self.servers[name].isReady = false;
+            console.log('Update station ' + name + ' from ' + self.servers[name].portalUrl);
             updatePromises[name] = $http.get(self.servers[name].portalUrl)
             .success(self.updateServer)
             .error(self.errorGetPortal);
