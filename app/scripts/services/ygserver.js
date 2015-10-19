@@ -332,9 +332,8 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
         if('statistic' in self.resources){
             return self.resources.statistic;
         }
-        else if('statisticUrl' in self.selectedServer && self.selectedServer.statisticUrl !== null){
-            // console.log(self.selectedServer.statisticUrl);
-            self.resources.statistic = $resource(self.selectedServer.statisticUrl.replace(/\/+$/, '') + '/:id',
+        else if('voteUrl' in self.selectedServer.urls){
+            self.resources.statistic = $resource(self.selectedServer.urls.voteUrl.replace(/\/+$/, '') + '/:id',
             {post_id: '@post_id', id: '@id'},
             {
                 'plusOne': {
@@ -354,7 +353,6 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
                     }
                 }
             });
-            // console.log(self.resources.statistic);
             return self.resources.statistic;
         }
         else{
