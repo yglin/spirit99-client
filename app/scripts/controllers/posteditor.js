@@ -76,7 +76,7 @@ function ($scope, $mdDialog, $window, ygUserPref, ygUserCtrl, ygServer, ygFroala
 
             var this_dialog = angular.element('#post-editor-dialog');
 
-            if(!('password' in $scope.newPost)){
+            if(!ygUserPref.isMyPost($scope.newPost)){
                 $window.alert('無法刪除，找不到密碼或密碼錯誤，這可能不是你的文章喔');
             }
             else{
