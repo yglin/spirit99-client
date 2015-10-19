@@ -320,19 +320,25 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
     };
 
     self.updatePost = function (post) {
+        var PostResource = ygServer.getSupportPost();
+        if(!PostResource){
+            console.log('Post resource not supported by server');
+            return $q.reject('Post resource not supported by server');
+        }
         self.filteredPosts.splice(self.filteredPosts.indexOf(post), 1);
         var tempPost = angular.copy(post);
-        var password = '';
-        if(post.id in ygUserPref.$storage.myPosts[ygServer.selectedServer.name]){
-            password = ygUserPref.$storage.myPosts[ygServer.selectedServer.name][post.id].password;
-        }
-        tempPost.password = password;
-        // console.log(tempPost.statistics);
         self.postEditor(tempPost).then(function (tempPost) {
-            // console.log(tempPost.statistics);
-            var statistics = tempPost.statistics;
-            var newStatistics = tempPost.newStatistics;
-            return tempPost.$save().then(function (response) {
+            var password = '';
+            if(post.id in ygUserPref.$storage.myPosts[ygServer.selectedServer.name]){
+                password = ygUserPref.$storage.myPosts[ygServer.selectedServer.name][post.id].password;
+            }
+            else{
+                $window.alert('這可能是別人的文章，你沒有權限更改');
+                return $q.reject(); 
+            }
+            ygStatusInfo.statusProcessing('更新文章資料...');
+            var promise = PostResource.update({id: post.id, password: password}, tempPost,
+            function (response) {
                 self.indexedPosts[post.id] = response;
                 self.assignIconObject(response);
 
@@ -340,12 +346,14 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
                 var statisticResource = ygServer.getSupportStatistic();
                 if(statisticResource){
                     // Delete statistics
+                    var statistics = tempPost.statistics;
                     for(var id in statistics){
                         if(statistics[id].tobeDeleted === true){
                             statisticResource.delete({post_id: post.id, id: id, password: password});
                         }
                     }
                     // Add new statistics
+                    var newStatistics = tempPost.newStatistics;
                     if(!angular.isUndefined(newStatistics) && newStatistics !== null){
                         self.addStatistics(post.id, newStatistics);
                     }                    
@@ -358,7 +366,11 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
                     $window.alert('更新失敗!!');
                 }
                 console.log(error);
-            });            
+            }).$promise;
+            promise.finally(function () {
+                ygStatusInfo.statusIdle();
+            });
+            return promise;
         }).finally(function () {
             if(self.filterPost(self.indexedPosts[post.id])){
                 self.filteredPosts.addAsMarker(self.indexedPosts[post.id]);
