@@ -46,8 +46,9 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
     });
 
     // This function should be override in map.js
-    self.filteredPosts.addAsMarker = function (postData) {
-          this.push(postData);
+    self.filteredPosts.addAsMarker = function (post) {
+        self.getThumbnail(post);
+        this.push(post);
     };
 
     self.validatePostData = function (postData) {
@@ -303,7 +304,7 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
         ygStatusInfo.statusProcessing('讀取資料...');
         var promise = PostResource.getDetails({id:post.id},
         function (result) {
-            console.log(result);
+            // console.log(result);
             for(var key in result){
                 if(!(key in post)){
                     post[key] = result[key];
@@ -577,15 +578,16 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
     };
 
     self.getThumbnail = function (post) {
+        post = typeof post === 'number' ? self.indexedPosts[post] : post;
         if(post.thumbnail){
             return $q.resolve(post.thumbnail);
         }
         else{
             return self.readPost(post).then(function () {
                 var rex = /<img[^>]+src\s*=\s*"([^"\s]+)"/i;
-                console.log(post.context);
+                // console.log(post.context);
                 var match = rex.exec(post.context);
-                console.log(match);
+                // console.log(match);
                 if(match){
                     post.thumbnail = match[1];
                 }

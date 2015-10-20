@@ -53,12 +53,6 @@ function($scope, $timeout, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygU
         control: {}
     };
 
-    $scope.posts.addAsMarker = function (postData) {
-        // console.log('Add post marker ' + postData.id);
-        // $scope.addMarkerAnimation(postData, 2500);
-        this.push(postData);
-    };
-
     self.focusOnLocation = function (location, viewport) {
         $scope.map.center = {
             latitude: location.lat(),
@@ -112,7 +106,6 @@ function($scope, $timeout, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygU
         $timeout.cancel(self.timeoutShowInfoWindow);
 
         ygUserCtrl.focusedPostId = model.id;
-        ygPost.getThumbnail(model);
         ygAudio.play('focusOnPost');
         if($scope.infoWindow.show){
             $scope.infoWindow.coords = {
