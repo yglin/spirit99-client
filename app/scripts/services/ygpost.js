@@ -575,4 +575,27 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
             }
         }
     };
+
+    self.getThumbnail = function (post) {
+        if(post.thumbnail){
+            return $q.resolve(post.thumbnail);
+        }
+        else{
+            return self.readPost(post).then(function () {
+                var rex = /<img[^>]+src\s*=\s*"([^"\s]+)"/i;
+                console.log(post.context);
+                var match = rex.exec(post.context);
+                console.log(match);
+                if(match){
+                    post.thumbnail = match[1];
+                }
+                else{
+                    post.thumbnail = null;
+                }
+                return $q.resolve(post.thumbnail);
+            }, function (error) {
+                return $q.reject(error);
+            });
+        }
+    };
 }]);

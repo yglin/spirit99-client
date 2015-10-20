@@ -112,6 +112,7 @@ function($scope, $timeout, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygU
         $timeout.cancel(self.timeoutShowInfoWindow);
 
         ygUserCtrl.focusedPostId = model.id;
+        ygPost.getThumbnail(model);
         ygAudio.play('focusOnPost');
         if($scope.infoWindow.show){
             $scope.infoWindow.coords = {
