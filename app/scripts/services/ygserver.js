@@ -364,10 +364,10 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
         if('upload' in self.resources){
             return self.resources.upload;
         }
-        else if('uploadToS3ConfigUrl' in self.selectedServer){
+        else if('uploadToS3ConfigUrl' in self.selectedServer.urls){
             self.resources.upload = {
                 s3Config: {},
-                promiseS3Config: $http.get(self.selectedServer.uploadToS3ConfigUrl)
+                promiseS3Config: $http.get(self.selectedServer.urls.uploadToS3ConfigUrl)
                 .then(function (response) {
                     self.resources.upload.s3Config = response.data;
                     return $q.resolve();
@@ -377,9 +377,9 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
             };
             return self.resources.upload;
         }
-        else if('uploadUrl' in self.selectedServer && nodeValidator.isURL(self.selectedServer.uploadUrl)){
+        else if('uploadUrl' in self.selectedServer.urls){
             self.resources.upload = {
-                url: self.selectedServer.uploadUrl
+                url: self.selectedServer.urls.uploadUrl
             };
             if('uploadParamName' in self.selectedServer){
                 self.resources.upload.paramName = self.selectedServer.uploadParamName;
