@@ -267,11 +267,11 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
                     self.markAsMyPost(newPost);
                     ygFollowPost.followPost(newPost);
 
-                    // Add new statistics
-                    var statisticResource = ygServer.getSupportStatistic();
-                    var newStatistics = self.newPost.newStatistics;
-                    if(statisticResource && !angular.isUndefined(newStatistics) && newStatistics !== null){
-                        self.addStatistics(result.id, newStatistics);
+                    // Add new votes
+                    var voteResource = ygServer.getSupportVote();
+                    var newVotes = self.newPost.newVotes;
+                    if(voteResource && !angular.isUndefined(newVotes) && newVotes !== null){
+                        self.addVotes(result.id, newVotes);
                     }
 
                     self.newPost = null;
@@ -343,20 +343,20 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
                 self.indexedPosts[post.id] = response;
                 self.assignIconObject(response);
 
-                // console.log(tempPost.statistics);
-                var statisticResource = ygServer.getSupportStatistic();
-                if(statisticResource){
-                    // Delete statistics
-                    var statistics = tempPost.statistics;
-                    for(var id in statistics){
-                        if(statistics[id].tobeDeleted === true){
-                            statisticResource.delete({post_id: post.id, id: id, password: password});
+                // console.log(tempPost.votes);
+                var voteResource = ygServer.getSupportVote();
+                if(voteResource){
+                    // Delete votes
+                    var votes = tempPost.votes;
+                    for(var id in votes){
+                        if(votes[id].tobeDeleted === true){
+                            voteResource.delete({post_id: post.id, id: id, password: password});
                         }
                     }
-                    // Add new statistics
-                    var newStatistics = tempPost.newStatistics;
-                    if(!angular.isUndefined(newStatistics) && newStatistics !== null){
-                        self.addStatistics(post.id, newStatistics);
+                    // Add new votes
+                    var newVotes = tempPost.newVotes;
+                    if(!angular.isUndefined(newVotes) && newVotes !== null){
+                        self.addVotes(post.id, newVotes);
                     }                    
                 }
             }, function (error) {
@@ -455,11 +455,11 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
     //                 self.newPost[key] = newPost[key];
     //             }
     //         }
-    //         var statisticResource = ygServer.getSupportStatistic();
-    //         if('newStatistics' in self.newPost){
-    //             var newStatistics = self.newPost.newStatistics;
-    //             delete self.newPost.newStatistics;
-    //             console.log(newStatistics);
+    //         var voteResource = ygServer.getSupportvote();
+    //         if('newvotes' in self.newPost){
+    //             var newvotes = self.newPost.newvotes;
+    //             delete self.newPost.newvotes;
+    //             console.log(newvotes);
     //         }
     //         var promise = self.newPost.$save()
     //         .then(function (result) {
@@ -474,8 +474,8 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
     //                 ygFollowPost.followPost(newPost);
     //                 self.newPost = null;
     //                 console.log('Success, post added!!');
-    //                 if(statisticResource && !angular.isUndefined(newStatistics) && newStatistics !== null){
-    //                     self.addStatistics(result.id, newStatistics);
+    //                 if(voteResource && !angular.isUndefined(newvotes) && newvotes !== null){
+    //                     self.addvotes(result.id, newvotes);
     //                 }
     //                 return $q.resolve();                        
     //             }
@@ -568,11 +568,11 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
         return deferred.promise;
     });
 
-    self.addStatistics = function (post_id, statistics) {
-        var statisticResource = ygServer.getSupportStatistic();
-        if(statisticResource){
-            for(var key in statistics){
-                statistics[key].$save({post_id: post_id});
+    self.addVotes = function (post_id, votes) {
+        var voteResource = ygServer.getSupportVote();
+        if(voteResource){
+            for(var key in votes){
+                votes[key].$save({post_id: post_id});
             }
         }
     };

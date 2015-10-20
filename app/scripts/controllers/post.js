@@ -48,28 +48,28 @@ function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygFroala,
 
     $scope.deletePost = ygPost.deletePost;
 
-    $scope.statisticResource = ygServer.getSupportStatistic();
-    if($scope.statisticResource){
-        if(!('statistics' in $scope.post)){
-            $scope.statisticResource.query({post_id: $scope.post.id},
+    $scope.voteResource = ygServer.getSupportVote();
+    if($scope.voteResource){
+        if(!('votes' in $scope.post)){
+            $scope.voteResource.query({post_id: $scope.post.id},
             function (results) {
                 if(results.length > 0){
-                    $scope.post.statistics = {};
+                    $scope.post.votes = {};
                     for (var i = 0; i < results.length; i++) {
-                        $scope.post.statistics[results[i].id]  = results[i];
+                        $scope.post.votes[results[i].id]  = results[i];
                     }
                 }
-                // console.log($scope.post.statistics);
+                // console.log($scope.post.votes);
             });
         }
 
-        $scope.statisticPlusOne = function (statistic) {
-            $scope.statisticResource.plusOne({post_id: $scope.post.id, id: statistic.id},
+        $scope.votePlusOne = function (vote) {
+            $scope.voteResource.plusOne({post_id: $scope.post.id, id: vote.id},
             function (result) {
                 if('count' in result){
-                    statistic.count = result.count;
+                    vote.count = result.count;
                 }
-                statistic.disabled = true;
+                vote.disabled = true;
             });
         };
     }

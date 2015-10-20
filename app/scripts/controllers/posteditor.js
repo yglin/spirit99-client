@@ -49,30 +49,30 @@ function ($scope, $mdDialog, $window, ygUserPref, ygUserCtrl, ygServer, ygFroala
         $mdDialog.hide($scope.newPost);
     };
 
-    $scope.statisticResource = ygServer.getSupportStatistic();
-    if($scope.statisticResource){
-        $scope.newStatistic = new $scope.statisticResource({
+    $scope.voteResource = ygServer.getSupportVote();
+    if($scope.voteResource){
+        $scope.newVote = new $scope.voteResource({
             expression: '言贊',
             count: 0
         });
-        $scope.newStatisticCount = 0;
-        $scope.addNewStatistic = function () {
-            if(!('newStatistics' in $scope.newPost)){
-                $scope.newPost.newStatistics = {};
+        $scope.newVoteCount = 0;
+        $scope.addNewVote = function () {
+            if(!('newVotes' in $scope.newPost)){
+                $scope.newPost.newVotes = {};
             }
-            $scope.newStatisticCount += 1;
-            $scope.newPost.newStatistics[$scope.newStatisticCount] = $scope.newStatistic;
-            $scope.newStatistic = new $scope.statisticResource({
+            $scope.newVoteCount += 1;
+            $scope.newPost.newVotes[$scope.newVoteCount] = $scope.newVote;
+            $scope.newVote = new $scope.voteResource({
                 expression: '言贊',
                 count: 0
             });
         };
-        $scope.removeNewStatistic = function (key) {
-            delete $scope.newPost.newStatistics[key];
+        $scope.removeNewVote = function (key) {
+            delete $scope.newPost.newVotes[key];
         };
 
-        $scope.removeStatistic = function (stat_id, event) {
-            var statistic = $scope.newPost.statistics[stat_id];
+        $scope.removeVote = function (stat_id, event) {
+            var vote = $scope.newPost.votes[stat_id];
 
             var this_dialog = angular.element('#post-editor-dialog');
 
@@ -80,8 +80,8 @@ function ($scope, $mdDialog, $window, ygUserPref, ygUserCtrl, ygServer, ygFroala
                 $window.alert('無法刪除，找不到密碼或密碼錯誤，這可能不是你的文章喔');
             }
             else{
-                if($window.confirm('刪除 ' + statistic.expression + ' 按鈕及資料: 有' + statistic.count + '人說 ' + statistic.expression)){
-                    $scope.newPost.statistics[stat_id].tobeDeleted = true;
+                if($window.confirm('刪除 ' + vote.expression + ' 按鈕及資料: 有' + vote.count + '人說 ' + vote.expression)){
+                    $scope.newPost.votes[stat_id].tobeDeleted = true;
                 }
             }
         };

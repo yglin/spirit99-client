@@ -62,24 +62,24 @@ img.grayscale {
                 <div ng-message='md-maxlength'>請勿超過30字</div>
             </div>
         </md-input-container>
-        <div ng-if='statisticResource !== false'>
-            <div ng-repeat="(id, statistic) in newPost.statistics" ng-show='statistic.tobeDeleted !== true' layout='row'>
-                <md-button type='button' class='md-icon-button' ng-click='removeStatistic(id, $event)'>
+        <div ng-if='voteResource !== false'>
+            <div ng-repeat="(id, vote) in newPost.votes" ng-show='vote.tobeDeleted !== true' layout='row'>
+                <md-button type='button' class='md-icon-button' ng-click='removeVote(id, $event)'>
                     <md-icon class='material-icons'>clear</md-icon>
                 </md-button>
-                <md-button type='button' class='md-accent md-raised'>{{statistic.expression}}</md-button>
-                <span>有 {{statistic.count}} 個人說：</span><div class='md-headline'>{{statistic.expression}}</div>
+                <md-button type='button' class='md-accent md-raised'>{{vote.expression}}</md-button>
+                <span>有 {{vote.count}} 個人說：</span><div class='md-headline'>{{vote.expression}}</div>
             </div>
-            <div ng-repeat="(key, statistic) in newPost.newStatistics" layout='row'>
-                <md-button type='button' class='md-icon-button' ng-click='removeNewStatistic(key)'>
+            <div ng-repeat="(key, vote) in newPost.newVotes" layout='row'>
+                <md-button type='button' class='md-icon-button' ng-click='removeNewVote(key)'>
                     <md-icon class='material-icons'>clear</md-icon>
                 </md-button>
-                <md-button type='button' class='md-accent md-raised'>{{statistic.expression}}</md-button>
-                <span>有 {{statistic.count}} 個人說：</span><div class='md-headline'>{{statistic.expression}}</div>
+                <md-button type='button' class='md-accent md-raised'>{{vote.expression}}</md-button>
+                <span>有 {{vote.count}} 個人說：</span><div class='md-headline'>{{vote.expression}}</div>
             </div>
             <div layout='row'>
-                <input name='newStatistic' ng-model='newStatistic.expression'>
-                <md-button type='button' class='md-raised' ng-click='addNewStatistic(newStatistic.expression)'>增加統計按鈕</md-button>
+                <input name='newVote' ng-model='newVote.expression'>
+                <md-button type='button' class='md-raised' ng-click='addNewVote(newVote.expression)'>增加統計按鈕</md-button>
             </div>
         </div>
     </form>   

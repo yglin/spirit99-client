@@ -328,12 +328,12 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
         };
     });
 
-    self.getSupportStatistic = function () {
-        if('statistic' in self.resources){
-            return self.resources.statistic;
+    self.getSupportVote = function () {
+        if('vote' in self.resources){
+            return self.resources.vote;
         }
         else if('voteUrl' in self.selectedServer.urls){
-            self.resources.statistic = $resource(self.selectedServer.urls.voteUrl.replace(/\/+$/, '') + '/:id',
+            self.resources.vote = $resource(self.selectedServer.urls.voteUrl.replace(/\/+$/, '') + '/:id',
             {post_id: '@post_id', id: '@id'},
             {
                 'plusOne': {
@@ -353,7 +353,7 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
                     }
                 }
             });
-            return self.resources.statistic;
+            return self.resources.vote;
         }
         else{
             return false;

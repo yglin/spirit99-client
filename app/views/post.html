@@ -30,10 +30,10 @@
             </md-content>
             <div layout='row' layout-align='space-between start'>
                 <div flex layout='column'>
-                    <div ng-if='statisticResource'>
-                    <div ng-repeat="statistic in post.statistics" layout='row'>
-                        <md-button type='button' class='md-accent md-raised' ng-click="statisticPlusOne(statistic)" ng-disabled="::statistic.disabled">{{statistic.expression}}</md-button>
-                        <span>有 <b>{{statistic.count | number}}</b> 個人說：</span><div class='md-headline'>{{statistic.expression}}</div>
+                    <div ng-if='voteResource'>
+                    <div ng-repeat="vote in post.votes" layout='row'>
+                        <md-button type='button' class='md-accent md-raised' ng-click="votePlusOne(vote)" ng-disabled="::vote.disabled">{{vote.expression}}</md-button>
+                        <span>有 <b>{{vote.count | number}}</b> 個人說：</span><div class='md-headline'>{{vote.expression}}</div>
                     </div>
                     </div>
                 </div>
