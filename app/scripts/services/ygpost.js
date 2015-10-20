@@ -293,7 +293,7 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
 
     self.readPost = function (post) {
         if('author' in post && 'context' in post){
-            console.log('Already got author and context, no need to read post');
+            // console.log('Already got author and context, no need to read post');
             return $q.resolve('Already got author and context, no need to read post');
         }
         var PostResource = ygServer.getSupportPost();

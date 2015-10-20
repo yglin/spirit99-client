@@ -50,7 +50,7 @@ function ($rootScope, $q, ygServer) {
                             }
                         };
                         self.options = angular.extend(self.defaultOptions, imageUploadOptions);
-                        console.log(self.options);
+                        // console.log(self.options);
                         defer.resolve(self.options);
                     }, function (error) {
                         console.log(error);
