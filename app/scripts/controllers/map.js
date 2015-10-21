@@ -39,14 +39,9 @@ function($scope, $timeout, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygU
             draggable: true
         },
         events: {
-            click: function (argument) {
-                ygPost.popStoryEditor().then(function (result) {
-                    var markers = $scope.clickedMarker.control.getGMarkers();
-                    if(markers.length >=1){
-                        markers[0].setVisible(false);
-                    }
-                }, function (error) {
-                    // body...
+            click: function (marker, eventName, model) {
+                ygPost.createPost().then(function () {
+                    marker.setVisible(false);
                 });
             }
         },

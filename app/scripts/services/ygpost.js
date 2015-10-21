@@ -224,21 +224,11 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
             self.newPost = new PostResource();
             // self.newPost = ygUtils.fillDefaults(self.newPost, self.postDataDefaults);
         }
-        latitude = typeof latitude === 'undefined' ? ygUserPref.$storage.map.center.latitude : latitude;
-        self.newPost.latitude = latitude;
-        longitude = typeof longitude === 'undefined' ? ygUserPref.$storage.map.center.longitude : longitude;
-        self.newPost.longitude = longitude;
+        self.newPost.latitude = angular.isUndefined(latitude) ? self.newPost.latitude : latitude;
+        self.newPost.longitude = angular.isUndefined(longitude) ? self.newPost.longitude : longitude;
 
         // // console.log($scope.newPost);
-        return $mdDialog.show({
-            templateUrl: 'views/posteditor.html',
-            controller: 'PostEditorController',
-            clickOutsideToClose: true,
-            escapeToClose: false,
-            locals: {
-                newPost: self.newPost
-            },
-        })
+        return self.postEditor(self.newPost)
         .then(function(){
             return PostResource.create(self.newPost,
             function (result) {
