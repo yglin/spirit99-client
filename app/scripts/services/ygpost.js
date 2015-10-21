@@ -8,8 +8,8 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygPost', ['$rootScope', '$window', '$timeout', '$q', '$resource', 'nodeValidator', '$mdDialog', 'uiGmapGoogleMapApi', 'ygUtils', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygError', 'ygFollowPost', 'ygStatusInfo',
-function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapGoogleMapApi, ygUtils, ygUserPref, ygUserCtrl, ygServer, ygError, ygFollowPost, ygStatusInfo) {
+.service('ygPost', ['$rootScope', '$window', '$timeout', '$q', '$resource', 'nodeValidator', '$mdDialog', 'uiGmapGoogleMapApi', 'ygUtils', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygMyPost', 'ygError', 'ygFollowPost', 'ygStatusInfo',
+function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapGoogleMapApi, ygUtils, ygUserPref, ygUserCtrl, ygServer, ygMyPost, ygError, ygFollowPost, ygStatusInfo) {
     var self = this;
 
     var PostUserFields = ['title', 'context', 'icon', 'author'];
@@ -68,7 +68,7 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
         // filter my posts
         if(!angular.isUndefined(filters.myPosts) && filters.myPosts !== null){
             if(filters.myPosts === 'myPosts'){
-                if(post.id in ygUserPref.$storage.myPosts[ygServer.selectedServer.name]){
+                if(ygMyPost.isMyPost(post)){
                     return true;
                 }
                 else{
@@ -76,7 +76,7 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
                 }
             }
             else if(filters.myPosts === 'commentedPosts'){
-                if(post.id in ygUserPref.$storage.commentedPosts[ygServer.selectedServer.name]){
+                if(ygMyPost.isMyCommented(post)){
                     return true;
                 }
                 else{
@@ -84,7 +84,7 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
                 }
             }
             else if(filters.myPosts === 'followedPosts'){
-                if(post.id in ygUserPref.$storage.followedPosts[ygServer.selectedServer.name]){
+                if(ygFollowPost.isFollowingPost(post)){
                     return true;
                 }
                 else{
@@ -135,21 +135,6 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
         }
 
         return matchAll;
-    };
-
-    self.markAsMyPost = function (post) {
-        if(angular.isUndefined(ygUserPref.$storage.myPosts)){
-            ygUserPref.$storage.myPosts = {};
-        }
-        if(angular.isUndefined(ygUserPref.$storage.myPosts[ygServer.selectedServer.name])){
-            ygUserPref.$storage.myPosts[ygServer.selectedServer.name] = {};
-        }
-        if(!(post.id in ygUserPref.$storage.myPosts[ygServer.selectedServer.name])){
-            ygUserPref.$storage.myPosts[ygServer.selectedServer.name][post.id] = {};
-        }
-        if('password' in post){
-            ygUserPref.$storage.myPosts[ygServer.selectedServer.name][post.id].password = post.password;                            
-        }
     };
 
     self.loadPosts = function () {
@@ -264,7 +249,7 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
                     if(self.filterPost(self.indexedPosts[newPost.id])){
                         self.filteredPosts.addAsMarker(self.indexedPosts[newPost.id]);
                     }
-                    self.markAsMyPost(newPost);
+                    ygMyPost.addMyPost(newPost);
                     ygFollowPost.followPost(newPost);
 
                     // Add new votes
@@ -329,11 +314,8 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
         self.filteredPosts.splice(self.filteredPosts.indexOf(post), 1);
         var tempPost = angular.copy(post);
         self.postEditor(tempPost).then(function (tempPost) {
-            var password = '';
-            if(post.id in ygUserPref.$storage.myPosts[ygServer.selectedServer.name]){
-                password = ygUserPref.$storage.myPosts[ygServer.selectedServer.name][post.id].password;
-            }
-            else{
+            var password = ygMyPost.getPassword(post);
+            if(!password){
                 $window.alert('這可能是別人的文章，你沒有權限更改');
                 return $q.reject(); 
             }
@@ -385,7 +367,7 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
             console.log('Post resource not supported by server');
             return $q.reject('Post resource not supported by server');
         }
-        if(post.id in ygUserPref.$storage.myPosts[ygServer.selectedServer.name]){
+        if(ygMyPost.isMyPost(post)){
             var confirm = $mdDialog.confirm()
             .title('刪除文章')
             .content('確定要刪除<br><br><p><b>' + post.title + '</b></p><br><br>這篇文章?')
@@ -394,7 +376,7 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
             .cancel('想想還是算了');
             return $mdDialog.show(confirm).then(function () {
                 self.filteredPosts.splice(self.filteredPosts.indexOf(post), 1);
-                var password = ygUserPref.$storage.myPosts[ygServer.selectedServer.name][post.id].password;
+                var password = ygMyPost.getPassword(post);
                 
                 return PostResource.delete({id:post.id, password: password},
                 function (response) {

@@ -151,12 +151,6 @@ function ($q, $localStorage) {
         return deferred.promise;
     };
 
-    self.isMyPost = function (post) {
-        return !angular.isUndefined(self.$storage.myPosts[self.$storage.selectedServer]) &&
-        self.$storage.myPosts[self.$storage.selectedServer] !== null &&
-        (post.id in self.$storage.myPosts[self.$storage.selectedServer]);
-    };
-
     self.initialPromises = {
         'startUpAtMap': self.promiseStartUpAtMap()
         // 'getGeolocation': self.promiseGetGeolocation(self.$storage.map)

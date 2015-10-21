@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('PostEditorController', ['$scope', '$mdDialog', '$window', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygFroala', 'newPost',
-function ($scope, $mdDialog, $window, ygUserPref, ygUserCtrl, ygServer, ygFroala, newPost){    
+.controller('PostEditorController', ['$scope', '$mdDialog', '$window', 'ygMyPost', 'ygUserCtrl', 'ygServer', 'ygFroala', 'newPost',
+function ($scope, $mdDialog, $window, ygMyPost, ygUserCtrl, ygServer, ygFroala, newPost){    
 
     ygFroala.getFroalaOptions().then(function(options){
         $scope.froalaOptions = options;
@@ -76,7 +76,7 @@ function ($scope, $mdDialog, $window, ygUserPref, ygUserCtrl, ygServer, ygFroala
 
             var this_dialog = angular.element('#post-editor-dialog');
 
-            if(!ygUserPref.isMyPost($scope.newPost)){
+            if(!ygMyPost.isMyPost($scope.newPost)){
                 $window.alert('無法刪除，找不到密碼或密碼錯誤，這可能不是你的文章喔');
             }
             else{

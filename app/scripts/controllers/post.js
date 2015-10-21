@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('PostController', ['$scope', '$resource', '$mdDialog', 'ygUtils', 'ygUserPref', 'ygServer', 'ygFroala', 'ygPost', 'ygFollowPost', 'post',
-function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygFroala, ygPost, ygFollowPost, post) {
+.controller('PostController', ['$scope', '$resource', '$mdDialog', 'ygUtils', 'ygMyPost', 'ygServer', 'ygFroala', 'ygPost', 'ygFollowPost', 'post',
+function ($scope, $resource, $mdDialog, ygUtils, ygMyPost, ygServer, ygFroala, ygPost, ygFollowPost, post) {
     var self = this;
 
     self.commentResource = ygServer.getSupportComment();
@@ -35,7 +35,7 @@ function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygFroala,
     $scope.post = post;
     // console.log($scope.post);
 
-    $scope.isMyPost = post.id in ygUserPref.$storage.myPosts[ygServer.selectedServer.name];
+    $scope.isMyPost = ygMyPost.isMyPost(post);
 
     $scope.formatDatetime = ygUtils.formatDatetime;
 
@@ -93,21 +93,7 @@ function ($scope, $resource, $mdDialog, ygUtils, ygUserPref, ygServer, ygFroala,
         function (result) {
             $scope.comments.push($scope.newComment);
             // Record commented post
-            var commentedPosts;
-            if(angular.isUndefined(ygUserPref.$storage.commentedPosts)){
-                ygUserPref.$storage.commentedPosts = {};
-            }
-            commentedPosts = ygUserPref.$storage.commentedPosts;
-            if(angular.isUndefined(commentedPosts[ygServer.selectedServer.name])){
-                commentedPosts[ygServer.selectedServer.name] = {};
-            }
-            if(angular.isUndefined(commentedPosts[ygServer.selectedServer.name][$scope.post.id])){
-                commentedPosts[ygServer.selectedServer.name][$scope.post.id] = 1;
-            }
-            else{
-                commentedPosts[ygServer.selectedServer.name][$scope.post.id] += 1;                
-            }
-            console.log(ygUserPref.$storage.commentedPosts);
+            ygMyPost.addMyCommented($scope.post);
             // Automatic follow post if added comment
             ygFollowPost.followPost($scope.post);
             $scope.followPost = $scope.post.id in ygFollowPost.followedPosts;
