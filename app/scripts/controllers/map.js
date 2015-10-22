@@ -40,7 +40,9 @@ function($scope, $timeout, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygU
         },
         events: {
             click: function (marker, eventName, model) {
-                ygPost.createPost().then(function () {
+                var position = marker.getPosition();
+                ygPost.createPost(position.lat(), position.lng())
+                .then(function () {
                     marker.setVisible(false);
                 });
             }
