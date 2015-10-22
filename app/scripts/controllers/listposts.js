@@ -17,7 +17,7 @@ function ($scope, $q, $interval, $mdSidenav, ygUserCtrl, ygPost, ygAudio) {
     $scope.isScrolling = false;   
     
     ygPost.initialPromises.loadPosts
-    .then(function () {
+    .finally(function () {
         $scope.posts = ygPost.filteredPosts;
         $scope.$watch(function () {
             return ygUserCtrl.openListPosts;
