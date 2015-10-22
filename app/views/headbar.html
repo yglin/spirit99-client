@@ -65,10 +65,14 @@ img.grayscale {
                 </md-menu>
             </div>
             <div flex layout='row' layout-padding ng-show='selectedTool == "period"'>
-                <input type='date' ng-model="create_time.startDate" />
+                <md-button class='md-primary md-raised md-hue-1' md-menu-origin aria-label='Pick date range' ng-click='openDatePicker()'>
+                   <div style='color:white' layout-padding>{{ formatDate(create_time.startDate) }} ~ {{ formatDate(create_time.endDate) }}</div>
+                </md-button>
+                <div flex></div>
+<!--                 <input type='date' ng-model="create_time.startDate" />
                 <div layout-margin class='md-display-1' style='color:white;'> ~ </div>
                 <input type='date' ng-model="create_time.endDate" />
-            </div>
+ -->            </div>
             <div flex layout='row' layout-align='center center' layout-padding ng-show='selectedTool == "my-posts"'>
                 <md-select flex style='margin:0;' placeholder='我的...' ng-model='userPref.filters.myPosts'>
                     <md-option ng-repeat='(name, title) in myPostsOptions' value='{{name}}'>

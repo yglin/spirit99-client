@@ -27,7 +27,8 @@ angular
     'ngStorage',
     'duScroll',
     'ngAudio',
-    'angular.validators'
+    'angular.validators',
+    'datePicker'
 ])
 .value('portalRules', {
     requiredFields: [

@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('HeadBarController', ['$scope', '$mdSidenav', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygFilter', 'ygAudio',
-function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio){
+.controller('HeadBarController', ['$scope', '$mdSidenav', '$mdDialog', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygFilter', 'ygAudio', 'ygUtils',
+function($scope, $mdSidenav, $mdDialog, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio, ygUtils){
     var self = this;
 
     $scope.userPref = ygUserPref.$storage;
@@ -35,7 +35,7 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
             fontIcon: 'person'
         }
     };
-    $scope.selectedTool = "markers";
+    $scope.selectedTool = "period";
     $scope.selectTool = function (toolName) {
         $scope.selectedTool = toolName;
     };
@@ -80,6 +80,22 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
 
     $scope.openIconMenu = function ($mdOpenMenu, event) {
         $mdOpenMenu(event);
+    };
+
+    $scope.formatDate = ygUtils.formatDate;
+
+    $scope.openDatePicker = function () {
+        $mdDialog.show({
+            controller: 'DatePickerController',
+            templateUrl: 'views/date-picker.html',
+            locals: {
+                create_time: $scope.create_time
+            },
+            clickOutsideToClose: true
+        }).then(function (dates) {
+            $scope.create_time.startDate = dates.startDate;
+            $scope.create_time.endDate = dates.endDate;
+        });
     };
 
     $scope.openSidenav = function(){
