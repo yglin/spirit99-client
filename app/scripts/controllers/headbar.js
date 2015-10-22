@@ -155,5 +155,5 @@ function($scope, $mdSidenav, $mdDialog, ygUserPref, ygUserCtrl, ygServer, ygFilt
             delete ygUserPref.$storage.filters.create_time;
         }
         $scope.datePickerText = '請選擇日期';
-    }
+    };
 }]);

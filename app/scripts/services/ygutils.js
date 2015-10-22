@@ -40,7 +40,7 @@ angular.module('spirit99App')
     self.formatDate = function (dateString) {
         var date = new Date(dateString);
         return date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-    }
+    };
 
     self.getHateoasLinks = function(responseHeaders){
         var links = {};

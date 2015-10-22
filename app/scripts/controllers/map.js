@@ -103,13 +103,13 @@ function($scope, $timeout, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygU
         $timeout.cancel(self.timeoutShowInfoWindow);
 
         ygUserCtrl.focusedPostId = model.id;
-        ygAudio.play('focusOnPost');
         if($scope.infoWindow.show){
             $scope.infoWindow.coords = {
                 latitude: model.latitude,
                 longitude: model.longitude
             };
             $scope.infoWindow.templateParameter = model;
+            ygAudio.play('focusOnPost');
         }
         else{
             self.timeoutShowInfoWindow = $timeout(function () {
@@ -120,6 +120,7 @@ function($scope, $timeout, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygU
                     };
                     $scope.infoWindow.templateParameter = model;
                     $scope.infoWindow.show = true;
+                    ygAudio.play('focusOnPost');
                 }
             }, 500);
         }
