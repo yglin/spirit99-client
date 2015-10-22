@@ -8,9 +8,9 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('ListPostsController', ['$scope', '$q', '$interval', '$mdSidenav', 'ygUserCtrl', 'ygPost', 'ygAudio',
+.controller('PostListController', ['$scope', '$q', '$interval', '$mdSidenav', 'ygUserCtrl', 'ygPost', 'ygAudio',
 function ($scope, $q, $interval, $mdSidenav, ygUserCtrl, ygPost, ygAudio) {
-    $scope.mdComponentID = 'sidenav-listposts';
+    $scope.mdComponentID = 'sidenav-postList';
     $scope.lockedOpen = false;
     $scope.focusedPostId = -1;
     $scope.isMouseOverList = false;
@@ -20,7 +20,7 @@ function ($scope, $q, $interval, $mdSidenav, ygUserCtrl, ygPost, ygAudio) {
     .finally(function () {
         $scope.posts = ygPost.filteredPosts;
         $scope.$watch(function () {
-            return ygUserCtrl.openListPosts;
+            return ygUserCtrl.openPostList;
         }, function (newValue, oldValue) {
             $scope.lockedOpen = newValue;
     
@@ -30,10 +30,10 @@ function ($scope, $q, $interval, $mdSidenav, ygUserCtrl, ygPost, ygAudio) {
             // console.log(oldValue + '-->' + newValue);
             // console.log(typeof oldValue + '-->' + typeof newValue);
             if(newValue && !oldValue){
-                ygAudio.play('openListPosts');
+                ygAudio.play('openPostList');
             }
             else if(!newValue && oldValue){
-                ygAudio.play('closeListPosts');
+                ygAudio.play('closePostList');
             }
         });
     });
@@ -49,7 +49,7 @@ function ($scope, $q, $interval, $mdSidenav, ygUserCtrl, ygPost, ygAudio) {
     };
 
     $interval(function () {
-        if(!$mdSidenav('sidenav-listposts').isLockedOpen()){
+        if(!$mdSidenav('sidenav-postList').isLockedOpen()){
             return;
         }
         // console.log($scope.isMouseOverList);
@@ -59,7 +59,7 @@ function ($scope, $q, $interval, $mdSidenav, ygUserCtrl, ygPost, ygAudio) {
             if(container.length > 0 && target.length > 0){
                 $scope.isScrolling = true;
                 // console.log('Start scroll!!');
-                ygAudio.play('scrollListPosts');
+                ygAudio.play('scrollPostList');
                 container.scrollToElementAnimated(target, 50, 2000)
                 .then(function () {
                     $scope.focusedPostId = ygUserCtrl.focusedPostId;
@@ -71,7 +71,7 @@ function ($scope, $q, $interval, $mdSidenav, ygUserCtrl, ygPost, ygAudio) {
     }, 100);
 
     $scope.close = function () {
-        ygUserCtrl.openListPosts = false;
+        ygUserCtrl.openPostList = false;
     };
 
     $scope.onMouseOverPosts = function (postID) {

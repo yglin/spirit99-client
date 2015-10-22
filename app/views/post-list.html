@@ -3,7 +3,7 @@
     <md-icon class='material-icons'>highlight_off</md-icon>
     </a>
 </div>
-<md-sidenav class='md-sidenav-left md-whiteframe-z2' md-component-id='sidenav-listposts' md-is-locked-open='lockedOpen' style='height:100%;'>
+<md-sidenav class='md-sidenav-left md-whiteframe-z2' md-component-id='sidenav-postList' md-is-locked-open='lockedOpen' style='height:100%;'>
     <md-content id='post-list-container' layout-padding style='height:100%;padding:10px;' ng-mouseover="onMouseOverList()" ng-mouseleave="onMouseLeaveList()">
         <md-list>
             <md-list-item id='post-{{post.id}}' ng-repeat="post in posts" ng-class='{"md-whiteframe-z1":post.id!=focusedPostId, "md-accent md-title md-whiteframe-z5":post.id==focusedPostId}' ng-mouseover="onMouseOverPosts(post.id)" ng-click="onClickPost(post.id)">

@@ -86,14 +86,14 @@ function($scope, $mdSidenav, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio
         $mdSidenav('sidenav-left').open();
     };
 
-    $scope.openListPosts = function () {
-        ygUserCtrl.openListPosts = !(ygUserCtrl.openListPosts);
+    $scope.openPostList = function () {
+        ygUserCtrl.openPostList = !(ygUserCtrl.openPostList);
     };
-    $scope.styleOfViewListButton = ygUserCtrl.openListPosts ? {color: 'white'} : {color: 'lightgrey'};
+    $scope.styleOfViewListButton = ygUserCtrl.openPostList ? {color: 'white'} : {color: 'lightgrey'};
     $scope.$watch(function () {
-        return ygUserCtrl.openListPosts;
+        return ygUserCtrl.openPostList;
     }, function () {
-        $scope.styleOfViewListButton = ygUserCtrl.openListPosts ? {color: 'white'} : {color: 'lightgrey'};    
+        $scope.styleOfViewListButton = ygUserCtrl.openPostList ? {color: 'white'} : {color: 'lightgrey'};    
     });
 
     $scope.onEnterAddress = function (address) {

@@ -17,11 +17,11 @@ function ($rootScope, ngAudio, ygUserPref, ygServer) {
             file: 'sounds/big_bubble_blown_into_glass_through_drinking_straw_version_1.mp3',
             volume: 0.5
         },
-        scrollListPosts: {
+        scrollPostList: {
             file: 'sounds/bubbles_blown_into_glass_through_drinking_straw_version_2.mp3',
             volume: 0.5
         },
-        closeListPosts: {
+        closePostList: {
             file: 'sounds/large_water_drip.mp3',
             volume: 0.5
         },

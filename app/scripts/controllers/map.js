@@ -94,7 +94,7 @@ function($scope, $timeout, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygU
     $scope.onClickPostMarker = function (marker, eventName, model) {
         $timeout.cancel(self.timeoutShowInfoWindow);
         $timeout.cancel(self.timeoutCloseInfoWindow);
-        $timeout.cancel(self.timeoutOpenListPosts);
+        $timeout.cancel(self.timeoutOpenPostList);
         ygPost.showPostDetail(model.id);
     };
 
@@ -124,11 +124,11 @@ function($scope, $timeout, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygU
             }, 500);
         }
 
-        if(!ygUserCtrl.openListPosts && ygUserPref.$storage.autoOpenListPosts){
-            $timeout.cancel(self.timeoutOpenListPosts);
-            self.timeoutOpenListPosts = $timeout(function () {
+        if(!ygUserCtrl.openPostList && ygUserPref.$storage.autoOpenPostList){
+            $timeout.cancel(self.timeoutOpenPostList);
+            self.timeoutOpenPostList = $timeout(function () {
                 if(ygUserCtrl.focusedPostId === model.id){
-                    ygUserCtrl.openListPosts = true;
+                    ygUserCtrl.openPostList = true;
                 }
             }, 3000);
         }
@@ -141,7 +141,7 @@ function($scope, $timeout, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygU
                 $scope.infoWindow.show = false;
             }, 2000);
         }
-        $timeout.cancel(self.timeoutOpenListPosts);
+        $timeout.cancel(self.timeoutOpenPostList);
     };
 
     $scope.postMarkerEvents = {

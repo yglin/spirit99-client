@@ -11,7 +11,7 @@ angular.module('spirit99App')
 .service('ygUserCtrl', ['$rootScope', '$q', 'nodeValidator', 'ygServer',
 function ($rootScope, $q, nodeValidator, ygServer) {
     var self = this;
-    self.openListPosts = false;
+    self.openPostList = false;
     self.focusedPostId = -1;
     self.isMouseOverMap = true;
     self.userAddress = '';
