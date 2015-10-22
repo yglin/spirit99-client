@@ -118,7 +118,9 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
                 else if('startDate' in filters[key] && 'endDate' in filters[key]){
                     var postDate = new Date(post[key]);
                     var startDate = new Date(filters[key].startDate);
+                    startDate.setHours(0, 0, 0, 0);
                     var endDate = new Date(filters[key].endDate);
+                    endDate.setHours(23, 59, 59, 999);
                     matchAll = postDate > startDate && postDate < endDate;
                     // console.log(matchAll + ', ' + postDate + ', ' + filters[key].startDate + ' ~ ' + filters[key].endDate);
                 }

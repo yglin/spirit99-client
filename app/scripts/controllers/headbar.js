@@ -35,16 +35,10 @@ function($scope, $mdSidenav, $mdDialog, ygUserPref, ygUserCtrl, ygServer, ygFilt
             fontIcon: 'person'
         }
     };
-    $scope.selectedTool = "period";
+    $scope.selectedTool = "address";
     $scope.selectTool = function (toolName) {
         $scope.selectedTool = toolName;
     };
-
-    $scope.create_time = {
-        startDate: new Date(ygUserPref.$storage.filters.create_time.startDate),
-        endDate: new Date(ygUserPref.$storage.filters.create_time.endDate)
-    };
-
 
     $scope.iconSet = {};
     ygServer.initialPromises.updateServers.then(function () {
@@ -82,22 +76,6 @@ function($scope, $mdSidenav, $mdDialog, ygUserPref, ygUserCtrl, ygServer, ygFilt
         $mdOpenMenu(event);
     };
 
-    $scope.formatDate = ygUtils.formatDate;
-
-    $scope.openDatePicker = function () {
-        $mdDialog.show({
-            controller: 'DatePickerController',
-            templateUrl: 'views/date-picker.html',
-            locals: {
-                create_time: $scope.create_time
-            },
-            clickOutsideToClose: true
-        }).then(function (dates) {
-            $scope.create_time.startDate = dates.startDate;
-            $scope.create_time.endDate = dates.endDate;
-        });
-    };
-
     $scope.openSidenav = function(){
         $mdSidenav('sidenav-left').open();
     };
@@ -131,14 +109,6 @@ function($scope, $mdSidenav, $mdDialog, ygUserPref, ygUserCtrl, ygServer, ygFilt
         }
     });
 
-    $scope.$watch('create_time.startDate', function (newValue) {
-        ygUserPref.$storage.filters.create_time.startDate = newValue.toString();
-    });
-
-    $scope.$watch('create_time.endDate', function (newValue) {
-        ygUserPref.$storage.filters.create_time.endDate = newValue.toString();
-    });
-
     $scope.nextGeocodeLocation = function () {
         ygUserCtrl.geocode.currentIndex = (ygUserCtrl.geocode.currentIndex + 1) % ygUserCtrl.geocode.results.length;
     };
@@ -147,4 +117,43 @@ function($scope, $mdSidenav, $mdDialog, ygUserPref, ygUserCtrl, ygServer, ygFilt
         $scope.userPref.filters.myPosts = undefined;
     };
 
+    $scope.datePickerText = '請選擇日期';
+    $scope.create_time = {};
+    if('create_time' in ygUserPref.$storage.filters &&
+    'startDate' in ygUserPref.$storage.filters.create_time &&
+    'endDate' in ygUserPref.$storage.filters.create_time){
+        $scope.create_time = {
+            startDate: new Date(ygUserPref.$storage.filters.create_time.startDate),
+            endDate: new Date(ygUserPref.$storage.filters.create_time.endDate)
+        };
+        $scope.datePickerText = ygUtils.formatDate($scope.create_time.startDate) + ' ~ ' + ygUtils.formatDate($scope.create_time.endDate);
+    }
+
+    $scope.openDatePicker = function () {
+        $mdDialog.show({
+            controller: 'DatePickerController',
+            templateUrl: 'views/date-picker.html',
+            locals: {
+                create_time: $scope.create_time
+            },
+            clickOutsideToClose: true
+        }).then(function (dates) {
+            $scope.create_time.startDate = dates.startDate;
+            $scope.create_time.endDate = dates.endDate;
+            if(!('create_time' in ygUserPref.$storage.filters)){
+                ygUserPref.$storage.filters.create_time = {};
+            }
+            ygUserPref.$storage.filters.create_time.startDate = dates.startDate.toString();
+            ygUserPref.$storage.filters.create_time.endDate = dates.endDate.toString();
+            $scope.datePickerText = ygUtils.formatDate($scope.create_time.startDate) + ' ~ ' + ygUtils.formatDate($scope.create_time.endDate);
+        });
+    };
+
+    $scope.clearDateFilter = function () {
+        $scope.create_time = {};
+        if('create_time' in ygUserPref.$storage.filters){
+            delete ygUserPref.$storage.filters.create_time;
+        }
+        $scope.datePickerText = '請選擇日期';
+    }
 }]);
