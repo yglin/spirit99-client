@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('MapController', ['$scope', '$timeout', 'uiGmapGoogleMapApi', 'ygUtils', 'ygError', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygPost', 'ygAudio',
-function($scope, $timeout, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygUserCtrl, ygServer, ygPost, ygAudio) {
+.controller('MapController', ['$scope', '$timeout', '$mdDialog', 'uiGmapGoogleMapApi', 'ygUtils', 'ygError', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygPost', 'ygAudio',
+function($scope, $timeout, $mdDialog, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygUserCtrl, ygServer, ygPost, ygAudio) {
 
     var self = this;
 
@@ -146,7 +146,24 @@ function($scope, $timeout, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygU
     };
 
     $scope.onDragendPostMarker = function (marker, eventName, model) {
-        console.log('Drag End~!!!');
+        var confirm = $mdDialog.confirm()
+            .parent(angular.element(document.body))
+            .title('移到這裡')
+            .content('確定要把文章的地點移到這裡?')
+            .ariaLabel('Move Post')
+            .ok('確定')
+            .cancel('想想還是算了');
+
+        $mdDialog.show(confirm).then(
+            function() {
+                ygPost.updatePost(model.id, {
+                    latitude: marker.getPosition().lat(),
+                    longitude: marker.getPosition().lng()
+                });
+            },
+            function() {
+                console.log('這樣就算了那這社會還需要警察嗎!? O_o');
+            });        
     };
 
     $scope.postMarkerEvents = {
