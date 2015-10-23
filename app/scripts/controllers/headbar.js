@@ -72,8 +72,12 @@ function($scope, $mdSidenav, $mdDialog, ygUserPref, ygUserCtrl, ygServer, ygFilt
         // console.log(ygUserCtrl.iconCtrls);
     };
 
-    $scope.openIconMenu = function ($mdOpenMenu, event) {
-        $mdOpenMenu(event);
+    $scope.openIconCtrl = function () {
+        $mdDialog.show({
+            controller: 'IconCtrlController',
+            templateUrl: 'views/icon-ctrl.html',
+            clickOutsideToClose: true
+        });
     };
 
     $scope.openSidenav = function(){
