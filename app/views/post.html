@@ -9,7 +9,7 @@
             <div flex layout='column' layout-align='center end'>
                 <div layout='row' layout-align='end center' style='min-height:20px;max-height:32px;'>
                     <div data-fittext data-fittext-max='24' data-fittext-min='14'>{{ post.author }}</div>
-                    <md-button class='md-icon-button' style='width:24px;min-height:24px;height:24px;line-height:24px;' ng-show='isMyPost' ng-click="updatePost(post)">
+                    <md-button class='md-icon-button' style='width:24px;min-height:24px;height:24px;line-height:24px;' ng-show='isMyPost' ng-click="editPost(post)">
                         <md-icon class='material-icons' style='color:white;font-size:20px;'>edit</md-icon>
                     </md-button>
                     <md-button class='md-icon-button' style='width:24px;min-height:24px;height:24px;line-height:24px;' ng-show='isMyPost' ng-click="deletePost(post)">

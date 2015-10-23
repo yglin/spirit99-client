@@ -48,6 +48,12 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
     // This function should be override in map.js
     self.filteredPosts.addAsMarker = function (post) {
         self.getThumbnail(post);
+        if(ygMyPost.isMyPost(post)){
+            if(!('options' in post)){
+                post.options = {};
+            }
+            post.options.draggable = true;
+        }
         this.push(post);
     };
 
@@ -297,59 +303,63 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
         return promise;
     };
 
-    self.updatePost = function (post) {
+    self.updatePost = function (id, data) {
         var PostResource = ygServer.getSupportPost();
         if(!PostResource){
             console.log('Post resource not supported by server');
             return $q.reject('Post resource not supported by server');
         }
+        var post = self.indexedPosts[id];
+        var password = ygMyPost.getPassword(post);
+        if(!password){
+            $window.alert('這可能是別人的文章，你沒有權限更改');
+            return $q.reject(); 
+        }
         self.filteredPosts.splice(self.filteredPosts.indexOf(post), 1);
-        var tempPost = angular.copy(post);
-        self.postEditor(tempPost).then(function (tempPost) {
-            var password = ygMyPost.getPassword(post);
-            if(!password){
-                $window.alert('這可能是別人的文章，你沒有權限更改');
-                return $q.reject(); 
-            }
-            ygStatusInfo.statusProcessing('更新文章資料...');
-            var promise = PostResource.update({id: post.id, password: password}, tempPost,
-            function (response) {
-                self.indexedPosts[post.id] = response;
-                self.assignIconObject(response);
+        ygStatusInfo.statusProcessing('更新文章資料...');
+        var promise = PostResource.update({id: id, password: password}, data,
+        function (response) {
+            self.indexedPosts[id] = response;
+            self.assignIconObject(response);
 
-                // console.log(tempPost.votes);
-                var voteResource = ygServer.getSupportVote();
-                if(voteResource){
+            // console.log(tempPost.votes);
+            var voteResource = ygServer.getSupportVote();
+            if(voteResource){
+                if('votes' in data){
                     // Delete votes
-                    var votes = tempPost.votes;
-                    for(var id in votes){
-                        if(votes[id].tobeDeleted === true){
-                            voteResource.delete({post_id: post.id, id: id, password: password});
+                    for(var vote_id in data.votes){
+                        if(data.votes[vote_id].tobeDeleted === true){
+                            voteResource.delete({post_id: id, id: vote_id, password: password});
                         }
-                    }
-                    // Add new votes
-                    var newVotes = tempPost.newVotes;
-                    if(!angular.isUndefined(newVotes) && newVotes !== null){
-                        self.addVotes(post.id, newVotes);
                     }                    
                 }
-            }, function (error) {
-                if(error.status === 401){
-                    $window.alert('這可能是別人的文章，你沒有權限更改');
+                if('newVotes' in data && data.newVotes !== null){
+                    self.addVotes(id, data.newVotes);
                 }
-                else{
-                    $window.alert('更新失敗!!');
-                }
-                console.log(error);
-            }).$promise;
-            promise.finally(function () {
-                ygStatusInfo.statusIdle();
-            });
-            return promise;
-        }).finally(function () {
+            }
+        }, function (error) {
+            if(error.status === 401){
+                $window.alert('這可能是別人的文章，你沒有權限更改');
+            }
+            else{
+                $window.alert('更新失敗!!');
+            }
+            console.log(error);
+        }).$promise;
+        promise.finally(function () {
             if(self.filterPost(self.indexedPosts[post.id])){
                 self.filteredPosts.addAsMarker(self.indexedPosts[post.id]);
             }            
+            ygStatusInfo.statusIdle();
+        });
+        return promise;
+        
+    };
+
+    self.editPost = function (post) {
+        var tempPost = angular.copy(post);
+        return self.postEditor(tempPost).then(function (tempPost) {
+            return self.updatePost(post.id, tempPost);
         });  
     };
 
@@ -395,83 +405,6 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
             return $q.reject();            
         }
     };
-
-    // self.popStoryEditor = function (latitude, longitude) {
-    //     var PostResource = ygServer.getSupportPost();
-    //     if(!PostResource){
-    //         console.log('Post resource not supported by server');
-    //         return $q.reject('Post resource not supported by server');
-    //     }
-
-    //     if(self.newPost === null){
-    //         self.newPost = new PostResource();
-    //         // self.newPost = ygUtils.fillDefaults(self.newPost, self.postDataDefaults);
-    //     }
-    //     if(latitude){
-    //         self.newPost.latitude = latitude;
-    //     }
-    //     if(longitude){
-    //         self.newPost.longitude = longitude;
-    //     }
-    //     // // console.log($scope.newPost);
-    //     return $mdDialog.show({
-    //         templateUrl: 'views/posteditor.html',
-    //         controller: 'PostEditorController',
-    //         clickOutsideToClose: true,
-    //         escapeToClose: false,
-    //         locals: {
-    //             newPost: self.newPost
-    //         },
-    //     })
-    //     .then(function(newPost){
-    //         for(var key in newPost){
-    //             if(self.newPost[key] !== newPost[key]){
-    //                 self.newPost[key] = newPost[key];
-    //             }
-    //         }
-    //         var voteResource = ygServer.getSupportvote();
-    //         if('newvotes' in self.newPost){
-    //             var newvotes = self.newPost.newvotes;
-    //             delete self.newPost.newvotes;
-    //             console.log(newvotes);
-    //         }
-    //         var promise = self.newPost.$save()
-    //         .then(function (result) {
-    //             if(self.validatePostData(result) && !(result.id in self.indexedPosts)){
-    //                 var newPost = ygUtils.fillDefaults(result, self.postDataDefaults);
-    //                 self.assignIconObject(newPost);
-    //                 self.indexedPosts[newPost.id] = newPost;
-    //                 if(self.filterPost(self.indexedPosts[newPost.id])){
-    //                     self.filteredPosts.addAsMarker(self.indexedPosts[newPost.id]);
-    //                 }
-    //                 self.markAsMyPost(newPost);
-    //                 ygFollowPost.followPost(newPost);
-    //                 self.newPost = null;
-    //                 console.log('Success, post added!!');
-    //                 if(voteResource && !angular.isUndefined(newvotes) && newvotes !== null){
-    //                     self.addvotes(result.id, newvotes);
-    //                 }
-    //                 return $q.resolve();                        
-    //             }
-    //             else{
-    //                 return $q.reject('Invalid post data: ' + result.toString());
-    //             }
-    //         }, function (error) {
-    //             ygError.errorMessages.push('新增資料至遠端伺服器失敗');
-    //             return $q.reject(error);
-    //         });
-    //         // ygProgress.show('新增資料...', promise);
-    //         return promise;
-    //     }, function(newPost){
-    //         for(var key in newPost){
-    //             if(self.newPost[key] !== newPost[key]){
-    //                 self.newPost[key] = newPost[key];
-    //             }
-    //         }
-    //         console.log('你又按錯啦你');
-    //         return $q.reject();
-    //     });
-    // };
 
     self.showPostDetail = function (postID) {
         var post = self.indexedPosts[postID];        

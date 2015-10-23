@@ -44,7 +44,7 @@ function ($scope, $resource, $mdDialog, ygUtils, ygMyPost, ygServer, ygFroala, y
     $scope.canFollowPost = ygFollowPost.supportFollowPost;
     $scope.followPost = $scope.post.id in ygFollowPost.followedPosts;
 
-    $scope.updatePost = ygPost.updatePost;
+    $scope.editPost = ygPost.editPost;
 
     $scope.deletePost = ygPost.deletePost;
 

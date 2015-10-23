@@ -145,10 +145,15 @@ function($scope, $timeout, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygU
         $timeout.cancel(self.timeoutOpenPostList);
     };
 
+    $scope.onDragendPostMarker = function (marker, eventName, model) {
+        console.log('Drag End~!!!');
+    };
+
     $scope.postMarkerEvents = {
         click: $scope.onClickPostMarker,
         mouseover: $scope.onMouseoverPostMarker,
-        mouseout: $scope.onMouseoutPostMarker
+        mouseout: $scope.onMouseoutPostMarker,
+        dragend: $scope.onDragendPostMarker
     };
 
 
