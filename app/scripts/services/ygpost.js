@@ -175,7 +175,8 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
         extraParams.bounds = ygUserPref.$storage.map.bounds;
 
         ygStatusInfo.statusProcessing('讀取資料...');
-        return PostResource.getMarkers(extraParams, function(responses){
+        // return PostResource.getMarkers(extraParams, function(responses){
+        return PostResource.query(extraParams, function (responses) {
             console.log('Load ' + responses.length + ' posts');
             for (var i = 0; i < responses.length; i++) {
                 if(!(responses[i].id in self.indexedPosts) && self.validatePostData(responses[i])){
@@ -427,54 +428,6 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
         });
     };
 
-
-    self.initialPromises = {};
-    self.initialPromises.loadPosts = $q.allSettled([ygUserPref.initialPromises.startUpAtMap, ygServer.initialPromises.updateServers, uiGmapGoogleMapApi])
-    .then(function () {
-        var deferred = $q.defer();
-        $timeout(function () {
-            self.reloadPosts().then(function () {
-                // console.log(self.indexedPosts);
-                // console.log(self.filteredPosts);
-                deferred.resolve();
-            }, function () {
-                deferred.reject();
-            });
-        }, 3000);
-
-        $rootScope.$watch(function () {
-            return ygServer.selectedServer;
-        }, function () {
-            self.reloadPosts();
-        });
-
-        $rootScope.$watch(function () {
-            return ygUserPref.$storage.filters;
-        }, function  () {
-            self.filteredPosts.length = 0;
-            for(var id in self.indexedPosts){
-                if(self.filterPost(self.indexedPosts[id])){
-                    // self.filteredPosts.push(self.indexedPosts[id]);
-                    self.filteredPosts.addAsMarker(self.indexedPosts[id]);
-                }
-            }
-        }, true);        
-
-        $rootScope.$watch(function () {
-            return ygUserCtrl.iconCtrls;
-        }, function  () {
-            self.filteredPosts.length = 0;
-            for(var id in self.indexedPosts){
-                if(self.filterPost(self.indexedPosts[id])){
-                    // self.filteredPosts.push(self.indexedPosts[id]);
-                    self.filteredPosts.addAsMarker(self.indexedPosts[id]);
-                }
-            }
-        }, true);        
-
-        return deferred.promise;
-    });
-
     self.addVotes = function (post_id, votes) {
         var voteResource = ygServer.getSupportVote();
         if(voteResource){
@@ -507,4 +460,55 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
             });
         }
     };
+
+    self.initialPromises = {};
+    self.initialPromises.loadPosts = $q.allSettled([ygUserPref.initialPromises.startUpAtMap, ygServer.initialPromises.updateServers, uiGmapGoogleMapApi])
+    .then(function () {
+        var deferred = $q.defer();
+        $timeout(function () {
+            self.reloadPosts().then(function () {
+                // console.log(self.indexedPosts);
+                // console.log(self.filteredPosts);
+                deferred.resolve();
+            }, function () {
+                deferred.reject();
+            });
+        }, 3000);
+
+        $rootScope.$watch(function () {
+            return ygServer.selectedServer;
+        }, function (newValue, oldValue) {
+            // Check to avoid listener function being called initially even if newValue == oldValue.
+            if(newValue !== oldValue){
+                self.reloadPosts();
+            }
+        });
+
+        $rootScope.$watch(function () {
+            return ygUserPref.$storage.filters;
+        }, function  () {
+            self.filteredPosts.length = 0;
+            for(var id in self.indexedPosts){
+                if(self.filterPost(self.indexedPosts[id])){
+                    // self.filteredPosts.push(self.indexedPosts[id]);
+                    self.filteredPosts.addAsMarker(self.indexedPosts[id]);
+                }
+            }
+        }, true);        
+
+        $rootScope.$watch(function () {
+            return ygUserCtrl.iconCtrls;
+        }, function  () {
+            self.filteredPosts.length = 0;
+            for(var id in self.indexedPosts){
+                if(self.filterPost(self.indexedPosts[id])){
+                    // self.filteredPosts.push(self.indexedPosts[id]);
+                    self.filteredPosts.addAsMarker(self.indexedPosts[id]);
+                }
+            }
+        }, true);        
+
+        return deferred.promise;
+    });
+
 }]);
