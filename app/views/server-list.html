@@ -9,7 +9,7 @@
     <md-list-item>
         <md-input-container flex>
             <label>新增電台傳送門網址</label>
-            <input ng-model='newServerPortalUrl'>
+            <input ng-model='newServerPortalUrl' ng-keypress="$event.keyCode == 13 && addServer(newServerPortalUrl)">
         </md-input-container>
         <md-button class='md-icon-button' aria-label='Add' ng-click='addServer(newServerPortalUrl)'>
             <md-icon class='material-icons'>add</md-icon>
