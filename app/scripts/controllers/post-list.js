@@ -22,18 +22,14 @@ function ($scope, $q, $interval, $mdSidenav, ygUserCtrl, ygPost, ygAudio) {
         $scope.$watch(function () {
             return ygUserCtrl.openPostList;
         }, function (newValue, oldValue) {
-            $scope.lockedOpen = newValue;
-    
-            // XXX: I have to check both newValue and oldValue,
-            // because somehow $watch() fires initially even when oldValue and newValue are both false.
-            // Damn it~!!!
-            // console.log(oldValue + '-->' + newValue);
-            // console.log(typeof oldValue + '-->' + typeof newValue);
-            if(newValue && !oldValue){
-                ygAudio.play('openPostList');
-            }
-            else if(!newValue && oldValue){
-                ygAudio.play('closePostList');
+            if(newValue !== oldValue){
+                $scope.lockedOpen = newValue;
+                if(newValue){
+                    ygAudio.play('openPostList');
+                }
+                else{
+                    ygAudio.play('closePostList');
+                }
             }
         });
     });
