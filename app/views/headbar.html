@@ -11,13 +11,13 @@
         <div flex='30' layout='row' layout-align='end center'>
              <div style='position:relative;width:48px;height:48px;'>
                 <div style='position:absolute;top:0px;left:0px;'>
-                    <md-fab-speed-dial md-direction="down" class="md-fling">
+                    <md-fab-speed-dial md-direction="down" class="md-scale">
                         <md-fab-trigger>
-                            <md-button class='md-fab md-mini'>
+                            <md-button class='md-fab md-mini' ng-mouseover="showFabActions()">
                                 <md-icon class='material-icons' ng-style="{color: 'white'}">{{tools[selectedTool].fontIcon}}</md-icon>
                             </md-button>
                         </md-fab-trigger>
-                        <md-fab-actions>
+                        <md-fab-actions ng-show='isShowFabActions' ng-mouseleave="hideFabActions()">
                             <md-button ng-repeat='(name, tool) in tools' class='md-fab md-mini' ng-click="selectTool(name)">
                                 <md-icon class='material-icons' ng-style="{color: 'white'}">{{tool.fontIcon}}</md-icon>
                             </md-button>

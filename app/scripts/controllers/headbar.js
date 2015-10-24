@@ -36,8 +36,17 @@ function($scope, $mdSidenav, $mdDialog, ygUserPref, ygUserCtrl, ygServer, ygFilt
         }
     };
     $scope.selectedTool = "address";
+    $scope.isShowFabActions = false;
+    $scope.showFabActions = function () {
+        // console.log('showFabActions = true');
+        $scope.isShowFabActions = true;
+    };
+    $scope.hideFabActions = function () {
+        $scope.isShowFabActions = false;
+    }
     $scope.selectTool = function (toolName) {
         $scope.selectedTool = toolName;
+        $scope.hideFabActions();
     };
 
     $scope.iconSet = {};
