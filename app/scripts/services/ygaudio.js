@@ -32,9 +32,7 @@ function ($rootScope, ngAudio, ygUserPref, ygServer) {
     };
 
     self.play = function (soundName) {
-        // console.log(ygUserPref.$storage.soundFX);
         if(ygUserPref.$storage.soundFX && soundName in self){
-            // console.log('Play ' + soundName);
             self[soundName].progress = 0;
             self[soundName].play();
         }

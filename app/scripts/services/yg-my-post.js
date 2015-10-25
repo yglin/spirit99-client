@@ -66,8 +66,6 @@ function ($rootScope, ygUserPref, ygServer) {
     };
 
     self.isMyCommented = function (post) {
-        // console.log('Post id = ' + post.id);
-        // console.log(self.myCommented);
         return post.id in self.myCommented;        
     };
 
@@ -79,6 +77,5 @@ function ($rootScope, ygUserPref, ygServer) {
         else{
             self.myCommented[post.id].count += 1;
         }
-        // console.log(self.myCommented);
     };
 }]);

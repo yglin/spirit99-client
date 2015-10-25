@@ -38,12 +38,11 @@ function($scope, $mdSidenav, $mdDialog, ygUserPref, ygUserCtrl, ygServer, ygFilt
     $scope.selectedTool = "address";
     $scope.isShowFabActions = false;
     $scope.showFabActions = function () {
-        // console.log('showFabActions = true');
         $scope.isShowFabActions = true;
     };
     $scope.hideFabActions = function () {
         $scope.isShowFabActions = false;
-    }
+    };
     $scope.selectTool = function (toolName) {
         $scope.selectedTool = toolName;
         $scope.hideFabActions();
@@ -78,7 +77,6 @@ function($scope, $mdSidenav, $mdDialog, ygUserPref, ygUserCtrl, ygServer, ygFilt
     $scope.toggleIcon = function (name) {
         $scope.iconCtrls[name].show = !($scope.iconCtrls[name].show);
         ygAudio.play('toggleIconCtrl');
-        // console.log(ygUserCtrl.iconCtrls);
     };
 
     $scope.openIconCtrl = function () {
@@ -104,7 +102,6 @@ function($scope, $mdSidenav, $mdDialog, ygUserPref, ygUserCtrl, ygServer, ygFilt
     });
 
     $scope.onEnterAddress = function (address) {
-        // console.log('Navigate to ' + address);
         if(address.length > 0){
             ygUserCtrl.userAddress = address;
         }

@@ -97,12 +97,9 @@ angular.module('spirit99App')
             }
             else{
                 if(self.withinBounds(self.historyBoundsUnion, GMapBounds)){
-                    // console.log('Update maxBounds!!');
                     self.maxBounds = GMapBounds;
                 }
                 self.historyBoundsUnion = self.historyBoundsUnion.union(GMapBounds);
-                // console.log('Update historyBoundsUnion: ' + self.historyBoundsUnion.toString());
-                // console.log('maxBounds: ' + self.maxBounds.toString());
             }
         };
 

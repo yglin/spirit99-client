@@ -8,8 +8,8 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygUserPref', ['$q', '$localStorage',
-function ($q, $localStorage) {
+.service('ygUserPref', ['$q', '$localStorage', '$log',
+function ($q, $localStorage, $log) {
 // AngularJS will instantiate a singleton by calling "new" on this function
     var self = this;
 
@@ -117,13 +117,7 @@ function ($q, $localStorage) {
     };
 
     self.promiseGetGeolocation = function (map, zoom) {
-        // console.log(self.$storage.startUpAtMap);
-        // console.log(self.$storage.startAtGeolocation);
-        // if(!self.$storage.startAtGeolocation){
-        //     // No need to get geolocation, return imediatedlly resolved promise
-        //     return $q.resolve();
-        // }
-        console.log('Start get geolocation');
+        $log.info('Start get geolocation');
         zoom = typeof zoom !== 'undefined' ? zoom : 15;
         var deferred = $q.defer();
         if(navigator.geolocation){
@@ -134,7 +128,7 @@ function ($q, $localStorage) {
                         longitude: position.coords.longitude
                     };
                     map.zoom = zoom;
-                    console.log('Finish get geolocation');
+                    $log.info('Finish get geolocation');
                     deferred.resolve();
                 },
                 function (error) {

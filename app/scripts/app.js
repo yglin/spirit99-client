@@ -30,11 +30,6 @@ angular
     'angular.validators',
     'datePicker'
 ])
-.value('portalRules', {
-    requiredFields: [
-        'name', 'title'
-    ]
-})
 .config(function ($routeProvider) {
     $routeProvider
         .when('/', {
@@ -65,9 +60,41 @@ angular
         libraries: 'weather,geometry,visualization'
     });
 })
-// // Kick-start the app
-// .run(['$q', 'ygUserPref', 'ygServer', 'ygPost', 'uiGmapIsReady',
-// function ($q, ygUserPref, ygServer, ygPost, uiGmapIsReady) {
-//     // ygUserPref.loadPref();
-// }])
-;
+.config(['$provide', function ($provide) {
+    $provide.decorator('$log', ['$delegate', function ($delegate) {
+        var functions = ['log', 'debug', 'info', 'warn', 'error'];
+        var contentType = 'application/json; charset=UTF-8';
+
+        $delegate.logHistory = {};
+        $delegate.logHistory.maxLength = {};
+        _.each(functions, function (funcName){
+            $delegate.logHistory[funcName] = [];
+            $delegate.logHistory.maxLength[funcName] = 1000;
+        });
+        $delegate.originalFunctions = {};
+        _.each(functions, function (funcName){
+            $delegate.originalFunctions[funcName] = $delegate[funcName];
+            $delegate[funcName] = _.wrap($delegate.originalFunctions[funcName],
+            function (origFunc){
+                var data = Array.prototype.slice.call(arguments, 1);
+                origFunc.apply($delegate, data);
+
+                $delegate.logHistory[funcName].push(JSON.stringify(data));
+                while($delegate.logHistory[funcName].length > $delegate.logHistory.maxLength[funcName]){
+                    $delegate.logHistory[funcName].shift();
+                }
+            });
+        });
+
+        $delegate.getHistory = function (levelName) {
+            return $delegate.logHistory[levelName];    
+        };
+
+        return $delegate;
+    }]);
+}])
+.value('portalRules', {
+    requiredFields: [
+        'name', 'title'
+    ]
+});

@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('ServerListController', ['$scope', '$mdDialog', 'ygUserPref', 'ygServer',
-function($scope, $mdDialog, ygUserPref, ygServer){
+.controller('ServerListController', ['$scope', '$log', '$mdDialog', 'ygUserPref', 'ygServer',
+function($scope, $log, $mdDialog, ygUserPref, ygServer){
     // ============== Initilize scope model ==================
     // $scope.ygServer = ygServer;
     ygServer.initialPromises.updateServers.then(function () {
@@ -32,11 +32,11 @@ function($scope, $mdDialog, ygUserPref, ygServer){
 
         $mdDialog.show(confirm).then(
             function() {
-                console.log('去死吧! ' + ygServer.servers[serverName].title + '去死!');
+                $log.info('去死吧! ' + ygServer.servers[serverName].title + '去死!');
                 ygServer.removeServer(serverName);
             },
             function() {
-                console.log('阿不就按錯了!? O_o');
+                $log.info('阿不就按錯了!? O_o');
             });
     };
 

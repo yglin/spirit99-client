@@ -36,31 +36,26 @@ function ($scope, $q, $interval, $mdSidenav, ygUserCtrl, ygPost, ygAudio) {
 
     $scope.onMouseOverList = function () {
         $scope.isMouseOverList = true;
-        // console.log($scope.isMouseOverList);
     };
 
     $scope.onMouseLeaveList = function () {
         $scope.isMouseOverList = false;
-        // console.log($scope.isMouseOverList);
     };
 
     $interval(function () {
         if(!$mdSidenav('sidenav-postList').isLockedOpen()){
             return;
         }
-        // console.log($scope.isMouseOverList);
         if($scope.focusedPostId !== ygUserCtrl.focusedPostId && !$scope.isMouseOverList && !$scope.isScrolling){
             var container = angular.element(document.getElementById('post-list-container'));
             var target = angular.element(document.getElementById('post-' + ygUserCtrl.focusedPostId));
             if(container.length > 0 && target.length > 0){
                 $scope.isScrolling = true;
-                // console.log('Start scroll!!');
                 ygAudio.play('scrollPostList');
                 container.scrollToElementAnimated(target, 50, 2000)
                 .then(function () {
                     $scope.focusedPostId = ygUserCtrl.focusedPostId;
                     $scope.isScrolling = false;
-                    // console.log('Stop scroll!!');
                 });
             }        
         }

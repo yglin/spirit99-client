@@ -8,8 +8,8 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygPost', ['$rootScope', '$window', '$timeout', '$q', '$resource', 'nodeValidator', '$mdDialog', 'uiGmapGoogleMapApi', 'ygUtils', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygMyPost', 'ygError', 'ygFollowPost', 'ygStatusInfo',
-function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapGoogleMapApi, ygUtils, ygUserPref, ygUserCtrl, ygServer, ygMyPost, ygError, ygFollowPost, ygStatusInfo) {
+.service('ygPost', ['$rootScope', '$log', '$window', '$timeout', '$q', '$resource', 'nodeValidator', '$mdDialog', 'uiGmapGoogleMapApi', 'ygUtils', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygMyPost', 'ygError', 'ygFollowPost', 'ygStatusInfo',
+function ($rootScope, $log, $window, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapGoogleMapApi, ygUtils, ygUserPref, ygUserCtrl, ygServer, ygMyPost, ygError, ygFollowPost, ygStatusInfo) {
     var self = this;
 
     var PostUserFields = ['title', 'context', 'icon', 'author'];
@@ -128,7 +128,6 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
                     var endDate = new Date(filters[key].endDate);
                     endDate.setHours(23, 59, 59, 999);
                     matchAll = postDate > startDate && postDate < endDate;
-                    // console.log(matchAll + ', ' + postDate + ', ' + filters[key].startDate + ' ~ ' + filters[key].endDate);
                 }
                 else{
                     matchAll = false;
@@ -147,18 +146,18 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
 
     self.loadPosts = function () {
         if(!ygServer.isSelectedServer()){
-            console.log('No selected server');
+            $log.warn('No selected server');
             return $q.reject('No selected server');
         }
 
         var PostResource = ygServer.getSupportPost();
         if(!PostResource){
-            console.log('Post resource not supported by server');
+            $log.warn('Post resource not supported by server');
             return $q.reject('Post resource not supported by server');
         }
 
         if(ygUtils.withinMaxBounds(ygUserPref.$storage.map.bounds)){
-            console.log('Bounds within max bounds, no need to load new posts');
+            $log.info('Bounds within max bounds, no need to load new posts');
             return $q.resolve('Bounds within max bounds, no need to load new posts');
         }
         var extraParams = {};
@@ -177,7 +176,7 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
         ygStatusInfo.statusProcessing('讀取資料...');
         // return PostResource.getMarkers(extraParams, function(responses){
         return PostResource.query(extraParams, function (responses) {
-            console.log('Load ' + responses.length + ' posts');
+            $log.info('Load ' + responses.length + ' posts');
             for (var i = 0; i < responses.length; i++) {
                 if(!(responses[i].id in self.indexedPosts) && self.validatePostData(responses[i])){
                     var newPost = ygUtils.fillDefaults(responses[i], self.postDataDefaults);
@@ -196,13 +195,13 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
             ygStatusInfo.statusIdle();
         },
         function (error) {
-            console.log(error);
+            $log.warn(error);
             ygStatusInfo.statusIdle();            
         }).$promise;
     };
 
     self.reloadPosts = function(){
-        console.log('Reload posts~ ');
+        $log.info('Reload posts~ ');
         self.filteredPosts.length = 0;
         self.indexedPosts = {};
         ygUtils.resetMaxBounds();
@@ -225,7 +224,7 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
     self.createPost = function (latitude, longitude){
         var PostResource = ygServer.getSupportPost();
         if(!PostResource){
-            console.log('Post resource not supported by server');
+            $log.error('Post resource not supported by server');
             return $q.reject('Post resource not supported by server');
         }
 
@@ -236,7 +235,6 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
         self.newPost.latitude = angular.isUndefined(latitude) ? self.newPost.latitude : latitude;
         self.newPost.longitude = angular.isUndefined(longitude) ? self.newPost.longitude : longitude;
 
-        // // console.log($scope.newPost);
         return self.postEditor(self.newPost)
         .then(function(){
             return PostResource.create(self.newPost,
@@ -259,7 +257,7 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
                     }
 
                     self.newPost = null;
-                    console.log('Success, post added!!');
+                    $log.info('Success, post added!!');
                     return $q.resolve();                        
                 }
                 else{
@@ -270,25 +268,24 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
                 return $q.reject(error);
             }).$promise;
         }, function(){
-            console.log('你又按錯啦你');
+            $log.info('你又按錯啦你');
             return $q.reject();
         });
     };
 
     self.readPost = function (post) {
         if('author' in post && 'context' in post){
-            // console.log('Already got author and context, no need to read post');
+            // $log.info('Already got author and context, no need to read post');
             return $q.resolve('Already got author and context, no need to read post');
         }
         var PostResource = ygServer.getSupportPost();
         if(!PostResource){
-            console.log('Post resource not supported by server');
+            $log.error('Post resource not supported by server');
             return $q.reject('Post resource not supported by server');
         }
         ygStatusInfo.statusProcessing('讀取資料...');
         var promise = PostResource.getDetails({id:post.id},
         function (result) {
-            // console.log(result);
             for(var key in result){
                 if(!(key in post)){
                     post[key] = result[key];
@@ -296,7 +293,7 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
             }        
         }, function (error) {
             $window.alert('讀取文章內容失敗');
-            console.log(error);
+            $log.error(error);
         }).$promise;
         promise.finally(function () {
             ygStatusInfo.statusIdle();
@@ -307,7 +304,7 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
     self.updatePost = function (id, data) {
         var PostResource = ygServer.getSupportPost();
         if(!PostResource){
-            console.log('Post resource not supported by server');
+            $log.error('Post resource not supported by server');
             return $q.reject('Post resource not supported by server');
         }
         var post = self.indexedPosts[id];
@@ -323,7 +320,6 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
             self.indexedPosts[id] = response;
             self.assignIconObject(response);
 
-            // console.log(tempPost.votes);
             var voteResource = ygServer.getSupportVote();
             if(voteResource){
                 if('votes' in data){
@@ -341,11 +337,12 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
         }, function (error) {
             if(error.status === 401){
                 $window.alert('這可能是別人的文章，你沒有權限更改');
+                $log.warn(error);
             }
             else{
                 $window.alert('更新失敗!!');
+                $log.error(error);
             }
-            console.log(error);
         }).$promise;
         promise.finally(function () {
             if(self.filterPost(self.indexedPosts[post.id])){
@@ -367,7 +364,7 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
     self.deletePost = function (post) {
         var PostResource = ygServer.getSupportPost();
         if(!PostResource){
-            console.log('Post resource not supported by server');
+            $log.error('Post resource not supported by server');
             return $q.reject('Post resource not supported by server');
         }
         if(ygMyPost.isMyPost(post)){
@@ -392,12 +389,12 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
                     }
                     else{
                         $window.alert('刪除失敗!!');
+                        $log.error(error);
                     }
-                    console.log(error);
                     return $q.reject();
                 }).$promise;
             }, function () {
-                console.log('那你再想想吧');
+                $log.info('那你再想想吧');
                 return $q.resolve();
             });
         }
@@ -445,9 +442,7 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
         else{
             return self.readPost(post).then(function () {
                 var rex = /<img[^>]+src\s*=\s*"([^"\s]+)"/i;
-                // console.log(post.context);
                 var match = rex.exec(post.context);
-                // console.log(match);
                 if(match){
                     post.thumbnail = match[1];
                 }
@@ -456,6 +451,7 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
                 }
                 return $q.resolve(post.thumbnail);
             }, function (error) {
+                $log.error(error);
                 return $q.reject(error);
             });
         }
@@ -467,8 +463,6 @@ function ($rootScope, $window, $timeout, $q, $resource, nodeValidator, $mdDialog
         var deferred = $q.defer();
         $timeout(function () {
             self.reloadPosts().then(function () {
-                // console.log(self.indexedPosts);
-                // console.log(self.filteredPosts);
                 deferred.resolve();
             }, function () {
                 deferred.reject();

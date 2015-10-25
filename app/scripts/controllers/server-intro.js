@@ -10,7 +10,6 @@
 angular.module('spirit99App')
 .controller('ServerIntroController', ['$scope', '$sce', '$mdDialog', 'nodeValidator', 'ygServer', 'server',
 function ($scope, $sce, $mdDialog, nodeValidator, ygServer, server) {
-    // console.log(server);
     $scope.server = server;
     $scope.introUrl = null;
     $scope.introContent = '這電台沒提供簡介...';

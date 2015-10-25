@@ -27,7 +27,6 @@ angular.module('spirit99App')
         return self.errorMessages;
     }, 
     function (newValue, oldValue){
-        // console.log('Got you!! ' + newValue);
         while(self.errorMessages.length > 0){
             var errorMessage = self.errorMessages.pop();
             showError(errorMessage);

@@ -8,8 +8,8 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygServer', ['$rootScope', '$http', '$resource', '$q', '$mdDialog', 'uiGmapGoogleMapApi', 'nodeValidator', 'portalRules', 'ygError', 'ygUtils', 'ygUserPref', 'ygStatusInfo',
-function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeValidator, portalRules, ygError, ygUtils, ygUserPref, ygStatusInfo) {
+.service('ygServer', ['$rootScope', '$log', '$http', '$resource', '$q', '$mdDialog', 'uiGmapGoogleMapApi', 'nodeValidator', 'portalRules', 'ygError', 'ygUtils', 'ygUserPref', 'ygStatusInfo',
+function ($rootScope, $log, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeValidator, portalRules, ygError, ygUtils, ygUserPref, ygStatusInfo) {
     // AngularJS will instantiate a singleton by calling "new" on self function
     var self = this;
 
@@ -28,7 +28,7 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
     self.validatePortal = function(portalData){
         for (var i = 0; i < portalRules.requiredFields.length; i++) {
             if(!(portalRules.requiredFields[i] in portalData)){
-                console.log('Missing required field: ' + portalRules.requiredFields[i] + ',\n in data: ' + portalData);
+                $log.error('Missing required field: ' + portalRules.requiredFields[i] + ',\n in data: ' + portalData);
                 return false;
             }
         }
@@ -50,7 +50,7 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
             self.resources = {};
         }
         else{
-            console.log('沒有找到' + serverName + '啊！你是不是忘記load啦？');
+            $log.warn('沒有找到' + serverName + '啊！你是不是忘記load啦？');
         }
     };
 
@@ -90,14 +90,14 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
             else{
                 var errorMessage = "載入失敗，請檢查傳送門網址是否正確：" + portalUrl;
                 ygError.errorMessages.push(errorMessage);                
-                console.log(errorMessage + " response:\n" + status + "\n" + response);
+                $log.warn(errorMessage + " response:\n" + status + "\n" + response);
             }
         })
         .error(function(response, status){
             // error
             var errorMessage = "載入失敗，請檢查傳送門網址是否正確：" + portalUrl;
             ygError.errorMessages.push(errorMessage);
-            console.log(errorMessage + " response:\n" + status + "\n" + response);
+            $log.warn(errorMessage + " response:\n" + status + "\n" + response);
         });
     };
 
@@ -109,8 +109,7 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
     };
 
     self.errorGetPortal = function (response, status, headersGetter, request){
-        // console.log(request);
-        console.log('Failed to update server, portal url = ' + request.url + ', status = ' + status + ', response data = ' + response);
+        $log.error('Failed to update server, portal url = ' + request.url + ', status = ' + status + ', response data = ' + response);
     };
 
     self.updateServer = function (portalData) {
@@ -121,8 +120,8 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
             portalUrl = portalData.urls.portalUrl;
         }
         if(portalUrl !== server.portalUrl && nodeValidator.isURL(portalUrl)){
-        // Got new portalUrl, update with new portal
-            console.log('Got new portal url , update from it: ' + portalUrl);
+            // Got new portalUrl, update with new portal
+            $log.info('Got new portal url , update from it: ' + portalUrl);
             return $http.get(portalUrl)
             .success(function (newestData) {
                 if(self.validatePortal(newestData)){
@@ -134,26 +133,25 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
             .error(self.errorGetPortal);
         }
         else if(self.validatePortal(portalData)){
-            // console.log(portalData)
             self.servers[serverName] = ygUtils.fillDefaults(portalData, self.portalDataDefaults);
             self.servers[serverName].portalUrl = portalUrl;
             self.servers[serverName].isReady = true;
             return $q.resolve();
         }
         else{
-            console.log('Invalid portal data:' + JSON.stringify(portalData));
+            $log.error('Invalid portal data:' + JSON.stringify(portalData));
             return $q.reject('Invalid portal data:' + JSON.stringify(portalData));
         }
     };
 
     self.updateServers = function(){
-        console.log('Start update servers');
+        $log.info('Start update servers');
         ygStatusInfo.statusProcessing('更新電台資料...');
         var updatePromises = {};
 
         for (var name in self.servers) {
             self.servers[name].isReady = false;
-            console.log('Update station ' + name + ' from ' + self.servers[name].portalUrl);
+            $log.info('Update station ' + name + ' from ' + self.servers[name].portalUrl);
             updatePromises[name] = $http.get(self.servers[name].portalUrl)
             .success(self.updateServer)
             .error(self.errorGetPortal);
@@ -163,7 +161,7 @@ function ($rootScope, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeV
             if(ygUserPref.$storage.selectedServer in self.servers){
                 self.switchServer(ygUserPref.$storage.selectedServer);
             }
-            console.log('Finish update servers');
+            $log.info('Finish update servers');
             ygStatusInfo.statusIdle();
         });
 

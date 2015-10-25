@@ -19,11 +19,9 @@ function ($scope, $mdDialog, ygUserPref, ygFollowPost) {
             .ok('確定')
             .cancel('我按錯了')
         ).then(function () {
-            // console.log('followedPosts go die~!!');
             for(var post_id in ygFollowPost.followedPosts){
                 delete ygFollowPost.followedPosts[post_id];
             }
-            // console.log(ygFollowPost.followedPosts);
         });
     };
 
@@ -37,7 +35,6 @@ function ($scope, $mdDialog, ygUserPref, ygFollowPost) {
         ).then(function () {
             $scope.settings.startUpAtMap = 'useMapHome';
             ygUserPref.setMapHome();
-            // console.log(ygUserPref.$storage.mapHome);
         });
     };
 }]);

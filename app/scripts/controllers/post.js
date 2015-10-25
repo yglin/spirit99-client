@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('PostController', ['$scope', '$resource', '$mdDialog', 'ygUtils', 'ygMyPost', 'ygServer', 'ygFroala', 'ygPost', 'ygFollowPost', 'post',
-function ($scope, $resource, $mdDialog, ygUtils, ygMyPost, ygServer, ygFroala, ygPost, ygFollowPost, post) {
+.controller('PostController', ['$scope', '$log', '$resource', '$mdDialog', 'ygUtils', 'ygMyPost', 'ygServer', 'ygFroala', 'ygPost', 'ygFollowPost', 'post',
+function ($scope, $log, $resource, $mdDialog, ygUtils, ygMyPost, ygServer, ygFroala, ygPost, ygFollowPost, post) {
     var self = this;
 
     self.commentResource = ygServer.getSupportComment();
@@ -33,7 +33,6 @@ function ($scope, $resource, $mdDialog, ygUtils, ygMyPost, ygServer, ygFroala, y
     });
     
     $scope.post = post;
-    // console.log($scope.post);
 
     $scope.isMyPost = ygMyPost.isMyPost(post);
 
@@ -59,7 +58,6 @@ function ($scope, $resource, $mdDialog, ygUtils, ygMyPost, ygServer, ygFroala, y
                         $scope.post.votes[results[i].id]  = results[i];
                     }
                 }
-                // console.log($scope.post.votes);
             });
         }
 
@@ -76,7 +74,6 @@ function ($scope, $resource, $mdDialog, ygUtils, ygMyPost, ygServer, ygFroala, y
 
     $scope.$watch('followPost',
         function (newValue) {
-            // console.log(newValue);
             if(newValue){
                 ygFollowPost.followPost($scope.post);
             }
@@ -101,7 +98,7 @@ function ($scope, $resource, $mdDialog, ygUtils, ygMyPost, ygServer, ygFroala, y
             $scope.newComment = new self.commentResource();
         },
         function (error) {
-            console.log(error);
+            $log.error(error);
         });
     };
 

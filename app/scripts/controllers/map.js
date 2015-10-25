@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('MapController', ['$scope', '$timeout', '$mdDialog', 'uiGmapGoogleMapApi', 'ygUtils', 'ygError', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygPost', 'ygAudio',
-function($scope, $timeout, $mdDialog, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygUserCtrl, ygServer, ygPost, ygAudio) {
+.controller('MapController', ['$scope', '$log', '$timeout', '$mdDialog', 'uiGmapGoogleMapApi', 'ygUtils', 'ygError', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygPost', 'ygAudio',
+function($scope, $log, $timeout, $mdDialog, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygUserCtrl, ygServer, ygPost, ygAudio) {
 
     var self = this;
 
@@ -162,7 +162,7 @@ function($scope, $timeout, $mdDialog, uiGmapGoogleMapApi, ygUtils, ygError, ygUs
                 });
             },
             function() {
-                console.log('這樣就算了那這社會還需要警察嗎!? O_o');
+                $log.info('這樣就算了那這社會還需要警察嗎!? O_o');
             });        
     };
 
@@ -282,7 +282,7 @@ function($scope, $timeout, $mdDialog, uiGmapGoogleMapApi, ygUtils, ygError, ygUs
                         }
                     }
                     else{
-                        console.log("Geocode was not successful for the following reason: " + status);
+                        $log.warn("Geocode failed due to the following reason: " + status);
                         if(status === googlemaps.GeocoderStatus.ZERO_RESULTS){
                             ygError.errorMessages.push('找不到符合搜尋條件的地點');
                         }

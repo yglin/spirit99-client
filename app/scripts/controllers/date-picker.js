@@ -10,7 +10,6 @@
 angular.module('spirit99App')
 .controller('DatePickerController', ['$scope', '$mdDialog', 'create_time',
 function ($scope, $mdDialog, create_time) {
-    // console.log(create_time);
     if('startDate' in create_time){
         $scope.startDate = create_time.startDate;
     }

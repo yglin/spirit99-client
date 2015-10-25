@@ -8,8 +8,8 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygFroala', ['$rootScope', '$q', 'ygServer',
-function ($rootScope, $q, ygServer) {
+.service('ygFroala', ['$rootScope', '$log', '$q', 'ygServer',
+function ($rootScope, $log, $q, ygServer) {
     var self = this;
 
     self.defaultOptions = {
@@ -37,9 +37,9 @@ function ($rootScope, $q, ygServer) {
                                 region: upload.s3Config.region,
                                 keyStart: upload.s3Config.keyStart,
                                 callback: function (url, key) {
-                                        // The URL and Key returned from Amazon.
-                                        console.log (url);
-                                        console.log (key);
+                                        // // The URL and Key returned from Amazon.
+                                        // console.log (url);
+                                        // console.log (key);
                                     },
                                 params: {
                                     acl: upload.s3Config.acl,
@@ -50,10 +50,9 @@ function ($rootScope, $q, ygServer) {
                             }
                         };
                         self.options = angular.extend(self.defaultOptions, imageUploadOptions);
-                        // console.log(self.options);
                         defer.resolve(self.options);
                     }, function (error) {
-                        console.log(error);
+                        $log.warn(error);
                         defer.resolve(self.defaultOptions);
                     });
                 }
