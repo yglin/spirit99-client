@@ -389,6 +389,25 @@ function ($rootScope, $log, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi,
         }
     };
 
+    self.getSupportReportIssue = function () {
+        if(!self.isSelectedServer()){
+            return false;
+        }
+
+        if('reportIssue' in self.resources){
+            return self.resources.reportIssue;
+        }
+        else if('reportIssueUrl' in self.selectedServer.urls){
+            self.resources.reportIssue = {
+                url: self.selectedServer.urls.reportIssueUrl
+            };
+            return self.resources.reportIssue;
+        }
+        else{
+            return false;
+        }
+    };
+
     self.initialPromises = {
         'updateServers': self.updateServers()
     };

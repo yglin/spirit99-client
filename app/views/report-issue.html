@@ -1,0 +1,22 @@
+<md-dialog aria-label="Report Issue" flex='60'>
+<md-dialog-content>
+    <div ng-if="froalaOptions">
+        <h3>問題描述</h3>
+        <div class='md-whiteframe-z3' layout-padding>
+            <textarea froala='froalaOptions' ng-model='description'></textarea>
+        </div>
+    </div>
+    <md-checkbox ng-model='isSendingLogHistory'>回報錯誤日誌</md-checkbox>
+    <div ng-show='isSendingLogHistory'>
+        <h5>以下系統日誌的錯誤訊息將會一併回報給開發團隊</h5>
+        <md-content style='max-height:100px;'> 
+            <p ng-repeat='log in errorLogs'>{{log}}</p>
+        </md-content>
+    </div>
+    <div layout='row'>
+        <md-button class='md-primary md-raised' ng-click="cancel()">算了</md-button>
+        <div flex></div>
+        <md-button class='md-primary md-raised' ng-click="confirm()">確定送出</md-button>
+    </div>
+</md-dialog-content>
+</md-dialog>

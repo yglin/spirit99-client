@@ -79,7 +79,7 @@ angular
                 var data = Array.prototype.slice.call(arguments, 1);
                 origFunc.apply($delegate, data);
 
-                $delegate.logHistory[funcName].push(JSON.stringify(data));
+                $delegate.logHistory[funcName].push(Date().toLocaleString() + ': ' + JSON.stringify(data));
                 while($delegate.logHistory[funcName].length > $delegate.logHistory.maxLength[funcName]){
                     $delegate.logHistory[funcName].shift();
                 }

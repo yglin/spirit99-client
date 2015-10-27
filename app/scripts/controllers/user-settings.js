@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('UserSettingsController', ['$scope', '$mdDialog', 'ygUserPref', 'ygFollowPost',
-function ($scope, $mdDialog, ygUserPref, ygFollowPost) {
+.controller('UserSettingsController', ['$scope', '$log', '$window', '$mdDialog', 'ygUserPref', 'ygServer', 'ygFollowPost',
+function ($scope, $log, $window, $mdDialog, ygUserPref, ygServer, ygFollowPost) {
     $scope.settings = ygUserPref.$storage;
     $scope.unfollowAllPosts = function () {
         $mdDialog.show(
@@ -35,6 +35,20 @@ function ($scope, $mdDialog, ygUserPref, ygFollowPost) {
         ).then(function () {
             $scope.settings.startUpAtMap = 'useMapHome';
             ygUserPref.setMapHome();
+        });
+    };
+
+    // $scope.canReportIssue = ygServer.getSupportReportIssue();
+    $scope.reportIssue = function () {
+        $scope.canReportIssue = ygServer.getSupportReportIssue();
+        if(!$scope.canReportIssue){
+            $window.alert('電台不支援問題回報功能');
+            return;
+        }
+        $mdDialog.show({
+            controller: 'ReportIssueController',
+            templateUrl: 'views/report-issue.html',
+            clickOutsideToClose: true
         });
     };
 }]);
