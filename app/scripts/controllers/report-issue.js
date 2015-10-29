@@ -19,7 +19,17 @@ function ($scope, $log, $http, $window, $mdDialog, ygFroala, ygServer) {
     });
 
     // $scope.isSendingLogHistory = false;
-    $scope.errorLogs = $log.getHistory('error');
+    $scope.logs = $log.getHistory('error').concat($log.getHistory('ajax'));
+    // Sort logs by timestamp
+    $scope.logs.sort(function (log1, log2) {
+        return log1.timestamp - log2.timestamp;
+    });
+    $scope.readableLogs = $scope.logs.map(function (element) {
+        return {
+            timestamp: element.timestamp.toLocaleString(),
+            context: angular.toJson(element.context)
+        };
+    });
 
     $scope.cancel = function () {
         $mdDialog.cancel();
@@ -35,7 +45,7 @@ function ($scope, $log, $http, $window, $mdDialog, ygFroala, ygServer) {
                 description: $scope.description
             };
             if($scope.isSendingLogHistory){
-                issueData.error_logs = angular.toJson($scope.errorLogs);
+                issueData.error_logs = $scope.logs;
             }
             $http.post(canReportIssue.url, issueData).then(
             function (response) {

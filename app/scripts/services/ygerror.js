@@ -8,19 +8,28 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygError', ['$rootScope', '$mdDialog', function ($rootScope, $mdDialog) {
+.service('ygError', ['$rootScope', '$mdDialog',
+function ($rootScope, $mdDialog) {
 // AngularJS will instantiate a singleton by calling "new" on this function
     var self = this;
 
     self.errorMessages = [];
 
     var showError = function(errorMessage){
-        var alert = $mdDialog.alert()
-            .title('靠妖那Ａ安內')
-            .content(errorMessage)
-            .ok('喔。好');
+        var confirm = $mdDialog.confirm()
+        .title('那Ａ安內')
+        .content(errorMessage)
+        .ok('回報問題')
+        .cancel('喔 好');
         $mdDialog
-            .show( alert );
+        .show(confirm)
+        .then(function () {
+            $mdDialog.show({
+                controller: 'ReportIssueController',
+                templateUrl: 'views/report-issue.html',
+                clickOutsideToClose: true
+            });
+        });
     };
 
     $rootScope.$watchCollection(function(){

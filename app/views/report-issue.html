@@ -10,7 +10,7 @@
     <div ng-show='isSendingLogHistory'>
         <h5>以下系統日誌的錯誤訊息將會一併回報給開發團隊</h5>
         <md-content style='max-height:100px;'> 
-            <p ng-repeat='log in errorLogs'>{{log}}</p>
+            <p ng-repeat='log in readableLogs'>[{{log.timestamp}}] {{log.context}}</p>
         </md-content>
     </div>
     <div layout='row'>

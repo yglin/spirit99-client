@@ -60,13 +60,18 @@ angular
         libraries: 'weather,geometry,visualization'
     });
 })
-.config(['$provide', function ($provide) {
+.config(['$provide', '$httpProvider', function ($provide, $httpProvider) {
+    // ================== Decorate $log service to make it store loggings ================
     $provide.decorator('$log', ['$delegate', function ($delegate) {
         var functions = ['log', 'debug', 'info', 'warn', 'error'];
         var contentType = 'application/json; charset=UTF-8';
 
-        $delegate.logHistory = {};
-        $delegate.logHistory.maxLength = {};
+        $delegate.logHistory = {
+            ajax: [],
+            maxLength: {
+                ajax: 1000
+            }
+        };
         _.each(functions, function (funcName){
             $delegate.logHistory[funcName] = [];
             $delegate.logHistory.maxLength[funcName] = 1000;
@@ -79,7 +84,10 @@ angular
                 var data = Array.prototype.slice.call(arguments, 1);
                 origFunc.apply($delegate, data);
 
-                $delegate.logHistory[funcName].push(Date().toLocaleString() + ': ' + JSON.stringify(data));
+                $delegate.logHistory[funcName].push({
+                    timestamp: new Date(),
+                    context: data
+                });
                 while($delegate.logHistory[funcName].length > $delegate.logHistory.maxLength[funcName]){
                     $delegate.logHistory[funcName].shift();
                 }
@@ -89,9 +97,25 @@ angular
         $delegate.getHistory = function (levelName) {
             return $delegate.logHistory[levelName];    
         };
-
         return $delegate;
     }]);
+
+    // =================== Log ajax error into logHistory, too ====================
+    $httpProvider.interceptors.push(function($q, $log){
+        return {
+            'responseError': function (rejection) {
+                $log.logHistory.ajax.push({
+                    timestamp: new Date(),
+                    context: rejection
+                });
+                while($log.logHistory.ajax.length > $log.logHistory.maxLength.ajax){
+                    $log.logHistory.ajax.shift();
+                }
+                // console.log($log.logHistory.ajax);
+                return $q.reject(rejection);
+            }
+        };
+    });
 }])
 .value('portalRules', {
     requiredFields: [
