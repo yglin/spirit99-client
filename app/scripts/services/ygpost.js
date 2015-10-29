@@ -8,8 +8,8 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygPost', ['$rootScope', '$log', '$window', '$timeout', '$q', '$resource', 'nodeValidator', '$mdDialog', 'uiGmapGoogleMapApi', 'ygUtils', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygMyPost', 'ygError', 'ygFollowPost', 'ygStatusInfo',
-function ($rootScope, $log, $window, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapGoogleMapApi, ygUtils, ygUserPref, ygUserCtrl, ygServer, ygMyPost, ygError, ygFollowPost, ygStatusInfo) {
+.service('ygPost', ['$rootScope', '$log', '$window', '$timeout', '$q', '$resource', 'nodeValidator', '$mdDialog', 'uiGmapGoogleMapApi', 'ygUtils', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygMyPost', 'ygError', 'ygFollowPost', 'ygStatusInfo', 'ygAudio',
+function ($rootScope, $log, $window, $timeout, $q, $resource, nodeValidator, $mdDialog, uiGmapGoogleMapApi, ygUtils, ygUserPref, ygUserCtrl, ygServer, ygMyPost, ygError, ygFollowPost, ygStatusInfo, ygAudio) {
     var self = this;
 
     var PostUserFields = ['title', 'context', 'icon', 'author'];
@@ -209,6 +209,7 @@ function ($rootScope, $log, $window, $timeout, $q, $resource, nodeValidator, $md
     };
 
     self.postEditor = function (post) {
+        ygAudio.play('openPostEditor');
         $mdDialog.cancel();
         return $mdDialog.show({
             templateUrl: 'views/posteditor.html',
@@ -408,6 +409,7 @@ function ($rootScope, $log, $window, $timeout, $q, $resource, nodeValidator, $md
         var post = self.indexedPosts[postID];        
         self.readPost(post)
         .then(function () {
+            ygAudio.play('openPostView');
             $mdDialog.show({
                 templateUrl: 'views/post.html',
                 controller: 'PostController',
@@ -502,6 +504,7 @@ function ($rootScope, $log, $window, $timeout, $q, $resource, nodeValidator, $md
             }
         }, true);        
 
+        // ygError.errorMessages.push('test');
         return deferred.promise;
     });
 

@@ -8,8 +8,8 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygError', ['$rootScope', '$mdDialog',
-function ($rootScope, $mdDialog) {
+.service('ygError', ['$rootScope', '$mdDialog', 'ygAudio',
+function ($rootScope, $mdDialog, ygAudio) {
 // AngularJS will instantiate a singleton by calling "new" on this function
     var self = this;
 
@@ -21,6 +21,7 @@ function ($rootScope, $mdDialog) {
         .content(errorMessage)
         .ok('回報問題')
         .cancel('喔 好');
+        ygAudio.play('onError');
         $mdDialog
         .show(confirm)
         .then(function () {

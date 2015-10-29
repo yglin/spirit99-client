@@ -8,8 +8,8 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygServer', ['$rootScope', '$log', '$http', '$resource', '$q', '$mdDialog', 'uiGmapGoogleMapApi', 'nodeValidator', 'portalRules', 'ygError', 'ygUtils', 'ygUserPref', 'ygStatusInfo',
-function ($rootScope, $log, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeValidator, portalRules, ygError, ygUtils, ygUserPref, ygStatusInfo) {
+.service('ygServer', ['$rootScope', '$log', '$http', '$resource', '$q', '$mdDialog', 'uiGmapGoogleMapApi', 'nodeValidator', 'portalRules', 'ygError', 'ygUtils', 'ygUserPref', 'ygStatusInfo', 'ygAudio',
+function ($rootScope, $log, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeValidator, portalRules, ygError, ygUtils, ygUserPref, ygStatusInfo, ygAudio) {
     // AngularJS will instantiate a singleton by calling "new" on self function
     var self = this;
 
@@ -56,6 +56,7 @@ function ($rootScope, $log, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi,
 
     self.showServerIntro = function (serverName) {
         if(serverName in self.servers){
+            ygAudio.play('openStationIntro');
             $mdDialog.show({
                 templateUrl: 'views/server-intro.html',
                 controller: 'ServerIntroController',
@@ -412,4 +413,13 @@ function ($rootScope, $log, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi,
         'updateServers': self.updateServers()
     };
 
+    self.initialPromises.updateServers.then(function () {
+        $rootScope.$watch(function () {
+            return self.selectedServer;
+        }, function () {
+            if('soundSet' in self.selectedServer){
+                ygAudio.loadSoundSet(self.selectedServer.soundSet);
+            }
+        });
+    });
 }]);

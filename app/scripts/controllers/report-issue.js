@@ -18,7 +18,7 @@ function ($scope, $log, $http, $window, $mdDialog, ygFroala, ygServer) {
     });
     $scope.issue = {
         description: '<p>天殺的這網站是怎樣#@$%!!</p><img src="http://static2.fjcdn.com/thumbnails/comments/5483060+_11224083b0f38dbfdfb203db56bfe1d3.gif" />'
-    }
+    };
 
     // $scope.isSendingLogHistory = false;
     $scope.issue.error_logs = $log.getHistory('error').concat($log.getHistory('ajax'));

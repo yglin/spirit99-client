@@ -8,17 +8,17 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygAudio', ['$rootScope', 'ngAudio', 'ygUserPref', 'ygServer',
-function ($rootScope, ngAudio, ygUserPref, ygServer) {
+.service('ygAudio', ['$rootScope', 'ngAudio', 'ygUserPref',
+function ($rootScope, ngAudio, ygUserPref) {
     var self = this;
 
     self.defaultSoundSet = {
         focusOnPost: {
-            file: 'sounds/big_bubble_blown_into_glass_through_drinking_straw_version_1.mp3',
+            file: 'sounds/water_drip_006.mp3',
             volume: 0.5
         },
-        scrollPostList: {
-            file: 'sounds/bubbles_blown_into_glass_through_drinking_straw_version_2.mp3',
+        openPostList: {
+            file: 'sounds/water_bubbles_002.mp3',
             volume: 0.5
         },
         closePostList: {
@@ -27,6 +27,22 @@ function ($rootScope, ngAudio, ygUserPref, ygServer) {
         },
         toggleIconCtrl: {
             file: 'sounds/water_drip_009.mp3',
+            volume: 0.5
+        },
+        openPostEditor: {
+            file: 'sounds/big_bubble_blown_into_glass_through_drinking_straw_version_2.mp3',
+            volume: 0.5
+        },
+        openPostView: {
+            file: 'sounds/big_bubble_blown_into_glass_through_drinking_straw_version_1.mp3',
+            volume: 0.5
+        },
+        onError: {
+            file: 'sounds/water_splash_in_flooded_bunker_006.mp3',
+            volume: 0.5
+        },
+        openStationIntro: {
+            file: 'sounds/bubbles_blown_into_glass_through_drinking_straw_version_2.mp3',
             volume: 0.5
         }
     };
@@ -47,22 +63,22 @@ function ($rootScope, ngAudio, ygUserPref, ygServer) {
 
     self.loadSoundSet(self.defaultSoundSet);
 
-    self.loadSoundSetFromSelectedServer = function(){
-        if(ygServer.selectedServer !== null && 'soundSet' in ygServer.selectedServer){
-            self.loadSoundSet(ygServer.selectedServer.soundSet);
-        }
-    };
+    // self.loadSoundSetFromSelectedServer = function(){
+    //     if(ygServer.selectedServer !== null && 'soundSet' in ygServer.selectedServer){
+    //         self.loadSoundSet(ygServer.selectedServer.soundSet);
+    //     }
+    // };
 
     // ngAudio.mute();
 
-    ygServer.initialPromises.updateServers.then(function () {
-        self.loadSoundSetFromSelectedServer();
-        $rootScope.$watch(function () {
-            return ygServer.selectedServer;
-        }, function () {
-            self.loadSoundSetFromSelectedServer();
-            // ngAudio.mute();
-        });
-    });
+    // ygServer.initialPromises.updateServers.then(function () {
+    //     self.loadSoundSetFromSelectedServer();
+    //     $rootScope.$watch(function () {
+    //         return ygServer.selectedServer;
+    //     }, function () {
+    //         self.loadSoundSetFromSelectedServer();
+    //         // ngAudio.mute();
+    //     });
+    // });
 
 }]);
