@@ -32,7 +32,7 @@
             </div>
             <div flex layout='row' layout-padding ng-show='selectedTool == "address"'>
                 <md-input-container flex md-no-float>
-                    <input placeholder='輸入地址' style='color:white;' ng-model='userAddress' ng-keypress="$event.keyCode == 13 && onEnterAddress(userAddress)"/>
+                    <input placeholder='請輸入地址或地名' style='color:white;' ng-model='userAddress' ng-keypress="$event.keyCode == 13 && onEnterAddress(userAddress)"/>
                 </md-input-container>
                 <md-button class='md-icon-button' aria-label='Next location' ng-click='nextGeocodeLocation()' ng-show='isMultipleGeocodeLocations'>
                     <md-icon class='material-icons' ng-style="{color: 'white'}">swap_horiz</md-icon>
