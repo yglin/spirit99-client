@@ -61,7 +61,12 @@ function ($rootScope, ngAudio, ygUserPref) {
         }
     };
 
-    self.loadSoundSet(self.defaultSoundSet);
+    self.reloadSoundSet = function (soundSet) {
+        self.loadSoundSet(self.defaultSoundSet);
+        if(angular.isDefined(soundSet) && soundSet !== null){
+            self.loadSoundSet(soundSet);
+        }
+    };
 
     // self.loadSoundSetFromSelectedServer = function(){
     //     if(ygServer.selectedServer !== null && 'soundSet' in ygServer.selectedServer){

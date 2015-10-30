@@ -428,9 +428,7 @@ function ($rootScope, $log, $routeParams, $http, $resource, $q, $mdDialog, uiGma
         $rootScope.$watch(function () {
             return self.selectedServer;
         }, function () {
-            if('soundSet' in self.selectedServer){
-                ygAudio.loadSoundSet(self.selectedServer.soundSet);
-            }
+            ygAudio.reloadSoundSet(self.selectedServer.soundSet);
         });
     });
 }]);
