@@ -73,6 +73,12 @@ function ($rootScope, $log, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi,
     };
 
     self.loadServer = function(portalUrl){
+        if(!nodeValidator.isURL(portalUrl)){
+            var errorMessage = '喂喂，你輸入的這個好像不是網址喔？<br>' + portalUrl;
+            ygError.errorMessages.push(errorMessage);
+            $log.warn(errorMessage);
+            return;
+        }
         $http.get(portalUrl)
         .success(function(response, status){
             // success
@@ -89,14 +95,14 @@ function ($rootScope, $log, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi,
                 self.showServerIntro(response.name);
             }
             else{
-                var errorMessage = "載入失敗，請檢查傳送門網址是否正確：" + portalUrl;
+                var errorMessage = '載入失敗，請檢查傳送門網址是否正確<br>' + portalUrl;
                 ygError.errorMessages.push(errorMessage);                
                 $log.warn(errorMessage + " response:\n" + status + "\n" + response);
             }
         })
         .error(function(response, status){
             // error
-            var errorMessage = "載入失敗，請檢查傳送門網址是否正確：" + portalUrl;
+            var errorMessage = '載入失敗，請檢查傳送門網址是否正確<br>' + portalUrl;
             ygError.errorMessages.push(errorMessage);
             $log.warn(errorMessage + " response:\n" + status + "\n" + response);
         });
