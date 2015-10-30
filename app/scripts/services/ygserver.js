@@ -8,8 +8,8 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygServer', ['$rootScope', '$log', '$http', '$resource', '$q', '$mdDialog', 'uiGmapGoogleMapApi', 'nodeValidator', 'portalRules', 'ygError', 'ygUtils', 'ygUserPref', 'ygStatusInfo', 'ygAudio',
-function ($rootScope, $log, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeValidator, portalRules, ygError, ygUtils, ygUserPref, ygStatusInfo, ygAudio) {
+.service('ygServer', ['$rootScope', '$log', '$routeParams', '$http', '$resource', '$q', '$mdDialog', 'uiGmapGoogleMapApi', 'nodeValidator', 'portalRules', 'ygError', 'ygUtils', 'ygUserPref', 'ygStatusInfo', 'ygAudio',
+function ($rootScope, $log, $routeParams, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi, nodeValidator, portalRules, ygError, ygUtils, ygUserPref, ygStatusInfo, ygAudio) {
     // AngularJS will instantiate a singleton by calling "new" on self function
     var self = this;
 
@@ -165,9 +165,6 @@ function ($rootScope, $log, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi,
         }
 
         var promise = $q.allSettled(updatePromises).then(function (dataArray) {
-            if(ygUserPref.$storage.selectedServer in self.servers){
-                self.switchServer(ygUserPref.$storage.selectedServer);
-            }
             $log.info('Finish update servers');
             ygStatusInfo.statusIdle();
         });
@@ -420,6 +417,14 @@ function ($rootScope, $log, $http, $resource, $q, $mdDialog, uiGmapGoogleMapApi,
     };
 
     self.initialPromises.updateServers.then(function () {
+        // console.log($routeParams);
+        if('stationName' in $routeParams && $routeParams.stationName in self.servers){
+            self.switchServer($routeParams.stationName);
+        }
+        else if(ygUserPref.$storage.selectedServer in self.servers){
+            self.switchServer(ygUserPref.$storage.selectedServer);
+        }
+
         $rootScope.$watch(function () {
             return self.selectedServer;
         }, function () {

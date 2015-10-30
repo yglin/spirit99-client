@@ -32,7 +32,7 @@ angular
 ])
 .config(function ($routeProvider) {
     $routeProvider
-        .when('/', {
+        .when('/:stationName?', {
             templateUrl: 'views/main.html',
             controller: 'MainCtrl',
             controllerAs: 'main'
