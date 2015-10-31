@@ -21,7 +21,7 @@
             <!-- TODO: limit character length to 50  -->
             <input md-maxlength='50' required name='title' ng-model="newPost.title">
             <div ng-messages='postForm.title.$error'>
-                <div ng-message='required'>必須要有標題</div>
+                <div ng-message='required'>請填入標題</div>
                 <div ng-message='md-maxlength'>請勿超過50字</div>
             </div>
         </md-input-container>
@@ -42,14 +42,20 @@
                 </div>
             </md-toolbar>
             <!-- </div> -->
-            <textarea froala='froalaOptions' ng-model="newPost.context"></textarea>
+            <md-input-container>
+                <textarea required name='context' froala='froalaOptions' ng-model="newPost.context"></textarea>
+                <div ng-messages='postForm.context.$error'>
+                    <div ng-message='required'>請填入內容</div>
+                </div>
+            </md-input-container>
         </md-content>
         <br>
         <md-input-container>
             <!-- TODO: limit character length to 30 -->
             <label>作者或聯絡方式</label>
-            <input md-maxlength='30' name='author' ng-model="newPost.author">
+            <input required md-maxlength='30' name='author' ng-model="newPost.author">
             <div ng-messages='postForm.author.$error'>
+                <div ng-message='required'>請填入作者或聯絡方式</div>
                 <div ng-message='md-maxlength'>請勿超過30字</div>
             </div>
         </md-input-container>
@@ -70,7 +76,7 @@
             </div>
             <div layout='row'>
                 <input name='newVote' ng-model='newVote.expression'>
-                <md-button type='button' class='md-raised' ng-click='addNewVote(newVote.expression)'>增加統計按鈕</md-button>
+                <md-button type='button' class='md-raised' ng-click='addNewVote(newVote.expression)'>增加投票按鈕</md-button>
             </div>
         </div>
     </form>   
@@ -80,7 +86,7 @@
     我按錯了
 </md-button>
 <span flex></span>
-<md-button ng-click="post()" class="md-raised md-primary" ng-disabled="postForm.title.$invalid || postForm.author.$invalid">
+<md-button ng-click="post()" class="md-raised md-primary" ng-disabled="postForm.title.$invalid || postForm.author.$invalid || postForm.context.$invalid">
     完成
 </md-button>
 </div>
