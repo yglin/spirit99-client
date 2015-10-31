@@ -231,7 +231,9 @@ function ($rootScope, $log, $window, $timeout, $q, $resource, nodeValidator, $md
 
         if(self.newPost === null){
             self.newPost = new PostResource();
-            // self.newPost = ygUtils.fillDefaults(self.newPost, self.postDataDefaults);
+            if('whoami' in ygUserPref.$storage){
+                self.newPost.author = ygUserPref.$storage.whoami;
+            }
         }
         self.newPost.latitude = angular.isUndefined(latitude) ? self.newPost.latitude : latitude;
         self.newPost.longitude = angular.isUndefined(longitude) ? self.newPost.longitude : longitude;
@@ -256,6 +258,9 @@ function ($rootScope, $log, $window, $timeout, $q, $resource, nodeValidator, $md
                     if(voteResource && !angular.isUndefined(newVotes) && newVotes !== null){
                         self.addVotes(result.id, newVotes);
                     }
+
+                    // Record author in local storage
+                    ygUserPref.$storage.whoami = self.newPost.author;
 
                     self.newPost = null;
                     $log.info('Success, post added!!');
