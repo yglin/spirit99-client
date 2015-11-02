@@ -55,6 +55,14 @@ function ($rootScope, $q, nodeValidator, ygServer) {
         }
     };
 
+    self.filters = {};
+    self.myPostsOptions = {
+        'myPosts': '我的文章',
+        'commentedPosts': '我留言過的文章',
+        'followedPosts': '我追蹤的文章'
+    };
+
+
     self.initialPromises = {};
     self.initialPromises.refreshIconCtrls = ygServer.initialPromises.updateServers
     .then(function () {

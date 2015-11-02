@@ -69,11 +69,11 @@ function ($rootScope, $log, $window, $timeout, $q, $resource, nodeValidator, $md
     // };
 
     self.filterPost = function (post, filters) {
-        filters = typeof filters === 'undefined' ? ygUserPref.$storage.filters : filters;
+        filters = typeof filters === 'undefined' ? ygUserCtrl.filters : filters;
 
         // filter my posts
-        if(!angular.isUndefined(filters.myPosts) && filters.myPosts !== null){
-            if(filters.myPosts === 'myPosts'){
+        if(angular.isDefined(filters.myPostsOption) && filters.myPostsOption !== null){
+            if(filters.myPostsOption === 'myPosts'){
                 if(ygMyPost.isMyPost(post)){
                     return true;
                 }
@@ -81,7 +81,7 @@ function ($rootScope, $log, $window, $timeout, $q, $resource, nodeValidator, $md
                     return false;
                 }
             }
-            else if(filters.myPosts === 'commentedPosts'){
+            else if(filters.myPostsOption === 'commentedPosts'){
                 if(ygMyPost.isMyCommented(post)){
                     return true;
                 }
@@ -89,7 +89,7 @@ function ($rootScope, $log, $window, $timeout, $q, $resource, nodeValidator, $md
                     return false;
                 }
             }
-            else if(filters.myPosts === 'followedPosts'){
+            else if(filters.myPostsOption === 'followedPosts'){
                 if(ygFollowPost.isFollowingPost(post)){
                     return true;
                 }
@@ -106,7 +106,7 @@ function ($rootScope, $log, $window, $timeout, $q, $resource, nodeValidator, $md
 
         var matchAll = true;
         for(var key in filters){
-            if(key === 'myPosts'){
+            if(key === 'myPostsOption'){
                 continue;
             }
             if(key in post){
@@ -486,7 +486,7 @@ function ($rootScope, $log, $window, $timeout, $q, $resource, nodeValidator, $md
         });
 
         $rootScope.$watch(function () {
-            return ygUserPref.$storage.filters;
+            return ygUserCtrl.filters;
         }, function  () {
             self.filteredPosts.length = 0;
             for(var id in self.indexedPosts){

@@ -54,12 +54,6 @@ function ($q, $localStorage, $log) {
             },
             zoom: 16
         },
-        filters: {
-            myPosts: '',
-            title: {
-                keywords: []
-            },
-        },
         filterCircle: {
             center: {
                 latitude: 24.081665,
@@ -88,12 +82,6 @@ function ($q, $localStorage, $log) {
         commentedPosts: {},
         followedPosts: {},
     });
-
-    self.myPostsOptions = {
-        'myPosts': '我的文章',
-        'commentedPosts': '我留言過的文章',
-        'followedPosts': '我追蹤的文章'
-    };
 
     self.setMapHome = function () {
         self.$storage.mapHome = angular.copy(self.$storage.map);

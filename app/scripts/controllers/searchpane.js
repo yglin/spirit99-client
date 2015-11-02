@@ -10,5 +10,5 @@
 angular.module('spirit99App')
 .controller('SearchPaneController', ['$scope', 'ygUserPref',
 function($scope, ygUserPref){
-    $scope.keywords = ygUserPref.$storage.filters.title;
+    $scope.keywords = ygUserCtrl.filters.title;
 }]);

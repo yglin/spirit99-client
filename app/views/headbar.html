@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div flex layout-padding ng-show='selectedTool == "search"'>
-                <md-chips ng-model="keywords">
+                <md-chips ng-model="filters.title.keywords">
                     <input placeholder='搜尋標題' style='font-size:20px;color:white;' />
                 </md-chips>
             </div>
@@ -56,7 +56,7 @@
                 </md-button>
             </div>
             <div flex layout='row' layout-align='center center' layout-padding ng-show='selectedTool == "my-posts"'>
-                <md-select flex style='margin:0;' placeholder='我的...' ng-model='userPref.filters.myPosts'>
+                <md-select flex style='margin:0;' placeholder='我的...' ng-model='filters.myPostsOption'>
                     <md-option ng-repeat='(name, title) in myPostsOptions' value='{{name}}'>
                         {{title}}
                     </md-option>

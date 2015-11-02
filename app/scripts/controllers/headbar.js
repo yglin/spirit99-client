@@ -12,12 +12,17 @@ angular.module('spirit99App')
 function($scope, $mdSidenav, $mdDialog, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio, ygUtils){
     var self = this;
 
-    $scope.userPref = ygUserPref.$storage;
-    $scope.myPostsOptions = ygUserPref.myPostsOptions;
-    $scope.keywords = ygUserPref.$storage.filters.title.keywords;
-    // $scope.showInfoWindows = false;
-    // $scope.toogleInfoWindowsButtonStyle = {color: 'white'};
-    // $scope.toogleInfoWindowsButtonTooltip = '顯示全部標題';
+    if(!('title' in ygUserCtrl.filters)){
+        ygUserCtrl.filters.title = {
+            keywords: []
+        };
+    }
+    if(!('myPostsOption' in ygUserCtrl.filters)){
+        ygUserCtrl.filters.myPostsOption = null;
+    }
+    $scope.filters = ygUserCtrl.filters;
+    $scope.myPostsOptions = ygUserCtrl.myPostsOptions;
+
     $scope.tools = {
         search: {
             fontIcon: 'search'
@@ -124,17 +129,17 @@ function($scope, $mdSidenav, $mdDialog, ygUserPref, ygUserCtrl, ygServer, ygFilt
     };
 
     $scope.unselectMyPostsOptions = function () {
-        $scope.userPref.filters.myPosts = undefined;
+        $scope.filters.myPostsOption = null;
     };
 
     $scope.datePickerText = '請選擇日期';
     $scope.create_time = {};
-    if('create_time' in ygUserPref.$storage.filters &&
-    'startDate' in ygUserPref.$storage.filters.create_time &&
-    'endDate' in ygUserPref.$storage.filters.create_time){
+    if('create_time' in ygUserCtrl.filters &&
+    'startDate' in ygUserCtrl.filters.create_time &&
+    'endDate' in ygUserCtrl.filters.create_time){
         $scope.create_time = {
-            startDate: new Date(ygUserPref.$storage.filters.create_time.startDate),
-            endDate: new Date(ygUserPref.$storage.filters.create_time.endDate)
+            startDate: new Date(ygUserCtrl.filters.create_time.startDate),
+            endDate: new Date(ygUserCtrl.filters.create_time.endDate)
         };
         $scope.datePickerText = ygUtils.formatDate($scope.create_time.startDate) + ' ~ ' + ygUtils.formatDate($scope.create_time.endDate);
     }
@@ -150,19 +155,19 @@ function($scope, $mdSidenav, $mdDialog, ygUserPref, ygUserCtrl, ygServer, ygFilt
         }).then(function (dates) {
             $scope.create_time.startDate = dates.startDate;
             $scope.create_time.endDate = dates.endDate;
-            if(!('create_time' in ygUserPref.$storage.filters)){
-                ygUserPref.$storage.filters.create_time = {};
+            if(!('create_time' in ygUserCtrl.filters)){
+                ygUserCtrl.filters.create_time = {};
             }
-            ygUserPref.$storage.filters.create_time.startDate = dates.startDate.toString();
-            ygUserPref.$storage.filters.create_time.endDate = dates.endDate.toString();
+            ygUserCtrl.filters.create_time.startDate = dates.startDate.toString();
+            ygUserCtrl.filters.create_time.endDate = dates.endDate.toString();
             $scope.datePickerText = ygUtils.formatDate($scope.create_time.startDate) + ' ~ ' + ygUtils.formatDate($scope.create_time.endDate);
         });
     };
 
     $scope.clearDateFilter = function () {
         $scope.create_time = {};
-        if('create_time' in ygUserPref.$storage.filters){
-            delete ygUserPref.$storage.filters.create_time;
+        if('create_time' in ygUserCtrl.filters){
+            delete ygUserCtrl.filters.create_time;
         }
         $scope.datePickerText = '請選擇日期';
     };
