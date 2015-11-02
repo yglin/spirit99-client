@@ -420,6 +420,7 @@ function ($rootScope, $log, $routeParams, $http, $resource, $q, $mdDialog, uiGma
         // console.log($routeParams);
         if('stationName' in $routeParams && $routeParams.stationName in self.servers){
             self.switchServer($routeParams.stationName);
+            self.showServerIntro($routeParams.stationName);
         }
         else if(ygUserPref.$storage.selectedServer in self.servers){
             self.switchServer(ygUserPref.$storage.selectedServer);
