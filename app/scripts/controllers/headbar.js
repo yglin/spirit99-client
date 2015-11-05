@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('HeadBarController', ['$scope', '$mdSidenav', '$mdDialog', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygFilter', 'ygAudio', 'ygUtils',
-function($scope, $mdSidenav, $mdDialog, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio, ygUtils){
+.controller('HeadBarController', ['$scope', '$rootElement', '$mdSidenav', '$mdDialog', '$mdToast', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygFilter', 'ygAudio', 'ygUtils',
+function($scope, $rootElement, $mdSidenav, $mdDialog, $mdToast, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio, ygUtils){
     var self = this;
 
     if(!('title' in ygUserCtrl.filters)){
@@ -176,4 +176,18 @@ function($scope, $mdSidenav, $mdDialog, ygUserPref, ygUserCtrl, ygServer, ygFilt
         }
         $scope.datePickerText = '請選擇日期';
     };
+
+    self.mapHints = [
+        '點 <i class="material-icons">menu</i> 開啟電台及設定面板',
+        '點電台標題來顯示電台簡介',
+        '點<md-button class="md-fab md-mini"></md-button>可切換快速工具',
+        '點 <i class="material-icons">view_list</i> 開啟文章列表'
+    ];
+    self.mapHintsIndex = 0;
+    $scope.showToastTip = function () {
+        $mdToast.show({
+            template: '<md-toast>' + self.mapHints[self.mapHintsIndex] + '</md-toast>'
+        });
+        self.mapHintsIndex = (self.mapHintsIndex + 1) % self.mapHints.length;        
+    }
 }]);

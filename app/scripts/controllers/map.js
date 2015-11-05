@@ -211,7 +211,9 @@ function($scope, $log, $timeout, $mdDialog, $mdToast, uiGmapGoogleMapApi, ygUtil
     ];
     self.mapHintsIndex = 0;
     $scope.onMouseOverMap = function (googleMaps, eventName, args) {
-        $mdToast.show($mdToast.simple().content(self.mapHints[self.mapHintsIndex]));
+        $mdToast.show({
+            template: '<md-toast>' + self.mapHints[self.mapHintsIndex] + '</md-toast>'
+        });
         self.mapHintsIndex = (self.mapHintsIndex + 1) % self.mapHints.length;
         ygUserCtrl.isMouseOverMap = true;
     };
