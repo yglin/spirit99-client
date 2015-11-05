@@ -7,7 +7,7 @@
             <h1 class='md-headline'>{{server.title}}</h1>
         </div>
     </md-toolbar>
-    <md-dialog-content>
+    <md-dialog-content style='min-height:350px;'>
         <iframe width='100%' style='min-height:300px;' ng-if='introUrl' ng-src='{{introUrl}}'></iframe>
         <div ng-bind-html="introContent"></div>
         <div layout='row' layout-align='center center'>
