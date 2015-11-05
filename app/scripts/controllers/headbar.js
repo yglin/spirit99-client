@@ -25,18 +25,23 @@ function($scope, $mdSidenav, $mdDialog, ygUserPref, ygUserCtrl, ygServer, ygFilt
 
     $scope.tools = {
         search: {
+            tooltip: '搜尋標題',
             fontIcon: 'search'
         },
         address: {
+            tooltip: '搜尋地址',
             fontIcon: 'my_location'
         },
         markers: {
+            tooltip: '顯示／隱藏地圖標示',
             fontIcon: 'place'
         },
         period: {
+            tooltip: '搜尋文章發佈時間',
             fontIcon: 'access_time'
         },
         'my-posts': {
+            tooltip: '我的。。。文章',
             fontIcon: 'person'
         }
     };

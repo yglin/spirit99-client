@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('MapController', ['$scope', '$log', '$timeout', '$mdDialog', 'uiGmapGoogleMapApi', 'ygUtils', 'ygError', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygPost', 'ygAudio',
-function($scope, $log, $timeout, $mdDialog, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygUserCtrl, ygServer, ygPost, ygAudio) {
+.controller('MapController', ['$scope', '$log', '$timeout', '$mdDialog', '$mdToast', 'uiGmapGoogleMapApi', 'ygUtils', 'ygError', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygPost', 'ygAudio',
+function($scope, $log, $timeout, $mdDialog, $mdToast, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygUserCtrl, ygServer, ygPost, ygAudio) {
 
     var self = this;
 
@@ -204,7 +204,15 @@ function($scope, $log, $timeout, $mdDialog, uiGmapGoogleMapApi, ygUtils, ygError
         $scope.timeoutLoadPosts = $timeout(ygPost.loadPosts, 1000);
     };
 
+    self.mapHints = [
+        '在地圖上點一下來新增文章',
+        '指標移到地圖標示上來顯示文章標題跟縮圖',
+        '指標停在地圖標示上三秒後，會開啟文章列表'
+    ];
+    self.mapHintsIndex = 0;
     $scope.onMouseOverMap = function (googleMaps, eventName, args) {
+        $mdToast.show($mdToast.simple().content(self.mapHints[self.mapHintsIndex]));
+        self.mapHintsIndex = (self.mapHintsIndex + 1) % self.mapHints.length;
         ygUserCtrl.isMouseOverMap = true;
     };
 
