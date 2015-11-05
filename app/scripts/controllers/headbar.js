@@ -189,5 +189,5 @@ function($scope, $rootElement, $mdSidenav, $mdDialog, $mdToast, ygUserPref, ygUs
             template: '<md-toast>' + self.mapHints[self.mapHintsIndex] + '</md-toast>'
         });
         self.mapHintsIndex = (self.mapHintsIndex + 1) % self.mapHints.length;        
-    }
+    };
 }]);
