@@ -12,7 +12,7 @@
     <div layout='row' layout-wrap>
         <md-button type='button' class='md-icon-button' ng-repeat='(name, icon) in iconCtrls' aria-label="Marker Icon" ng-click="selectMarkerIcon(name)">
             <img ng-src='{{icon.url}}' width='100%' height='100%' ng-class='{"s99-transparent": name != newPost.icon}' />
-            <md-tooltip>{{name}}</md-tooltip>
+            <md-tooltip class='md-title'>{{name}}</md-tooltip>
         </md-button>
     </div>
     <form name='postForm'>
@@ -32,11 +32,11 @@
                 <div class="md-toolbar-tools md-toolbar-tools-bottom">
                     <md-button type='button' aria-label="Show Tools" class="md-fab md-raised md-mini" ng-click='triggerToolbar()'>
                         <md-icon class='material-icons'>menu</md-icon>
-                        <md-tooltip>工具列</md-tooltip>
+                        <md-tooltip class='md-body-2'>工具列</md-tooltip>
                     </md-button>
                     <md-button type='button' aria-label="Insert Image" class="md-fab md-raised md-mini" ng-click='insertImage()'>
                         <md-icon class='material-icons'>image</md-icon>
-                        <md-tooltip>上傳圖片</md-tooltip>
+                        <md-tooltip class='md-body-2'>上傳圖片</md-tooltip>
                     </md-button>
                     <span flex></span>
                 </div>
