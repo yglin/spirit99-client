@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('MapController', ['$scope', '$log', '$timeout', '$mdDialog', '$mdToast', 'uiGmapGoogleMapApi', 'ygUtils', 'ygError', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygPost', 'ygAudio',
-function($scope, $log, $timeout, $mdDialog, $mdToast, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygUserCtrl, ygServer, ygPost, ygAudio) {
+.controller('MapController', ['$scope', '$log', '$timeout', '$mdDialog', 'ygToastTip', 'uiGmapGoogleMapApi', 'ygUtils', 'ygError', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygPost', 'ygAudio',
+function($scope, $log, $timeout, $mdDialog, ygToastTip, uiGmapGoogleMapApi, ygUtils, ygError, ygUserPref, ygUserCtrl, ygServer, ygPost, ygAudio) {
 
     var self = this;
 
@@ -211,9 +211,7 @@ function($scope, $log, $timeout, $mdDialog, $mdToast, uiGmapGoogleMapApi, ygUtil
     ];
     self.mapHintsIndex = 0;
     $scope.onMouseOverMap = function (googleMaps, eventName, args) {
-        $mdToast.show({
-            template: '<md-toast>' + self.mapHints[self.mapHintsIndex] + '</md-toast>'
-        });
+        ygToastTip.showToastTip(self.mapHints[self.mapHintsIndex]);
         self.mapHintsIndex = (self.mapHintsIndex + 1) % self.mapHints.length;
         ygUserCtrl.isMouseOverMap = true;
     };

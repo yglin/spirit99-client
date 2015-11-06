@@ -8,8 +8,8 @@
  * Controller of the spirit99App
  */
 angular.module('spirit99App')
-.controller('HeadBarController', ['$scope', '$rootElement', '$mdSidenav', '$mdDialog', '$mdToast', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygFilter', 'ygAudio', 'ygUtils',
-function($scope, $rootElement, $mdSidenav, $mdDialog, $mdToast, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio, ygUtils){
+.controller('HeadBarController', ['$scope', '$rootElement', '$mdSidenav', '$mdDialog', 'ygToastTip', 'ygUserPref', 'ygUserCtrl', 'ygServer', 'ygFilter', 'ygAudio', 'ygUtils',
+function($scope, $rootElement, $mdSidenav, $mdDialog, ygToastTip, ygUserPref, ygUserCtrl, ygServer, ygFilter, ygAudio, ygUtils){
     var self = this;
 
     if(!('title' in ygUserCtrl.filters)){
@@ -185,9 +185,7 @@ function($scope, $rootElement, $mdSidenav, $mdDialog, $mdToast, ygUserPref, ygUs
     ];
     self.mapHintsIndex = 0;
     $scope.showToastTip = function () {
-        $mdToast.show({
-            template: '<md-toast>' + self.mapHints[self.mapHintsIndex] + '</md-toast>'
-        });
+        ygToastTip.showToastTip(self.mapHints[self.mapHintsIndex]);
         self.mapHintsIndex = (self.mapHintsIndex + 1) % self.mapHints.length;        
     };
 }]);
