@@ -1,10 +1,14 @@
 <md-dialog aria-label="Server Intro" flex='60'>
     <md-toolbar>
-        <div flex layout='row' layout-align='center center'>
+        <div flex layout='row'>
             <div layout-margin>
                 <img alt="{{server.title}}" ng-src="{{server.logo}}" class="md-avatar" ng-style="{'max-width':'48px', 'max-height':'48px'}" ng-hide='server.logo == ""' />
             </div>
             <h1 class='md-headline'>{{server.title}}</h1>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon class='material-icons'>clear</md-icon>
+            </md-button>
         </div>
     </md-toolbar>
     <md-dialog-content style='min-height:350px;'>

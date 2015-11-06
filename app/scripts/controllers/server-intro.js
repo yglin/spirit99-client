@@ -23,9 +23,15 @@ function ($scope, $sce, $mdDialog, nodeValidator, ygServer, server) {
             $scope.introContent = $scope.server.intro;
         }
     }
+    
     $scope.isAlreadySelected = ($scope.server !== null && ygServer.selectedServer !== null && $scope.server.name === ygServer.selectedServer.name);
+    
     $scope.switchServer = function (serverName) {
         ygServer.switchServer(serverName);
         $mdDialog.hide();
+    };
+
+    $scope.cancel = function () {
+        $mdDialog.cancel();
     };
 }]);
