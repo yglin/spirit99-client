@@ -77,6 +77,7 @@ function ($q, $localStorage, $log) {
         startUpAtMap: 'geolocation',
         autoOpenPostList: true,
         soundFX: true,
+        showToastTips: true,
         // startAtGeolocation: true,
         myPosts: {},
         commentedPosts: {},

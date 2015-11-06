@@ -8,12 +8,14 @@
  * Service in the spirit99App.
  */
 angular.module('spirit99App')
-.service('ygToastTip',['$mdToast',
-function ($mdToast) {
+.service('ygToastTip',['$mdToast', 'ygUserPref',
+function ($mdToast, ygUserPref) {
     var self = this;
     self.showToastTip = function (content) {
-        $mdToast.show({
-            template: '<md-toast>' + content + '</md-toast>'
-        });
+        if(ygUserPref.$storage.showToastTips){
+            $mdToast.show({
+                template: '<md-toast>' + content + '</md-toast>'
+            });            
+        }
     };
 }]);
