@@ -1,5 +1,5 @@
-<md-toolbar ng-cloak ng-mouseenter="showToastTip()">
-    <div layout='row' layout-align='start center' ng-mouseover="showToolHint(selectedTool)">
+<md-toolbar ng-cloak ng-mouseover="showToastTip()">
+    <div layout='row' layout-align='start center'>
         <div flex='10' layout='row'>
             <md-button class='md-icon-button' aria-label='Open Side Menu' ng-click='openSidenav()'>
                 <md-tooltip class='md-body-2'>
@@ -14,7 +14,7 @@
                 <md-icon class='material-icons' ng-style="styleOfViewListButton">view_list</md-icon>
             </md-button>
         </div>
-        <div flex='30' layout='row' layout-align='end center'>
+        <div flex='30' layout='row' layout-align='end center' ng-mouseover="showToolHint(selectedTool)">
              <div style='position:relative;width:48px;height:48px;'>
                 <div style='position:absolute;top:0px;left:0px;'>
                     <md-fab-speed-dial md-direction="down" class="md-scale">
