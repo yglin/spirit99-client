@@ -43,7 +43,7 @@
             </md-toolbar>
             <!-- </div> -->
             <md-input-container>
-                <textarea required name='context' froala='froalaOptions' ng-model="newPost.context"></textarea>
+                <textarea aria-label='context-textarea' required name='context' froala='froalaOptions' ng-model="newPost.context"></textarea>
                 <div ng-messages='postForm.context.$error'>
                     <div ng-message='required'>請填入內容</div>
                 </div>

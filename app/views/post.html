@@ -10,9 +10,11 @@
                 <div layout='row' layout-align='end center' style='min-height:20px;max-height:32px;'>
                     <div data-fittext data-fittext-max='24' data-fittext-min='14'>{{ post.author }}</div>
                     <md-button class='md-icon-button' style='width:24px;min-height:24px;height:24px;line-height:24px;' ng-show='isMyPost' ng-click="editPost(post)">
+                        <md-tooltip class='md-body-2' md-direction='top'>修改文章</md-tooltip>
                         <md-icon class='material-icons' style='color:white;font-size:20px;'>edit</md-icon>
                     </md-button>
                     <md-button class='md-icon-button' style='width:24px;min-height:24px;height:24px;line-height:24px;' ng-show='isMyPost' ng-click="deletePost(post)">
+                        <md-tooltip class='md-body-2' md-direction='top'>刪除文章</md-tooltip>
                         <md-icon class='material-icons' style='color:white;font-size:20px;'>delete</md-icon>
                     </md-button>
                 </div>
@@ -38,7 +40,10 @@
                     </div>
                 </div>
                 <div flex='20' ng-show='canFollowPost'>
-                    <md-checkbox ng-model='followPost' ng-click="toggleFollowPost()">追蹤本篇</md-checkbox>
+                    <md-checkbox ng-model='followPost' ng-click="toggleFollowPost()">
+                        <md-tooltip class='md-body-2'>文章更新內容或有新的留言請提示我</md-tooltip>
+                        追蹤本篇
+                    </md-checkbox>
                 </div>
             </div>
             <br>
