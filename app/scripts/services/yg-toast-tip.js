@@ -15,12 +15,15 @@ function ($q, $mdToast, ygUserPref) {
     self.showToastTip = function (content) {
         if(ygUserPref.$storage.showToastTips && !self.isShowingToast){
             self.isShowingToast = true;
-            $mdToast.show({
+            return $mdToast.show({
                 template: '<md-toast>' + content + '</md-toast>'
             })
             .finally(function () {
                 self.isShowingToast = false;
             });
+        }
+        else{
+            return $q.reject();
         }
     };
 }]);

@@ -38,7 +38,9 @@ function($scope, $rootElement, $mdSidenav, $mdDialog, ygToastTip, ygUserPref, yg
         },
         markers: {
             tooltip: '顯示／隱藏地圖標示',
-            fontIcon: 'place'
+            fontIcon: 'place',
+            hints: ['點地圖標示按鈕來顯示／隱藏相關分類文章', '點<i class="material-icons">more_horiz</i>按鈕開啟更多選項'],
+            hintIndex: 0
         },
         period: {
             tooltip: '搜尋文章發佈時間',
@@ -60,8 +62,10 @@ function($scope, $rootElement, $mdSidenav, $mdDialog, ygToastTip, ygUserPref, yg
 
     $scope.showToolHint = function (toolName) {
         if(toolName in $scope.tools && 'hints' in $scope.tools[toolName]){
-            $scope.showToastTip($scope.tools[toolName].hints[$scope.tools[toolName].hintIndex]);
-            $scope.tools[toolName].hintIndex = ($scope.tools[toolName].hintIndex + 1) % $scope.tools[toolName].hints.length;
+            ygToastTip.showToastTip($scope.tools[toolName].hints[$scope.tools[toolName].hintIndex])
+            .then(function () {
+                $scope.tools[toolName].hintIndex = ($scope.tools[toolName].hintIndex + 1) % $scope.tools[toolName].hints.length;
+            });
         }
     };
 
@@ -190,19 +194,17 @@ function($scope, $rootElement, $mdSidenav, $mdDialog, ygToastTip, ygUserPref, yg
         $scope.datePickerText = '請選擇日期';
     };
 
-    self.mapHints = [
+    self.hints = [
         '點 <i class="material-icons">menu</i> 開啟電台及設定面板',
         '點電台標題來顯示電台簡介',
         '點<md-button class="md-fab md-mini"></md-button>可切換快速工具',
         '點 <i class="material-icons">view_list</i> 開啟文章列表'
     ];
-    self.mapHintsIndex = 0;
-    $scope.showToastTip = function (content) {
-        if(content){
-            ygToastTip.showToastTip(content);
-        }else{
-            ygToastTip.showToastTip(self.mapHints[self.mapHintsIndex]);
-            self.mapHintsIndex = (self.mapHintsIndex + 1) % self.mapHints.length;        
-        }
+    self.hintIndex = 0;
+    $scope.showToastTip = function () {
+        return ygToastTip.showToastTip(self.hints[self.hintIndex])
+        .then(function () {
+            self.hintIndex = (self.hintIndex + 1) % self.hints.length;        
+        });
     };
 }]);

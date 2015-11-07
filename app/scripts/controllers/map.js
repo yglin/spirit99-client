@@ -211,8 +211,10 @@ function($scope, $log, $timeout, $mdDialog, ygToastTip, uiGmapGoogleMapApi, ygUt
     ];
     self.mapHintsIndex = 0;
     $scope.onMouseOverMap = function (googleMaps, eventName, args) {
-        ygToastTip.showToastTip(self.mapHints[self.mapHintsIndex]);
-        self.mapHintsIndex = (self.mapHintsIndex + 1) % self.mapHints.length;
+        ygToastTip.showToastTip(self.mapHints[self.mapHintsIndex])
+        .then(function () {
+            self.mapHintsIndex = (self.mapHintsIndex + 1) % self.mapHints.length;
+        });
         ygUserCtrl.isMouseOverMap = true;
     };
 
