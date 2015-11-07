@@ -1,5 +1,5 @@
 <md-toolbar ng-cloak ng-mouseenter="showToastTip()">
-    <div layout='row' layout-align='start center'>
+    <div layout='row' layout-align='start center' ng-mouseover="showToolHint(selectedTool)">
         <div flex='10' layout='row'>
             <md-button class='md-icon-button' aria-label='Open Side Menu' ng-click='openSidenav()'>
                 <md-tooltip class='md-body-2'>
@@ -37,14 +37,14 @@
                     </md-fab-speed-dial>
                 </div>
             </div>
-            <div flex layout-padding ng-show='selectedTool == "search"'>
-                <md-chips ng-model="filters.title.keywords">
+            <div flex layout='row' layout-padding ng-show='selectedTool == "search"'>
+                <md-chips ng-model="filters.title.keywords" md-transform-chip='addSearchKeyword($chip)'>
                     <input placeholder='搜尋標題' style='font-size:20px;color:white;' />
                 </md-chips>
             </div>
             <div flex layout='row' layout-padding ng-show='selectedTool == "address"'>
                 <md-input-container flex md-no-float>
-                    <input placeholder='請輸入地址或地名' style='color:white;' ng-model='userAddress' ng-keypress="$event.keyCode == 13 && onEnterAddress(userAddress)"/>
+                    <input placeholder='請輸入地址或地名' style='color:white;' ng-model='userAddress' ng-keypress="$event.keyCode == 13 && onEnterAddress(userAddress)" />
                 </md-input-container>
                 <md-button class='md-icon-button' aria-label='Next location' ng-click='nextGeocodeLocation()' ng-show='isMultipleGeocodeLocations'>
                     <md-icon class='material-icons' ng-style="{color: 'white'}">swap_horiz</md-icon>
@@ -53,6 +53,7 @@
             <div flex layout='row' layout-align='center center' ng-show='selectedTool == "markers"'>
                 <md-button ng-repeat='(name, icon) in iconCtrls' ng-if='$index < 6' class='md-icon-button' aria-label="Marker Icon" ng-click="toggleIcon(name)" style='width:36px;height:36px;'>
                     <img ng-src='{{icon.url}}' ng-class='{"s99-transparent": icon.show==false}' width='100%' height='100%'/>
+                    <md-tooltip class='md-title'>{{name}}</md-tooltip>
                 </md-button>
                 <md-button class='md-icon-button' aria-label='More Icons' ng-click='openIconCtrl()' style='width:24px;'>
                     <md-icon md-menu-origin class='material-icons' ng-style="{color: 'white'}">more_horiz</md-icon>

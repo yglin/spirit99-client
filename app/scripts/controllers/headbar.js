@@ -26,11 +26,15 @@ function($scope, $rootElement, $mdSidenav, $mdDialog, ygToastTip, ygUserPref, yg
     $scope.tools = {
         search: {
             tooltip: '搜尋標題',
-            fontIcon: 'search'
+            fontIcon: 'search',
+            hints: ['輸入搜尋關鍵字後按Enter', '多個關鍵字的搜尋效果會累加'],
+            hintIndex: 0
         },
         address: {
             tooltip: '搜尋地址',
-            fontIcon: 'my_location'
+            fontIcon: 'my_location',
+            hints: ['輸入地名或地址後按Enter', '點<i class="material-icons">swap_horiz</i>按鈕，切換多個搜尋的地點結果'],
+            hintIndex: 0
         },
         markers: {
             tooltip: '顯示／隱藏地圖標示',
@@ -53,8 +57,17 @@ function($scope, $rootElement, $mdSidenav, $mdDialog, ygToastTip, ygUserPref, yg
     $scope.hideFabActions = function () {
         $scope.isShowFabActions = false;
     };
+
+    $scope.showToolHint = function (toolName) {
+        if(toolName in $scope.tools && 'hints' in $scope.tools[toolName]){
+            $scope.showToastTip($scope.tools[toolName].hints[$scope.tools[toolName].hintIndex]);
+            $scope.tools[toolName].hintIndex = ($scope.tools[toolName].hintIndex + 1) % $scope.tools[toolName].hints.length;
+        }
+    };
+
     $scope.selectTool = function (toolName) {
         $scope.selectedTool = toolName;
+        $scope.showToolHint(toolName);
         $scope.hideFabActions();
     };
 
@@ -184,8 +197,12 @@ function($scope, $rootElement, $mdSidenav, $mdDialog, ygToastTip, ygUserPref, yg
         '點 <i class="material-icons">view_list</i> 開啟文章列表'
     ];
     self.mapHintsIndex = 0;
-    $scope.showToastTip = function () {
-        ygToastTip.showToastTip(self.mapHints[self.mapHintsIndex]);
-        self.mapHintsIndex = (self.mapHintsIndex + 1) % self.mapHints.length;        
+    $scope.showToastTip = function (content) {
+        if(content){
+            ygToastTip.showToastTip(content);
+        }else{
+            ygToastTip.showToastTip(self.mapHints[self.mapHintsIndex]);
+            self.mapHintsIndex = (self.mapHintsIndex + 1) % self.mapHints.length;        
+        }
     };
 }]);
